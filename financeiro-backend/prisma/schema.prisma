@@ -1,0 +1,71 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int     @id @default(autoincrement())
+  password String
+  email    String  @unique
+  name     String?
+  posts    Post[]
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  title     String?
+  content   String?
+  published Boolean? @default(false)
+  author    User?    @relation(fields: [id_autor], references: [id])
+  id_autor  Int?
+  id_image  Int?
+  image     Image?   @relation(fields: [id_image], references: [id])
+}
+
+model Image {
+  id   Int    @id @default(autoincrement())
+  url  String
+  Post Post[]
+}
+
+model Cliente {
+  id            Int     @id @default(autoincrement())
+  cus_name      String
+  cus_documento String
+  cus_phone     String
+  cus_email     String
+  cus_address   String
+  cus_district  String
+  cus_number    String
+  cus_state     String
+  cus_city      String
+  cus_zip_code  String
+  Caixa         Caixa[]
+}
+
+model Caixa {
+  id                    Int            @id @default(autoincrement())
+  id_cliente            Int
+  cliente               Cliente        @relation(fields: [id_cliente], references: [id])
+  inicial               Decimal        @db.Decimal(6, 2)
+  data_ultima_alteracao DateTime
+  status                Boolean
+  movimentacao          Movimentacao[]
+}
+
+model Movimentacao {
+  id       Int      @id @default(autoincrement())
+  id_caixa Int
+  caixa    Caixa    @relation(fields: [id_caixa], references: [id])
+  tipo     String
+  valor    Decimal  @db.Decimal(6, 2)
+  data     DateTime
+}

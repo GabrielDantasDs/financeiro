@@ -1,0 +1,24 @@
+.container {
+    min-width: 400px;
+    min-height: 400px;;
+    background-color: white;
+}
+
+.body {
+    height: fit-content;
+    padding: 32px;
+}
+
+.header {
+    padding: 24px;
+}
+
+.database-header {
+    display: flex;
+    flex-direction: row-reverse;
+    padding-bottom: 16px;
+}
+
+.form {
+    padding: 16px;
+}
