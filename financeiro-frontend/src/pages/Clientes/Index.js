@@ -5,6 +5,7 @@ import Sidebar from "../../components/sidebar/Sidebar";
 import "../../style/index.css";
 import Cliente from "./Cliente";
 import New from "./New";
+import Edit from "./Edit";
 
 export default function Index() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -23,6 +24,7 @@ export default function Index() {
       <Routes>
         <Route path="index" element={<Cliente />} />
         <Route path="new" element={<New />} />
+        <Route path={`edit/:id`} element={<Edit />} />
       </Routes>
       <Sidebar sidebarOpen={sidebarOpen} closeSidebar={closeSidebar} />
     </div>

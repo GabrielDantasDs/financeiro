@@ -4,6 +4,14 @@ import Dashboard from "./pages/Dashboard/Index";
 import { useNavigate, Route, Routes } from "react-router-dom";
 import { Nav } from "react-bootstrap";
 import ProtectedRoute from "./utils/ProtecedRoute";
+import "primereact/resources/themes/lara-light-indigo/theme.css";     
+import "primereact/resources/primereact.min.css";
+import "primeicons/primeicons.css"; 
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { fas } from '@fortawesome/free-solid-svg-icons'
+
+
+library.add(fas)
 
 function App() {
   const navigate = useNavigate();

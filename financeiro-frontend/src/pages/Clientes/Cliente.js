@@ -1,14 +1,22 @@
 import "../../style/cliente.css";
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
 import Button from "@mui/material/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons/faPlus";
 import { useEffect, useState } from "react";
 import { list } from "../../cruds/customer";
 import Swal from "sweetalert2";
+import { InputText } from "primereact/inputtext";
+import { FilterMatchMode, FilterOperator } from "primereact/api";
+import { Link } from "react-router-dom";
 
 export default function Cliente() {
   const [clientes, setClientes] = useState([]);
+  const [filters, setFilters] = useState({
+    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  });
+  const [globalFilterValue, setGlobalFilterValue] = useState("");
 
   useEffect(() => {
     list()
@@ -35,12 +43,45 @@ export default function Cliente() {
       });
   });
 
-  const columns = [
-    { field: "id", headerName: "ID", width: 70 },
-    { field: "cus_name", headerName: "Nome", width: 130 },
-    { field: "cus_email", headerName: "Email", width: 130 },
-    { field: "cus_documento", headerName: "Documento", width: 130 },
-  ];
+  const renderHeader = () => {
+    return (
+      <div className="flex justify-content-end">
+        <span className="p-input-icon-left">
+          <i className="pi pi-search" />
+          <InputText
+            value={globalFilterValue}
+            onChange={onGlobalFilterChange}
+            placeholder="Busque pelo nome ou doc"
+          />
+        </span>
+      </div>
+    );
+  };
+
+  const onGlobalFilterChange = (e) => {
+    const value = e.target.value;
+    let _filters = { ...filters };
+
+    _filters["global"].value = value;
+
+    setFilters(_filters);
+    setGlobalFilterValue(value);
+  };
+
+  const actionBody = (rowData) => {
+    return (
+      <div style={{ maxWidth: 120 }} className="d-flex justify-content-between">
+        <Link to={`/clientes/edit/${rowData.id}`} type="button" class="btn btn-primary">
+          <FontAwesomeIcon icon="fa-solid fa-pen-to-square" />
+        </Link>
+        <button type="button" class="btn btn-danger">
+        <FontAwesomeIcon icon="fa-solid fa-trash" />
+        </button>
+      </div>
+    );
+  };
+
+  const header = renderHeader();
 
   return (
     <div className="main">
@@ -59,40 +100,25 @@ export default function Cliente() {
               Novo cliente
             </Button>
           </div>
-          <div style={{ height: 300, width: "100%" }}>
-            <DataGrid
-              sx={{
-                height: "100%",
-              }}
-              localeText={{
-                toolbarFilters: "Filtros",
-                toolbarFiltersLabel: "Filtros",
-                filterPanelAddFilter: "Add filter",
-                filterPanelDeleteIconLabel: "Delete",
-                filterPanelColumns: "Colunas",
-                filterPanelInputLabel: "Valor",
-                filterPanelInputPlaceholder: "Valor a ser filtrado",
-                filterOperatorContains: "contém",
-                filterOperatorEquals: "igual",
-                filterOperatorStartsWith: "começa com",
-                filterOperatorEndsWith: "termina com",
-                filterOperatorIs: "é",
-                filterOperatorNot: "não é",
-                filterOperatorAfter: "está depois",
-                filterOperatorOnOrAfter: "está em ou depois",
-                filterOperatorBefore: "está antes",
-                filterOperatorOnOrBefore: "está em ou antes",
-                filterOperatorIsEmpty: "está vazio",
-                filterOperatorIsNotEmpty: "não estã vazio",
-                filterOperatorIsAnyOf: "qualquer um",
-              }}
-              components={{ Toolbar: GridToolbar }}
-              rows={clientes}
-              columns={columns}
-              pageSize={5}
-              rowsPerPageOptions={[5]}
-              checkboxSelection
-            />
+          <div style={{ width: "100%" }}>
+            <DataTable
+              value={clientes}
+              stripedRows
+              showGridlines
+              paginator
+              rows={5}
+              rowsPerPageOptions={[5, 10, 25, 50]}
+              tableStyle={{ minWidth: "50rem" }}
+              filters={filters}
+              globalFilterFields={["cus_name", "cus_documento"]}
+              header={header}
+              emptyMessage="Não há registros."
+            >
+              <Column field="cus_name" header="Nome"></Column>
+              <Column field="cus_email" header="Email"></Column>
+              <Column field="cus_documento" header="Documento"></Column>
+              <Column header="Opções" body={actionBody}></Column>
+            </DataTable>
           </div>
         </div>
       </div>
