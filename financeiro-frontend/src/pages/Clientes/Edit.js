@@ -10,7 +10,7 @@ import { Form, Formik } from "formik";
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons/faCheck";
-import { create, get } from "../../cruds/customer";
+import { edit, get } from "../../cruds/customer";
 import { validate } from "./Utils";
 import {
   formatCnpjCpfInput,
@@ -30,13 +30,18 @@ export default function Edit() {
   const navigate = useNavigate();
   const params = useParams();
 
-  useEffect(async () => {
-    await get(params.id).then((res) => {
-      setCustomer(res.data);
-    });
+  useEffect(() => {
+    async function fetchData() {
+      await get(params.id).then((res) => {
+        setCustomer(res.data);
+      });
+    };
+    fetchData();
   }, []);
 
+
   const getIniitalState = () => {
+    console.log(customer)
     return {
       cus_address: customer.cus_address,
       cus_city: customer.cus_city,
@@ -45,14 +50,14 @@ export default function Edit() {
       cus_email: customer.cus_email,
       cus_name: customer.cus_name,
       cus_number: customer.cus_number,
-      cus_state: states.find(e => e.label == customer.cus_state).value,
+      cus_state: customer.cus_state,
       cus_zip_code: customer.cus_zip_code,
       cus_phone: customer.cus_phone,
     };
   };
 
   const onSubmit = (values) => {
-    create(values)
+    edit(values)
       .catch((err) => {
         Swal.fire("Ops", "Houve um erro ao salvar o usuário", "error");
       })

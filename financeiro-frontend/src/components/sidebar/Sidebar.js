@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import "../../style/sidebar.css";
 
 export default function sideBar({ sidebarOpen, closeSidebar }) {
@@ -45,7 +46,7 @@ export default function sideBar({ sidebarOpen, closeSidebar }) {
         </div>
         <div className="sidebar_link">
           <i className="fa fa-users"></i>
-          <a href="clientes/index">Clientes</a>
+          <Link to={`/clientes/index`} type="button">Clientes</Link>
         </div>
       </div>
     </div>

@@ -70,9 +70,12 @@ export default function Cliente() {
 
   const actionBody = (rowData) => {
     return (
-      <div style={{ maxWidth: 120 }} className="d-flex justify-content-between">
+      <div style={{ maxWidth: 200 }} className="d-flex justify-content-between">
         <Link to={`/clientes/edit/${rowData.id}`} type="button" class="btn btn-primary">
           <FontAwesomeIcon icon="fa-solid fa-pen-to-square" />
+        </Link>
+        <Link to={`/clientes/financeiro/${rowData.id}`} type="button" class="btn btn-warning">
+          <FontAwesomeIcon icon="fa-solid fa-list" />
         </Link>
         <button type="button" class="btn btn-danger">
         <FontAwesomeIcon icon="fa-solid fa-trash" />
