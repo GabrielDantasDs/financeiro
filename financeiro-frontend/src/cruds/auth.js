@@ -14,7 +14,8 @@ export const login = (data, navigate) => {
     .then((res) => {
       localStorage.setItem("access_token", JSON.stringify(res.data.access_token));
       axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
-      axios.defaults.headers.common["Authorization"] = localStorage.getItem("access_token");
+      axios.defaults.headers.common["Authorization"] = 'Bearer ' +
+      localStorage.getItem("access_token")?.replace(/['"]+/g, '')
       dispatch(loginAction())
       navigate('/')
     });

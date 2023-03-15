@@ -37,7 +37,7 @@ model Image {
 }
 
 model Cliente {
-  id            Int     @id @default(autoincrement())
+  id            Int          @id @default(autoincrement())
   cus_name      String
   cus_documento String
   cus_phone     String
@@ -49,6 +49,17 @@ model Cliente {
   cus_city      String
   cus_zip_code  String
   Caixa         Caixa[]
+  FinancialTransactions    FinancialTransactions[]
+}
+
+model FinancialTransactions {
+  id              Int     @id @default(autoincrement())
+  fin_customer_id Int
+  fin_customer    Cliente @relation(fields: [fin_customer_id], references: [id])
+  fin_type        String
+  fin_value       Decimal @db.Decimal(6, 2)
+  fin_category    String
+  fin_note        String?
 }
 
 model Caixa {

@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
 import { UnauthorizedException, ValidationPipe } from '@nestjs/common';
 import { UnauthorizedExceptionFilter } from './filters/exceptions/http/http-unauthorized.filter';
+declare const module: any;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -12,6 +13,11 @@ async function bootstrap() {
     credentials: true
   })
 
+  if (module.hot) {
+    module.hot.accept();
+    module.hot.dispose(() => app.close());
+  }
+
   await app.listen(8000);
   // Pipes
   app.useGlobalPipes(new ValidationPipe({
@@ -19,6 +25,8 @@ async function bootstrap() {
     whitelist: true,
     forbidNonWhitelisted: true
   }));
+
+
 
   //Filter
   //app.useGlobalFilters(new UnauthorizedExceptionFilter());

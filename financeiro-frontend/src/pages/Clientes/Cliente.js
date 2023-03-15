@@ -41,7 +41,7 @@ export default function Cliente() {
 
         setClientes(formatted_clientes);
       });
-  });
+  }, []);
 
   const renderHeader = () => {
     return (
@@ -71,13 +71,13 @@ export default function Cliente() {
   const actionBody = (rowData) => {
     return (
       <div style={{ maxWidth: 200 }} className="d-flex justify-content-between">
-        <Link to={`/clientes/edit/${rowData.id}`} type="button" class="btn btn-primary">
+        <Link to={`/clientes/edit/${rowData.id}`} type="button" className="btn btn-primary">
           <FontAwesomeIcon icon="fa-solid fa-pen-to-square" />
         </Link>
-        <Link to={`/clientes/financeiro/${rowData.id}`} type="button" class="btn btn-warning">
+        <Link to={`/clientes/financeiro/${rowData.id}`} type="button" className="btn btn-warning">
           <FontAwesomeIcon icon="fa-solid fa-list" />
         </Link>
-        <button type="button" class="btn btn-danger">
+        <button type="button" className="btn btn-danger">
         <FontAwesomeIcon icon="fa-solid fa-trash" />
         </button>
       </div>

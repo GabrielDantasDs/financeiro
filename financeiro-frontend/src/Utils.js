@@ -2,14 +2,14 @@ import axios from "axios";
 import Constants from "./constants";
 
 export function SetupAxios() {
+  console.log('setup axios');
   axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
-  axios.defaults.headers.common["Authorization"] =
-    localStorage.getItem("access_token");
+  axios.defaults.headers.common["Authorization"] = 'Bearer ' +
+    localStorage.getItem("access_token")?.replace(/['"]+/g, '')
 }
 
 export function formatCnpjCpf(value) {
   if (value.length == 4) {
-    console.log("3");
     return (value = value.replace(/(\d{3})(\d)/, "$1.$2"));
   }
 

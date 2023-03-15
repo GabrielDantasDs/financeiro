@@ -35,7 +35,7 @@ export default function Login() {
       <div className="login-screen-text">
         <span>Sistema de gerenciamento financeiro</span>
         {errors ? (
-          <div class="alert alert-danger mt-2" role="alert">
+          <div className="alert alert-danger mt-2" role="alert">
             {errorText}
           </div>
         ) : null}
