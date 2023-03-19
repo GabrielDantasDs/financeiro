@@ -37,19 +37,19 @@ model Image {
 }
 
 model Cliente {
-  id            Int          @id @default(autoincrement())
-  cus_name      String
-  cus_documento String
-  cus_phone     String
-  cus_email     String
-  cus_address   String
-  cus_district  String
-  cus_number    String
-  cus_state     String
-  cus_city      String
-  cus_zip_code  String
-  Caixa         Caixa[]
-  FinancialTransactions    FinancialTransactions[]
+  id                    Int                     @id @default(autoincrement())
+  cus_name              String
+  cus_documento         String
+  cus_phone             String
+  cus_email             String
+  cus_address           String
+  cus_district          String
+  cus_number            String
+  cus_state             String
+  cus_city              String
+  cus_zip_code          String
+  Caixa                 Caixa[]
+  FinancialTransactions FinancialTransactions[]
 }
 
 model FinancialTransactions {
@@ -58,8 +58,15 @@ model FinancialTransactions {
   fin_customer    Cliente @relation(fields: [fin_customer_id], references: [id])
   fin_type        String
   fin_value       Decimal @db.Decimal(6, 2)
-  fin_category    String
+  fin_category_id Int
+  fin_category    Categories @relation(fields: [fin_category_id], references: [id])
   fin_note        String?
+}
+
+model Categories {
+  id       Int    @id @default(autoincrement())
+  cat_name String
+  FinancialTransactions FinancialTransactions[]
 }
 
 model Caixa {

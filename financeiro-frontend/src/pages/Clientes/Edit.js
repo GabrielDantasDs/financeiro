@@ -41,7 +41,6 @@ export default function Edit() {
 
 
   const getIniitalState = () => {
-    console.log(customer)
     return {
       cus_address: customer.cus_address,
       cus_city: customer.cus_city,

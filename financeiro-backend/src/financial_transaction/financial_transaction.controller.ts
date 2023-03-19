@@ -27,6 +27,11 @@ export class FinancialTransactionController {
         connect: {
           id: parseInt(data.fin_customer),
         },
+      fin_category: {
+        connect: {
+          id: parseInt(data.fin_category)
+        }
+      }
       },
     };
 

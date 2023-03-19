@@ -13,9 +13,10 @@ import { ClienteModule } from './cliente/cliente.module';
 import { CaixaModule } from './caixa/caixa.module';
 import { MovimentacaoModule } from './movimentacao/movimentacao.module';
 import { FinancialTransactionModule } from './financial_transaction/financial_transaction.module';
+import { CategoriasModule } from './categorias/categorias.module';
 
 @Module({
-  imports: [PrismaModule, AuthModule, UserModule, PostModule, DashboardModule, ClienteModule, CaixaModule, MovimentacaoModule, FinancialTransactionModule],
+  imports: [PrismaModule, AuthModule, UserModule, PostModule, DashboardModule, ClienteModule, CaixaModule, MovimentacaoModule, FinancialTransactionModule, CategoriasModule],
   controllers: [AppController],
   providers: [
     AppService,

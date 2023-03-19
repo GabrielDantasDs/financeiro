@@ -31,7 +31,7 @@ export default function sideBar({ sidebarOpen, closeSidebar }) {
 
         <div className="sidebar_link">
           <i className="fa fa-bars"></i>
-          <a href="#">Categorias</a>
+          <Link to={`/categorias/index`} type="button">Categorias</Link>
         </div>
 
         <div className="sidebar_link">

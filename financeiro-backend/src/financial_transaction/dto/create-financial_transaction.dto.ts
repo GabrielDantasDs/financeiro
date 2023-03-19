@@ -11,7 +11,7 @@ export class CreateFinancialTransactionDto implements FinancialTransaction{
     fin_type: string;
 
     @IsString()
-    fin_category: string;
+    fin_category: Prisma.CategoriesCreateNestedOneWithoutFinancialTransactionsInput;
 
     @IsDecimal()
     fin_value: Decimal;
