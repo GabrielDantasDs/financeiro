@@ -60,6 +60,7 @@ model FinancialTransactions {
   fin_value       Decimal @db.Decimal(6, 2)
   fin_category_id Int
   fin_category    Categories @relation(fields: [fin_category_id], references: [id])
+  fin_date        DateTime @default(now())
   fin_note        String?
 }
 

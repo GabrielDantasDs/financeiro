@@ -23,30 +23,31 @@ export class FinancialTransactionController {
   async create(@Body() data: any) {
     let data_formatted: CreateFinancialTransactionDto = {
       ...data,
+      fin_value: Number(data.fin_value.toString().replace(/[^0-9\.-]+/g,"")) / 100,
       fin_customer: {
         connect: {
           id: parseInt(data.fin_customer),
         },
+      },
       fin_category: {
         connect: {
-          id: parseInt(data.fin_category)
-        }
-      }
+          id: data.fin_category,
+        },
       },
     };
 
     return this.financialTransactionService.create(data_formatted);
   }
 
+  @Get('/charts/:id')
+  async getChartsData(customer_id: number) {
+    return this.financialTransactionService.getChartsData(customer_id);
+  }
+
   @Get(':id')
   findAllByCustomer(id: number) {
     return this.financialTransactionService.findAllByCustomer(id);
   }
-
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.financialTransactionService.findOne(+id);
-  // }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() data: any) {

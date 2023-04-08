@@ -1,6 +1,6 @@
 import { FinancialTransaction } from "../entities/financial_transaction.entity";
 import { Decimal } from "@prisma/client/runtime";
-import { IsDecimal, IsNumber, isObject, IsObject, IsOptional, IsString } from "class-validator";
+import { IsDateString, IsDecimal, IsNumber, isObject, IsObject, IsOptional, IsString } from "class-validator";
 import { Prisma } from "@prisma/client";
 
 export class CreateFinancialTransactionDto implements FinancialTransaction{
@@ -10,7 +10,7 @@ export class CreateFinancialTransactionDto implements FinancialTransaction{
     @IsString()
     fin_type: string;
 
-    @IsString()
+    @IsObject()
     fin_category: Prisma.CategoriesCreateNestedOneWithoutFinancialTransactionsInput;
 
     @IsDecimal()
@@ -19,4 +19,7 @@ export class CreateFinancialTransactionDto implements FinancialTransaction{
     @IsString()
     @IsOptional()
     fin_note: string;
+
+    @IsDateString()
+    fin_date: Date;
 }

@@ -140,3 +140,4 @@ export async function handleViaCep(value, setFieldValue) {
 export function removeSpecialCharacters(value) {
   return value.replace(/^a-zA-Z0-9 ]/g, '');
 }
+

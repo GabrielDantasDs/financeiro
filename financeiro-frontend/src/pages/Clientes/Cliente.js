@@ -106,6 +106,8 @@ export default function Cliente() {
     return (
       <div style={{ maxWidth: 200 }} className="d-flex justify-content-between">
         <Link
+          target="_blank"
+          rel="noopener noreferrer"
           to={`/clientes/edit/${rowData.id}`}
           type="button"
           className="btn btn-primary"

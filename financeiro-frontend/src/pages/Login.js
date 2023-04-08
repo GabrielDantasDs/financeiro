@@ -88,6 +88,7 @@ export default function Login() {
               <div className="form-group">
                 <TextField
                   fullWidth
+                  id="email"
                   name="email"
                   type="text"
                   label="Usuário"
@@ -102,6 +103,7 @@ export default function Login() {
               <div>
                 <TextField
                   fullWidth
+                  id="password"
                   name="password"
                   type="password"
                   label="Senha"
@@ -127,6 +129,7 @@ export default function Login() {
 
               <div className="login-card-button">
                 <button
+                  id="submit"
                   type="submit"
                   disabled={isSubmitting}
                   className="login-button"

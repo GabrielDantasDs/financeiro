@@ -28,9 +28,19 @@ export const get = async (id) => {
   return response
 }
 
+export const remove = async (id) => {
+  let response = await axios.delete(constants.baseUrl + `/financial/${id}`)
+
+  return response
+}
+
 export const getFinanceiro = async (id) => {
   let response = await axios.getFinanceiro(constants.baseUrl + `/finan/${id}`)
 
   return response
+}
+
+export const getChartsData = async (id) => {
+  let response = await axios.getFinanceiro(constants.baseUrl + `/financial/charts/${id}`)
 }
 

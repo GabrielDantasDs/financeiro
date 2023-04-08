@@ -5,9 +5,9 @@ import { UpdateClienteDto } from './dto/update-cliente.dto';
 
 @Injectable()
 export class ClienteService {
-  constructor(private readonly prisma: PrismaService){}
+  constructor(private readonly prisma: PrismaService) {}
   create(data: CreateClienteDto) {
-    return this.prisma.cliente.create({data})
+    return this.prisma.cliente.create({ data });
   }
 
   findAll() {
@@ -15,23 +15,26 @@ export class ClienteService {
   }
 
   findOne(id: number) {
-    return this.prisma.cliente.findFirst({where:{id}});
+    return this.prisma.cliente.findFirst({
+      where: { id },
+      include: { FinancialTransactions: { include: { fin_category: true } } },
+    });
   }
 
   update(id: number, data: UpdateClienteDto) {
     return this.prisma.cliente.update({
       where: {
-        id
+        id,
       },
-      data
-    })
+      data,
+    });
   }
 
   remove(id: number) {
-    return this.prisma.cliente.delete({ 
+    return this.prisma.cliente.delete({
       where: {
-        id
-      }
-    })
+        id,
+      },
+    });
   }
 }

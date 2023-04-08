@@ -7,22 +7,27 @@ import {
   TextField,
 } from "@mui/material";
 import { Form, Formik } from "formik";
-import { useEffect, useState } from "react";
+import { useEffect, useState, React, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { create, get } from "../../cruds/finantial_transaction";
+import { create, get, remove } from "../../cruds/finantial_transaction";
 import { validate } from "./Utils";
 
 import Swal from "sweetalert2";
 import { useNavigate, useParams } from "react-router";
-import { Link } from "react-router-dom";
 import { DataTable } from "primereact/datatable";
 import { FilterMatchMode } from "primereact/api";
 import { InputText } from "primereact/inputtext";
 import { Column } from "primereact/column";
 import { faPlus } from "@fortawesome/free-solid-svg-icons/faPlus";
+import { faPrint } from "@fortawesome/free-solid-svg-icons/faPrint";
 import "../../style/finantial.css";
 import { formatBRLInput } from "../../Utils";
-import { text } from "@fortawesome/fontawesome-svg-core";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { list as listCategories } from "../../cruds/category";
+import { get as getCliente } from "../../cruds/customer";
+import dayjs from "dayjs";
+import { useReactToPrint } from "react-to-print";
+import { ComponentToPrint } from "../../utils/ComponentToPrint";
 
 export default function Finantial(props) {
   const [isSubmitting, setSubmitting] = useState(false);
@@ -31,19 +36,68 @@ export default function Finantial(props) {
   });
   const [globalFilterValue, setGlobalFilterValue] = useState("");
   const [finantials, setFinantials] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [dataToPDF, setDataToPDF] = useState(null);
+  const [printing, setPrinting] = useState(false);
+  const [cliente, setCliente] = useState({});
   const navigate = useNavigate();
   const params = useParams();
+  const componentRef = useRef();
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+    onAfterPrint: () => setPrinting(false),
+  });
 
   useEffect(() => {
-    get(params.id)
-      .then((res) => {
-        setFinantials(res.data);
-      })
-      .catch((err) => {
-        Swal.fire("Ops", "Houve um erro ao buscar os dados.", "error");
-        return;
+    async function fetchData() {
+      const [finantialsl, categoriesl, clientel] = await Promise.all([
+        get(params.id)
+          .then((res) => {
+            return res.data;
+          })
+          .catch((err) => {
+            Swal.fire("Ops", "Houve um erro ao buscar os dados.", "error");
+            return;
+          }),
+
+        listCategories()
+          .then((res) => {
+            return res.data;
+          })
+          .catch((err) => {
+            Swal.fire("Ops", "Houve um erro ao buscar os categorias.", "error");
+            return;
+          }),
+
+        getCliente(params.id)
+          .then((res) => {
+            return res.data;
+          })
+          .catch((err) => {
+            Swal.fire("Ops", "Houve um erro ao buscar o cliente", "error");
+            return;
+          }),
+      ]);
+
+      setFinantials(finantialsl);
+      setCategories(categoriesl);
+      setCliente(clientel);
+
+      setDataToPDF({
+        cliente: clientel,
+        finantials: finantialsl,
       });
+    };
+    fetchData();
   }, []);
+
+  useEffect(() => {
+    if (printing) {
+      setTimeout(() => {
+        handlePrint();
+      }, 1000);
+    }
+  }, [printing]);
 
   const getIniitalState = () => {
     return {
@@ -51,6 +105,7 @@ export default function Finantial(props) {
       fin_category: "",
       fin_value: "",
       fin_note: "",
+      fin_date: dayjs(),
       fin_customer: params.id,
     };
   };
@@ -75,10 +130,40 @@ export default function Finantial(props) {
       .finally(() => setSubmitting(false));
   };
 
+  const deleteRecord = (id) => {
+    remove(id)
+      .catch((error) => {
+        Swal.fire("Ops", "Houve um erro ao remover esse registro.", "error");
+        return;
+      })
+      .then((res) => {
+        if (res.status == 200) {
+          get(params.id)
+            .catch((err) => {
+              Swal.fire(
+                "Ops",
+                "Houve um erro ao buscar a lista de categorias.",
+                "error"
+              );
+            })
+            .then((res) => {
+              setFinantials(res.data);
+            });
+        }
+      });
+  };
+
   const actionBody = (rowData) => {
     return (
       <div style={{ maxWidth: 200 }} className="d-flex justify-content-between">
-        <button type="button" className="btn btn-danger">
+        <button
+          type="button"
+          className="btn btn-danger"
+          onClick={(e) => {
+            e.preventDefault();
+            deleteRecord(rowData.id);
+          }}
+        >
           <FontAwesomeIcon icon="fa-solid fa-trash" />
         </button>
       </div>
@@ -108,6 +193,14 @@ export default function Finantial(props) {
         </span>
       </div>
     );
+  };
+
+  const onChangeFinDate = (e, setFieldValue) => {
+    setFieldValue("fin_date", e);
+  };
+
+  const printPdf = () => {
+    setPrinting(true);
   };
 
   const header = renderHeader();
@@ -179,7 +272,7 @@ export default function Finantial(props) {
                 </div>
 
                 <div className="form-row">
-                  <div className="form-group col-md-6">
+                  <div className="form-group col-md-4">
                     <FormControl fullWidth>
                       <InputLabel id="select-type-category">
                         Categoria *
@@ -192,13 +285,18 @@ export default function Finantial(props) {
                         label="Categoria"
                         onChange={handleChange}
                       >
-                        <MenuItem value={"Categoria_1"}>Categoria 1</MenuItem>
-                        <MenuItem value={"Categoria_2"}>Categoria 2</MenuItem>
+                        {categories.map((cat, i) => {
+                          return (
+                            <MenuItem key={i} value={cat.id}>
+                              {cat.cat_name}
+                            </MenuItem>
+                          );
+                        })}
                       </Select>
                     </FormControl>
                   </div>
 
-                  <div className="form-group col-md-6">
+                  <div className="form-group col-md-4">
                     <TextField
                       required
                       id="outlined-required"
@@ -210,6 +308,16 @@ export default function Finantial(props) {
                       error={touched.fin_note && errors.fin_note ? true : false}
                       onBlur={handleBlur}
                       onChange={handleChange}
+                    />
+                  </div>
+
+                  <div className="form-group col-md-4">
+                    <DatePicker
+                      className="full-width"
+                      onChange={(e) => onChangeFinDate(e, setFieldValue)}
+                      value={values.fin_date}
+                      error={touched.fin_date && errors.fin_date ? true : false}
+                      onBlur={handleBlur}
                     />
                   </div>
                 </div>
@@ -230,27 +338,69 @@ export default function Finantial(props) {
           </Formik>
         </div>
 
-        <div className="datatable-container">
-          <DataTable
-            value={finantials}
-            stripedRows
-            showGridlines
-            paginator
-            rows={5}
-            rowsPerPageOptions={[5, 10, 25, 50]}
-            tableStyle={{ minWidth: "50rem" }}
-            filters={filters}
-            globalFilterFields={["cus_name", "cus_documento"]}
-            header={header}
-            emptyMessage="Não há registros."
-          >
-            <Column field="fin_type" header="Tipo"></Column>
-            <Column field="fin_value" header="Valor"></Column>
-            <Column field="fin_category" header="Categoria"></Column>
-            <Column field="fin_note" header="Nota"></Column>
-            <Column header="Opções" body={actionBody}></Column>
-          </DataTable>
+        <div className="body">
+          <div className="database-header">
+            <Button
+              onClick={(e) => {
+                e.preventDefault();
+                printPdf();
+              }}
+              startIcon={<FontAwesomeIcon icon={faPrint} />}
+              color="primary"
+              variant="contained"
+            >
+              PDF
+            </Button>
+          </div>
+          <div className="datatable-container">
+            <DataTable
+              value={finantials}
+              stripedRows
+              showGridlines
+              paginator
+              rows={5}
+              rowsPerPageOptions={[5, 10, 25, 50]}
+              tableStyle={{ minWidth: "50rem" }}
+              filters={filters}
+              globalFilterFields={["cus_name", "cus_documento"]}
+              header={header}
+              emptyMessage="Não há registros."
+            >
+              <Column field="fin_type" header="Tipo"></Column>
+              <Column
+                field="fin_value"
+                header="Valor"
+                body={(rowData) => {
+                  return Number(rowData.fin_value).toLocaleString("pt-br", {
+                    style: "currency",
+                    currency: "BRL",
+                  });
+                }}
+              ></Column>
+              <Column
+                field="fin_category"
+                header="Categoria"
+                body={(rowData) => {
+                  return categories.find(
+                    (cat) => cat.id == rowData.fin_category_id
+                  ).cat_name;
+                }}
+              ></Column>
+              <Column field="fin_note" header="Nota"></Column>
+              <Column
+                field="fin_date"
+                header="Data"
+                body={(rowData) => {
+                  return dayjs(rowData.fin_date).format("DD/MM/YYYY");
+                }}
+              ></Column>
+              <Column header="Opções" body={actionBody}></Column>
+            </DataTable>
+          </div>
         </div>
+      </div>
+      <div style={!printing ? { display: "none" } : null}>
+        <ComponentToPrint ref={componentRef} data={dataToPDF} />
       </div>
     </div>
   );

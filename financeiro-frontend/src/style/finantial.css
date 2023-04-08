@@ -3,6 +3,21 @@
     padding: 0 16px 0 16px;
 }
 
+.database-header {
+    display: flex;
+    flex-direction: row-reverse;
+    padding: 0 16px 16px 16px;
+}
+
 .form-container {
     margin-bottom: 32px;
+}
+
+.full-width {
+    width: 100% !important;
+}
+
+.body {
+    height: fit-content;
+    padding: 32px;
 }

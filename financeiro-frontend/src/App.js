@@ -10,6 +10,9 @@ import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fas } from "@fortawesome/free-solid-svg-icons";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import "dayjs/locale/pt-br";
 
 library.add(fas);
 
@@ -17,36 +20,38 @@ function App() {
   const navigate = useNavigate();
 
   return (
-    <div>
-      <Nav />
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="clientes/*"
-          element={
-            <ProtectedRoute>
-              <Cliente />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="categorias/*"
-          element={
-            <ProtectedRoute>
-              <Categoria />
-            </ProtectedRoute>
-          }
-        />
-        <Route exact path="/auth" element={<Login />} />
-      </Routes>
-    </div>
+    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pt-br">
+      <div>
+        <Nav />
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="clientes/*"
+            element={
+              <ProtectedRoute>
+                <Cliente />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="categorias/*"
+            element={
+              <ProtectedRoute>
+                <Categoria />
+              </ProtectedRoute>
+            }
+          />
+          <Route exact path="/auth" element={<Login />} />
+        </Routes>
+      </div>
+    </LocalizationProvider>
   );
 }
 
