@@ -41,7 +41,7 @@ export class FinancialTransactionController {
 
   @Get('/charts/:id')
   async getChartsData(customer_id: number) {
-    return this.financialTransactionService.getChartsData(customer_id);
+    return await this.financialTransactionService.getChartsData(customer_id);
   }
 
   @Get(':id')

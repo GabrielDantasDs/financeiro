@@ -1,2 +1,1 @@
-# financeiro
-Painel administrativo para gerenciar um financeiro simples
+# financeiro Painel administrativo para gerenciar um financeiro simples

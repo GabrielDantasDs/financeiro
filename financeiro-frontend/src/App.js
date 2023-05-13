@@ -28,17 +28,24 @@ function App() {
             path="/"
             element={
               <ProtectedRoute>
+              </ProtectedRoute>
+            }
+          ></Route>
+           <Route
+            path="/dashboard/*"
+            element={
+              <ProtectedRoute>
                 <Dashboard />
               </ProtectedRoute>
             }
           />
-          <Route
-            path="clientes/*"
-            element={
-              <ProtectedRoute>
-                <Cliente />
-              </ProtectedRoute>
-            }
+          <Route 
+          path="clientes/*" element=
+          {
+            <ProtectedRoute>
+              <Cliente />
+            </ProtectedRoute>
+          }
           />
           <Route
             path="categorias/*"

@@ -11,9 +11,9 @@ export default function sideBar({ sidebarOpen, closeSidebar }) {
       <div className="sidebar_menu">
         <div className="sidebar_link active_menu_link">
           <i className="fa fa-house"> </i>
-          <a href="#">Home</a>
+          <Link to={`/dashboard`} type="button">Home</Link>
         </div>
-        <h2>ADMIN</h2>
+        {/* <h2>ADMIN</h2>
         <div className="sidebar_link">
           <i className="fa fa-tachometer"></i>
           <a href="#">Área administrativa</a>
@@ -37,13 +37,13 @@ export default function sideBar({ sidebarOpen, closeSidebar }) {
         <div className="sidebar_link">
           <i className="fa fa-cutlery"></i>
           <a href="#">Pedidos</a>
-        </div>
+        </div> */}
 
         <h2>PESSOAS</h2>
-        <div className="sidebar_link">
+        {/* <div className="sidebar_link">
           <i className="fa fa-male"></i>
           <a href="administradores">Administradores</a>
-        </div>
+        </div> */}
         <div className="sidebar_link">
           <i className="fa fa-users"></i>
           <Link to={`/clientes/index`} type="button">Clientes</Link>

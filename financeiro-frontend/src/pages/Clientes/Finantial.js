@@ -87,7 +87,7 @@ export default function Finantial(props) {
         cliente: clientel,
         finantials: finantialsl,
       });
-    };
+    }
     fetchData();
   }, []);
 
@@ -400,7 +400,9 @@ export default function Finantial(props) {
         </div>
       </div>
       <div style={!printing ? { display: "none" } : null}>
-        <ComponentToPrint ref={componentRef} data={dataToPDF} />
+        {dataToPDF ? (
+          <ComponentToPrint ref={componentRef} data={dataToPDF} />
+        ) : null}
       </div>
     </div>
   );

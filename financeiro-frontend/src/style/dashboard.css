@@ -12,6 +12,7 @@
 .main_title {
     display: flex;
     align-items: center;
+    margin: 20px 20px;
 }
 
 .main_title > img {

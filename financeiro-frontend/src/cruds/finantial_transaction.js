@@ -35,12 +35,14 @@ export const remove = async (id) => {
 }
 
 export const getFinanceiro = async (id) => {
-  let response = await axios.getFinanceiro(constants.baseUrl + `/finan/${id}`)
+  let response = await axios.get(constants.baseUrl + `/finan/${id}`)
 
   return response
 }
 
 export const getChartsData = async (id) => {
-  let response = await axios.getFinanceiro(constants.baseUrl + `/financial/charts/${id}`)
+  let response = await axios.get(constants.baseUrl + `/financial/charts/${id}`)
+
+  return response;
 }
 
