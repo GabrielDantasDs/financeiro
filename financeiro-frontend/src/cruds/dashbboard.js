@@ -1,20 +1,17 @@
-import axios from 'axios'
-import { redirect, useH } from 'react-router-dom'
-import Constants from 'src/constants'
-import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import Constants from '../../src/constants'
 
-const constants = new Constants()
-axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*'
+const constants = new Constants();
+axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
 
 const axiosHeaderConfig = {
   headers: {
-    Authorization: 'Bearer ' + localStorage.getItem('access_token'),
+    Authorization: "Bearer " + localStorage.getItem("access_token"),
   },
-}
+};
 
 export const get = async () => {
-  let response = await axios
-    .get(constants.baseUrl + '/dashboard', axiosHeaderConfig);
+  let response = await axios.get(constants.baseUrl + `/dashboard`);
 
-  return response
-}
+  return response;
+};

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseFilters } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseFilters, Request } from '@nestjs/common';
 import { IsPublic } from 'src/auth/decorators/is-public.decorator';
 import { UnauthorizedExceptionFilter } from '../filters/exceptions/http/http-unauthorized.filter';
 import { DashboardService } from './dashboard.service';
@@ -10,11 +10,13 @@ export class DashboardController {
   constructor(private readonly dashboardService: DashboardService) {}
 
   @Get()
-  findAll() {
-    return this.dashboardService.find().then(data => {
+  async get(@Request() req: any) {
+    const id_user = req.user.id
+  
+    return this.dashboardService.find(id_user).then(data => {
       return data
     }).catch(error => {
       return error;
-    })
+    });
   }
 }

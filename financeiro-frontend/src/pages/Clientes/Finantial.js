@@ -24,7 +24,7 @@ import "../../style/finantial.css";
 import { formatBRLInput } from "../../Utils";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { list as listCategories } from "../../cruds/category";
-import { get as getCliente } from "../../cruds/customer";
+import { get as getCliente } from "../../cruds/client";
 import dayjs from "dayjs";
 import { useReactToPrint } from "react-to-print";
 import { ComponentToPrint } from "../../utils/ComponentToPrint";

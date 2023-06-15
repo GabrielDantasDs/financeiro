@@ -11,80 +11,92 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id       Int     @id @default(autoincrement())
-  password String
-  email    String  @unique
-  name     String?
-  posts    Post[]
+model user {
+  id         Int      @id @default(autoincrement())
+  password   String
+  email      String   @unique
+  name       String?
+  created_at DateTime @default(now())
 }
 
-model Post {
-  id        Int      @id @default(autoincrement())
-  title     String?
-  content   String?
-  published Boolean? @default(false)
-  author    User?    @relation(fields: [id_autor], references: [id])
-  id_autor  Int?
-  id_image  Int?
-  image     Image?   @relation(fields: [id_image], references: [id])
-}
-
-model Image {
-  id   Int    @id @default(autoincrement())
-  url  String
-  Post Post[]
-}
-
-model Cliente {
+model client {
   id                    Int                     @id @default(autoincrement())
-  cus_name              String
-  cus_documento         String
-  cus_phone             String
-  cus_email             String
-  cus_address           String
-  cus_district          String
-  cus_number            String
-  cus_state             String
-  cus_city              String
-  cus_zip_code          String
-  Caixa                 Caixa[]
-  FinancialTransactions FinancialTransactions[]
+  cli_name              String
+  cli_email             String
+  cli_document          String
+  cli_phone             String
+  cli_address           String
+  cli_district          String
+  cli_number            String
+  cli_state             String
+  cli_city              String
+  cli_zip_code          String
+  created_at            DateTime                @default(now())
+  financial_transaction financial_transaction[]
+  subscriber            subscriber[]
 }
 
-model FinancialTransactions {
-  id              Int     @id @default(autoincrement())
-  fin_customer_id Int
-  fin_customer    Cliente @relation(fields: [fin_customer_id], references: [id])
-  fin_type        String
-  fin_value       Decimal @db.Decimal(6, 2)
-  fin_category_id Int
-  fin_category    Categories @relation(fields: [fin_category_id], references: [id])
-  fin_date        DateTime @default(now())
-  fin_note        String?
+model subscriber {
+  id                    Int                     @id @default(autoincrement())
+  sub_name              String
+  sub_document          String
+  sub_phone             String
+  sub_address           String
+  sub_district          String
+  sub_number            String
+  sub_state             String
+  sub_city              String
+  sub_zip_code          String
+  sub_id_client         Int
+  sub_client            client                  @relation(fields: [sub_id_client], references: [id])
+  created_at            DateTime                @default(now())
+  financial_transaction financial_transaction[]
 }
 
-model Categories {
+model subscriber_type {
   id       Int    @id @default(autoincrement())
-  cat_name String
-  FinancialTransactions FinancialTransactions[]
+  sut_name String
 }
 
-model Caixa {
-  id                    Int            @id @default(autoincrement())
-  id_cliente            Int
-  cliente               Cliente        @relation(fields: [id_cliente], references: [id])
-  inicial               Decimal        @db.Decimal(6, 2)
-  data_ultima_alteracao DateTime
-  status                Boolean
-  movimentacao          Movimentacao[]
+model financial_transaction {
+  id              Int         @id @default(autoincrement())
+  fin_id_client   Int
+  fin_client      client      @relation(fields: [fin_id_client], references: [id])
+  fin_type        String
+  fin_value       Decimal     @db.Decimal(6, 2)
+  fin_id_category Int
+  fin_category    category    @relation(fields: [fin_id_category], references: [id])
+  fin_date        DateTime    @default(now())
+  fin_note        String?
+  subscriber      subscriber? @relation(fields: [subscriberId], references: [id])
+  subscriberId    Int?
 }
 
-model Movimentacao {
-  id       Int      @id @default(autoincrement())
-  id_caixa Int
-  caixa    Caixa    @relation(fields: [id_caixa], references: [id])
-  tipo     String
-  valor    Decimal  @db.Decimal(6, 2)
-  data     DateTime
+model category {
+  id                    Int                     @id @default(autoincrement())
+  cat_name              String
+  financial_transaction financial_transaction[]
+}
+
+model cost_center {
+  id              Int    @id @default(autoincrement())
+  coc_id_category Int
+  coc_name        String
+}
+
+model payment_condition {
+  id                  Int          @id @default(autoincrement())
+  pac_installment     Int
+  pac_method          String
+  pac_id_bank_account Int
+  pac_bank_account    bank_account @relation(fields: [pac_id_bank_account], references: [id])
+  pac_paid            Boolean
+}
+
+model bank_account {
+  id                Int                 @id @default(autoincrement())
+  bac_name          String
+  bac_type          String
+  bac_description   String
+  payment_condition payment_condition[]
 }

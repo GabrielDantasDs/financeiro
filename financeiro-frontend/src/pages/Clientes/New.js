@@ -3,7 +3,7 @@ import { Form, Formik } from "formik";
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons/faCheck";
-import { create } from "../../cruds/customer";
+import { create } from "../../cruds/client";
 import { validate } from "./Utils";
 import {
   formatCnpjCpfInput,
@@ -23,16 +23,16 @@ export default function New() {
 
   const getIniitalState = () => {
     return {
-      cus_address: "",
-      cus_city: "",
-      cus_district: "",
-      cus_documento: "",
-      cus_email: "",
-      cus_name: "",
-      cus_number: "",
-      cus_state: "",
-      cus_zip_code: "",
-      cus_phone: "",
+      cli_address: "",
+      cli_city: "",
+      cli_district: "",
+      cli_document: "",
+      cli_email: "",
+      cli_name: "",
+      cli_number: "",
+      cli_state: "",
+      cli_zip_code: "",
+      cli_phone: "",
     };
   };
 
@@ -86,9 +86,9 @@ export default function New() {
                       required
                       id="outlined-required"
                       label="Nome"
-                      value={values.cus_name}
-                      error={touched.cus_name && errors.cus_name ? true : false}
-                      name="cus_name"
+                      value={values.cli_name}
+                      error={touched.cli_name && errors.cli_name ? true : false}
+                      name="cli_name"
                       onBlur={handleBlur}
                       fullWidth
                       onChange={handleChange}
@@ -100,11 +100,11 @@ export default function New() {
                       required
                       id="outlined-required"
                       label="Email"
-                      name="cus_email"
+                      name="cli_email"
                       fullWidth
-                      value={values.cus_email}
+                      value={values.cli_email}
                       error={
-                        touched.cus_email && errors.cus_email ? true : false
+                        touched.cli_email && errors.cli_email ? true : false
                       }
                       onBlur={handleBlur}
                       onChange={handleChange}
@@ -119,11 +119,11 @@ export default function New() {
                       id="outlined-required"
                       label="Telefone"
                       fullWidth
-                      value={values.cus_phone}
+                      value={values.cli_phone}
                       error={
-                        touched.cus_phone && errors.cus_phone ? true : false
+                        touched.cli_phone && errors.cli_phone ? true : false
                       }
-                      name="cus_phone"
+                      name="cli_phone"
                       onBlur={handleBlur}
                       onChange={(e) => handleChange(formatTelefoneInput(e))}
                       inputProps={{ maxLength: 15 }}
@@ -135,11 +135,11 @@ export default function New() {
                       required
                       id="outlined-required"
                       label="Documento"
-                      name="cus_documento"
+                      name="cli_document"
                       fullWidth
-                      value={values.cus_documento}
+                      value={values.cli_document}
                       error={
-                        touched.cus_documento && errors.cus_documento
+                        touched.cli_document && errors.cli_document
                           ? true
                           : false
                       }
@@ -157,8 +157,8 @@ export default function New() {
                       <Select
                         labelId="select-state"
                         id="select-state"
-                        value={values.cus_state}
-                        name="cus_state"
+                        value={values.cli_state}
+                        name="cli_state"
                         label="UF"
                         onChange={handleChange}
                       >
@@ -174,11 +174,11 @@ export default function New() {
                       required
                       id="outlined-required"
                       label="CEP"
-                      name="cus_zip_code"
+                      name="cli_zip_code"
                       fullWidth
-                      value={values.cus_zip_code}
+                      value={values.cli_zip_code}
                       error={
-                        touched.cus_zip_code && errors.cus_zip_code
+                        touched.cli_zip_code && errors.cli_zip_code
                           ? true
                           : false
                       }
@@ -194,10 +194,10 @@ export default function New() {
                       required
                       id="outlined-required"
                       label="Cidade"
-                      name="cus_city"
+                      name="cli_city"
                       fullWidth
-                      value={values.cus_city}
-                      error={touched.cus_city && errors.cus_city ? true : false}
+                      value={values.cli_city}
+                      error={touched.cli_city && errors.cli_city ? true : false}
                       onBlur={handleBlur}
                       onChange={handleChange}
                     />
@@ -208,11 +208,11 @@ export default function New() {
                       required
                       id="outlined-required"
                       label="Bairro"
-                      name="cus_district"
+                      name="cli_district"
                       fullWidth
-                      value={values.cus_district}
+                      value={values.cli_district}
                       error={
-                        touched.cus_district && errors.cus_district
+                        touched.cli_district && errors.cli_district
                           ? true
                           : false
                       }
@@ -227,11 +227,11 @@ export default function New() {
                       required
                       id="outlined-required"
                       label="Rua"
-                      name="cus_address"
+                      name="cli_address"
                       fullWidth
-                      value={values.cus_address}
+                      value={values.cli_address}
                       error={
-                        touched.cus_address && errors.cus_address ? true : false
+                        touched.cli_address && errors.cli_address ? true : false
                       }
                       onBlur={handleBlur}
                       onChange={handleChange}
@@ -243,11 +243,11 @@ export default function New() {
                       required
                       id="outlined-required"
                       label="Número"
-                      name="cus_number"
+                      name="cli_number"
                       fullWidth
-                      value={values.cus_number}
+                      value={values.cli_number}
                       error={
-                        touched.cus_number && errors.cus_number ? true : false
+                        touched.cli_number && errors.cli_number ? true : false
                       }
                       onBlur={handleBlur}
                       onChange={handleChange}

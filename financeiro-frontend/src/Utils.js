@@ -130,10 +130,10 @@ export async function handleViaCep(value, setFieldValue) {
   if (value.length == 9) {
     let payload = await getViaCep(removeSpecialCharacters(value));
 
-    setFieldValue("cus_address", payload.logradouro);
-    setFieldValue("cus_state", payload.uf);
-    setFieldValue("cus_city", payload.localidade);
-    setFieldValue("cus_district", payload.bairro);
+    setFieldValue("cli_address", payload.logradouro);
+    setFieldValue("cli_state", payload.uf);
+    setFieldValue("cli_city", payload.localidade);
+    setFieldValue("cli_district", payload.bairro);
   }
 }
 

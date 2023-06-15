@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
 import "../../style/sidebar.css";
+import { useState } from "react";
 
-export default function sideBar({ sidebarOpen, closeSidebar }) {
+export default function SideBar({ sidebarOpen, closeSidebar }) {
+  const [active, setActive] = useState("");
+
   return (
     <div className={sidebarOpen ? "sidebar-responsive" : ""} id="sidebar">
       <div className="sidebar_title">
@@ -9,44 +12,29 @@ export default function sideBar({ sidebarOpen, closeSidebar }) {
       </div>
 
       <div className="sidebar_menu">
-        <div className="sidebar_link active_menu_link">
+        <div
+          onClick={(e) => setActive("dashboard")}
+          className={
+            active == "dashobard" ? "sidebar_link active_link" : "sidebar_link"
+          }
+        >
           <i className="fa fa-house"> </i>
-          <Link to={`/dashboard`} type="button">Home</Link>
+          <Link to={`/dashboard`} type="button">
+            Dashboard
+          </Link>
         </div>
-        {/* <h2>ADMIN</h2>
-        <div className="sidebar_link">
-          <i className="fa fa-tachometer"></i>
-          <a href="#">Área administrativa</a>
-        </div>
-
-        <div className="sidebar_link">
-          <i className="fa fa-building"></i>
-          <a href="#">Lojas</a>
-        </div>
-
-        <div className="sidebar_link">
-          <i className="fa fa-archive"></i>
-          <a href="#">Produtos</a>
-        </div>
-
-        <div className="sidebar_link">
-          <i className="fa fa-bars"></i>
-          <Link to={`/categorias/index`} type="button">Categorias</Link>
-        </div>
-
-        <div className="sidebar_link">
-          <i className="fa fa-cutlery"></i>
-          <a href="#">Pedidos</a>
-        </div> */}
 
         <h2>PESSOAS</h2>
-        {/* <div className="sidebar_link">
-          <i className="fa fa-male"></i>
-          <a href="administradores">Administradores</a>
-        </div> */}
-        <div className="sidebar_link">
+        <div
+          onClick={() => setActive("clientes")}
+          className={
+            active == "clientes" ? "sidebar_link active_link" : "sidebar_link"
+          }
+        >
           <i className="fa fa-users"></i>
-          <Link to={`/clientes/index`} type="button">Clientes</Link>
+          <Link to={`/clientes/index`} type="button">
+            Clientes
+          </Link>
         </div>
       </div>
     </div>

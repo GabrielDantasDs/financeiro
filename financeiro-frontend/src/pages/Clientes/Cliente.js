@@ -5,7 +5,7 @@ import Button from "@mui/material/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons/faPlus";
 import { useEffect, useState } from "react";
-import { list, remove } from "../../cruds/customer";
+import { list, remove } from "../../cruds/client";
 import Swal from "sweetalert2";
 import { InputText } from "primereact/inputtext";
 import { FilterMatchMode, FilterOperator } from "primereact/api";
@@ -33,9 +33,9 @@ export default function Cliente() {
         res.data.map((cliente, i) => {
           formatted_clientes.push({
             id: cliente.id,
-            cus_name: cliente.cus_name,
-            cus_email: cliente.cus_email,
-            cus_documento: cliente.cus_documento,
+            cli_name: cliente.cli_name,
+            cli_email: cliente.cli_email,
+            cli_document: cliente.cli_document,
           });
         });
 
@@ -90,9 +90,9 @@ export default function Cliente() {
               res.data.map((cliente, i) => {
                 formatted_clientes.push({
                   id: cliente.id,
-                  cus_name: cliente.cus_name,
-                  cus_email: cliente.cus_email,
-                  cus_documento: cliente.cus_documento,
+                  cli_name: cliente.cli_name,
+                  cli_email: cliente.cli_email,
+                  cli_document: cliente.cli_document,
                 });
               });
 
@@ -106,8 +106,6 @@ export default function Cliente() {
     return (
       <div style={{ maxWidth: 200 }} className="d-flex justify-content-between">
         <Link
-          target="_blank"
-          rel="noopener noreferrer"
           to={`/clientes/edit/${rowData.id}`}
           type="button"
           className="btn btn-primary"
@@ -145,14 +143,15 @@ export default function Cliente() {
         </div>
         <div className="body">
           <div className="database-header">
-            <Button
-              href="/clientes/new"
-              startIcon={<FontAwesomeIcon icon={faPlus} />}
-              variant="contained"
-              color="success"
-            >
-              Novo cliente
-            </Button>
+            <Link to={`/clientes/new`} type="button">
+              <Button
+                startIcon={<FontAwesomeIcon icon={faPlus} />}
+                variant="contained"
+                color="success"
+              >
+                Editar cliente
+              </Button>
+            </Link>
           </div>
           <div style={{ width: "100%" }}>
             <DataTable
@@ -164,13 +163,13 @@ export default function Cliente() {
               rowsPerPageOptions={[5, 10, 25, 50]}
               tableStyle={{ minWidth: "50rem" }}
               filters={filters}
-              globalFilterFields={["cus_name", "cus_documento"]}
+              globalFilterFields={["cli_name", "cli_document"]}
               header={header}
               emptyMessage="Não há registros."
             >
-              <Column field="cus_name" header="Nome"></Column>
-              <Column field="cus_email" header="Email"></Column>
-              <Column field="cus_documento" header="Documento"></Column>
+              <Column field="cli_name" header="Nome"></Column>
+              <Column field="cli_email" header="Email"></Column>
+              <Column field="cli_document" header="Documento"></Column>
               <Column header="Opções" body={actionBody}></Column>
             </DataTable>
           </div>
