@@ -149,7 +149,7 @@ export default function Cliente() {
                 variant="contained"
                 color="success"
               >
-                Editar cliente
+                Novo cliente
               </Button>
             </Link>
           </div>

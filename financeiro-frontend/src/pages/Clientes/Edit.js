@@ -10,6 +10,7 @@ import { Form, Formik } from "formik";
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons/faCheck";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons/faArrowLeft";
 import { edit, get } from "../../cruds/client";
 import { validate } from "./Utils";
 import {
@@ -35,10 +36,9 @@ export default function Edit() {
       await get(params.id).then((res) => {
         setCustomer(res.data);
       });
-    };
+    }
     fetchData();
   }, []);
-
 
   const getIniitalState = () => {
     return {
@@ -158,7 +158,7 @@ export default function Edit() {
                         id="outlined-required"
                         label="Documento"
                         name="cli_document"
-                        fullWidth 
+                        fullWidth
                         value={values.cli_document}
                         error={
                           touched.cli_document && errors.cli_document
@@ -289,6 +289,15 @@ export default function Edit() {
                   </div>
 
                   <div className="d-flex flex-row-reverse">
+                    <Button
+                      startIcon={<FontAwesomeIcon icon={faArrowLeft} />}
+                      variant="contained"
+                      color="danger"
+                      disabled={isSubmitting}
+                      type="submit"
+                    >
+                      Voltar
+                    </Button>
                     <Button
                       startIcon={<FontAwesomeIcon icon={faCheck} />}
                       variant="contained"
