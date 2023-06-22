@@ -32,6 +32,7 @@ export default function Edit() {
   const params = useParams();
 
   useEffect(() => {
+    console.log('dassda')
     async function fetchData() {
       await get(params.id).then((res) => {
         setCustomer(res.data);
@@ -84,19 +85,12 @@ export default function Edit() {
             >
               {({
                 values,
-
                 errors,
-
                 touched,
-
                 handleChange,
-
                 handleBlur,
-
                 handleSubmit,
-
                 setFieldValue,
-
                 isSubmitting,
               }) => (
                 <Form>

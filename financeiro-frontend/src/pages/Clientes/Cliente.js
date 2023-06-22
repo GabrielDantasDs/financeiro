@@ -10,6 +10,7 @@ import Swal from "sweetalert2";
 import { InputText } from "primereact/inputtext";
 import { FilterMatchMode, FilterOperator } from "primereact/api";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export default function Cliente() {
   const [clientes, setClientes] = useState([]);
@@ -17,8 +18,15 @@ export default function Cliente() {
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
   const [globalFilterValue, setGlobalFilterValue] = useState("");
+  const user = useSelector((state) => state);
 
   useEffect(() => {
+    console.log(user)
+  },[]);
+  
+
+  useEffect(() => {
+    console.log('teste123')
     list()
       .catch((err) => {
         Swal.fire(

@@ -3,7 +3,6 @@ import "../style/componentToPrint.css";
 import Chart from "chart.js/auto";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import dayjs from "dayjs";
-import { getChartsData } from "../cruds/finantial_transaction";
 import Swal from "sweetalert2";
 
 export const ComponentToPrint = React.forwardRef((props, ref) => {
@@ -13,30 +12,30 @@ export const ComponentToPrint = React.forwardRef((props, ref) => {
   const [categorias_saida_porcentagem, setCategoriasSaidaPorcentagem] =
     useState([]);
 
-  useEffect(() => {
-    async function fetchData() {
-      let response = await getChartsData(props.data.cliente.id)
-        .catch((err) => {
-          Swal.fire(
-            "Ops",
-            "Houve um erro ao buscar os dados do cliente.",
-            "error"
-          );
-          return;
-        })
-        .then((res) => {
-          setCategoriasEntradaPorcentagem(res.data[0]);
-          setCategoriasSaidaPorcentagem(res.data[1]);
-        });
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     let response = await getChartsData(props.data.cliente.id)
+  //       .catch((err) => {
+  //         Swal.fire(
+  //           "Ops",
+  //           "Houve um erro ao buscar os dados do cliente.",
+  //           "error"
+  //         );
+  //         return;
+  //       })
+  //       .then((res) => {
+  //         setCategoriasEntradaPorcentagem(res.data[0]);
+  //         setCategoriasSaidaPorcentagem(res.data[1]);
+  //       });
 
-      return response;
-    }
+  //     return response;
+  //   }
 
-    if (props.data) {
-      setData(props.data);
-      fetchData();
-    }
-  }, [props.data]);
+  //   if (props.data) {
+  //     setData(props.data);
+  //     fetchData();
+  //   }
+  // }, [props.data]);
 
   useEffect(() => {
     let categories_profit = [];

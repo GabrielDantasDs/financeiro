@@ -9,9 +9,10 @@ import { UserModule } from './user/user.module';
 import { RolesGuard } from './authorization/guards/roles.guard';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { ClientModule } from './client/client.module';
+import { FinancialTransactionModule } from './financial_transaction/financial_transaction.module';
 
 @Module({
-  imports: [PrismaModule, AuthModule, UserModule, DashboardModule, ClientModule],
+  imports: [PrismaModule, AuthModule, UserModule, DashboardModule, ClientModule, FinancialTransactionModule],
   controllers: [AppController],
   providers: [
     AppService,

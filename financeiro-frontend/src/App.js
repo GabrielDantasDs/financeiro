@@ -14,6 +14,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import "dayjs/locale/pt-br";
 
+
 library.add(fas);
 
 function App() {
@@ -22,7 +23,7 @@ function App() {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pt-br">
       <div>
-        <Nav />
+        <Nav/>
         <Routes>
           <Route
             path="/"

@@ -59,17 +59,23 @@ model subscriber_type {
 }
 
 model financial_transaction {
-  id              Int         @id @default(autoincrement())
-  fin_id_client   Int
-  fin_client      client      @relation(fields: [fin_id_client], references: [id])
-  fin_type        String
-  fin_value       Decimal     @db.Decimal(6, 2)
-  fin_id_category Int
-  fin_category    category    @relation(fields: [fin_id_category], references: [id])
-  fin_date        DateTime    @default(now())
-  fin_note        String?
-  subscriber      subscriber? @relation(fields: [subscriberId], references: [id])
-  subscriberId    Int?
+  id                   Int         @id @default(autoincrement())
+  fin_id_client        Int
+  fin_client           client      @relation(fields: [fin_id_client], references: [id])
+  fin_type             String
+  fin_value            Decimal     @db.Decimal(6, 2)
+  fin_id_category      Int
+  fin_category         category    @relation(fields: [fin_id_category], references: [id])
+  fin_invoice_date     DateTime    @default(now())
+  fin_note             String?
+  fin_payment_day      DateTime
+  fin_payed            Boolean
+  fin_periodicity_type String
+  fin_periodicity      Int
+  fin_id_center_cost   Int
+  fin_cost_center      cost_center @relation(fields: [fin_id_center_cost], references: [id])
+  subscriber           subscriber? @relation(fields: [subscriberId], references: [id])
+  subscriberId         Int?
 }
 
 model category {
@@ -79,9 +85,10 @@ model category {
 }
 
 model cost_center {
-  id              Int    @id @default(autoincrement())
-  coc_id_category Int
-  coc_name        String
+  id                    Int                     @id @default(autoincrement())
+  coc_id_category       Int
+  coc_name              String
+  financial_transaction financial_transaction[]
 }
 
 model payment_condition {
