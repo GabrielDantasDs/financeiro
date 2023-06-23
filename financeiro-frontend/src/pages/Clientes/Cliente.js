@@ -1,7 +1,7 @@
 import "../../style/cliente.css";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import Button from "@mui/material/Button";
+import { Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons/faPlus";
 import { useEffect, useState } from "react";
@@ -9,8 +9,11 @@ import { list, remove } from "../../cruds/client";
 import Swal from "sweetalert2";
 import { InputText } from "primereact/inputtext";
 import { FilterMatchMode, FilterOperator } from "primereact/api";
-import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { setClient as setClientAction } from "../../store/ducks/client";
+import { useDispatch } from "react-redux";
+import { setClient } from "../../store/actions";
+
 
 export default function Cliente() {
   const [clientes, setClientes] = useState([]);
@@ -18,15 +21,11 @@ export default function Cliente() {
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
   const [globalFilterValue, setGlobalFilterValue] = useState("");
-  const user = useSelector((state) => state);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
 
   useEffect(() => {
-    console.log(user)
-  },[]);
-  
-
-  useEffect(() => {
-    console.log('teste123')
     list()
       .catch((err) => {
         Swal.fire(
@@ -110,6 +109,10 @@ export default function Cliente() {
       });
   };
 
+  const onSetSelectedCliente = (id) => {
+        dispatch(setClient(id, navigate));
+  }
+
   const actionBody = (rowData) => {
     return (
       <div style={{ maxWidth: 200 }} className="d-flex justify-content-between">
@@ -120,13 +123,12 @@ export default function Cliente() {
         >
           <FontAwesomeIcon icon="fa-solid fa-pen-to-square" />
         </Link>
-        <Link
-          to={`/clientes/financeiro/${rowData.id}`}
-          type="button"
-          className="btn btn-warning"
+        <Button
+          variant="warning"
+          onClick={(e) => {e.preventDefault();onSetSelectedCliente(rowData.id)}}
         >
           <FontAwesomeIcon icon="fa-solid fa-list" />
-        </Link>
+        </Button>
         <button
           type="button"
           className="btn btn-danger"

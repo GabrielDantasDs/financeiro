@@ -2,7 +2,6 @@ import axios from "axios";
 import Constants from "./constants";
 
 export function SetupAxios() {
-  console.log('setup axios');
   axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
   axios.defaults.headers.common["Authorization"] = 'Bearer ' +
     localStorage.getItem("access_token")?.replace(/['"]+/g, '')
