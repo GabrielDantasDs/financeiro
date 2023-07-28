@@ -16,7 +16,9 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import "dayjs/locale/pt-br";
 import { useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import Navbar from "./components/navbar/Navbar";
+import SideBar from "./components/sidebar/Sidebar";
 
 library.add(fas);
 
@@ -28,6 +30,8 @@ function App() {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pt-br">
       <div>
+      <Navbar/>
+      <SideBar/>
         <Nav />
         {cliente ? (
           <Routes>

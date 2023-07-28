@@ -3,7 +3,7 @@
 
 generator client {
   provider      = "prisma-client-js"
-  binaryTargets = ["debian-openssl-1.1.x","native"]
+  binaryTargets = ["debian-openssl-1.1.x", "native"]
 }
 
 datasource db {
@@ -34,6 +34,7 @@ model client {
   created_at            DateTime                @default(now())
   financial_transaction financial_transaction[]
   subscriber            subscriber[]
+  bank_account          bank_account[]
 }
 
 model subscriber {
@@ -102,7 +103,12 @@ model payment_condition {
 
 model bank_account {
   id                Int                 @id @default(autoincrement())
+  bac_id_client     Int
+  bac_client        client              @relation(fields: [bac_id_client], references: [id])
   bac_name          String
+  bac_institution   String
+  bac_inicial_value Decimal   @db.Decimal(6,2)
+  bac_date_inicial_value DateTime
   bac_type          String
   bac_description   String
   payment_condition payment_condition[]

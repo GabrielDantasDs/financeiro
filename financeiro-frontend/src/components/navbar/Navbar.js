@@ -4,10 +4,13 @@ import { Dropdown } from "react-bootstrap";
 import { logout as logoutAuth } from "../../cruds/auth";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
+import { openSideBar } from "../../store/actions";
 
-export default function Navbar({ sidebarOpen, openSidebar }) {
+export default function Navbar() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+
+    const handleShowSideBar = () => dispatch(openSideBar());
     
     const logout = () => {
         dispatch(logoutAuth(navigate));
@@ -15,23 +18,11 @@ export default function Navbar({ sidebarOpen, openSidebar }) {
 
   return (
     <nav className="navbar">
-      <div className="nav_icon" onClick={() => openSidebar()}>
+      <div className="nav_icon" onClick={() => handleShowSideBar()}>
         <i className="fa fa-bars" aria-hidden="true"></i>
       </div>
 
-      <div className="navbar_left">
-        {/* <a href="#">Produtos</a>
-                <a href="#">Usuários</a> */}
-        <a href="#" className="active_link">
-          Admin
-        </a>
-      </div>
-
-      <div className="navbar_right">
-        <a href="#">
-          <i className="fa fa-search"></i>
-        </a>
-
+      <div className="navbar_right ml-auto">
         <a href="#">
           <i className="fa fa-clock-o"></i>
         </a>

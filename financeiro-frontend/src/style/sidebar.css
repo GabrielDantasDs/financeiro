@@ -90,9 +90,13 @@
     position: absolute;
 }
 
+.sidebar_offcanva {
+    background-color: #020509;
+}
+
 @media only screen and (max-width: 978px) {
     #sidebar {
-        display: none;
+        width: 100px;
     }
 
     .sidebar_title  > i {

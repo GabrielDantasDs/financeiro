@@ -5,7 +5,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class FinancialTransactionService {
-  constructor (private readonly prisma:PrismaService) {}
+  constructor(private readonly prisma:PrismaService) {}
   create(createFinancialTransactionDto: CreateFinancialTransactionDto) {
     return this.prisma.financial_transaction.create({data: createFinancialTransactionDto});
   };

@@ -1,4 +1,5 @@
 import { setClient as setClientAction, unsetClient as unsetClientAction } from "./ducks/client";
+import { openSideBar as openSideBarAction, closeSideBar as closeSideBarAction } from "./ducks/sidebar";
 
 export const setClient = (data, navigate) => {    
   return async (dispatch) => {
@@ -13,5 +14,17 @@ export const unsetClient = (data, navigate) => {
     localStorage.removeItem("client");
     dispatch(unsetClientAction());
     navigate("/clientes/index");
+  };
+};
+
+export const openSideBar = () => {    
+  return async (dispatch) => {
+    dispatch(openSideBarAction());
+  };
+};
+
+export const closeSideBar = () => {   
+  return async (dispatch) => {
+    dispatch(closeSideBarAction());
   };
 };
