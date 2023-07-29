@@ -11,12 +11,12 @@ import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons/faCheck";
 import { create, getBankInstitutionList } from "../../cruds/bank-account";
-import { validate } from "./Utils";
+import { mascaraMoeda, validate, cleanCurrency } from "./Utils";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router";
 import { types } from "./Utils";
 import { useSelector } from "react-redux";
-import 'dayjs/locale/pt-br'
+import "dayjs/locale/pt-br";
 import dayjs from "dayjs";
 
 export default function New() {
@@ -49,12 +49,13 @@ export default function New() {
       bac_type: "",
       bac_description: "",
       bac_institution: "",
-      bac_date_inicial_value: dayjs()
+      bac_date_inicial_value: dayjs(),
+      bac_inicial_value: "",
     };
   };
 
   const onSubmit = (values) => {
-    create({ ...values, bac_id_client: parseInt(client) })
+    create({ ...values, bac_id_client: parseInt(client), bac_inicial_value: cleanCurrency(values.bac_inicial_value), bac_date_inicial_value: new Date(values.bac_date_inicial_value) })
       .catch((err) => {
         Swal.fire("Ops", "Houve um erro ao salvar a conta", "error");
       })
@@ -156,7 +157,9 @@ export default function New() {
 
                   <div className="form-group col-md-6">
                     <FormControl fullWidth>
-                      <InputLabel id="select-state">Instituição financeira</InputLabel>
+                      <InputLabel id="select-state">
+                        Instituição financeira
+                      </InputLabel>
                       <Select
                         labelId="select-state"
                         id="select-state"
@@ -177,20 +180,43 @@ export default function New() {
                   </div>
                 </div>
                 <div className="form-row">
-                <div className="form-group col-md-6">
+                  <div className="form-group col-md-6">
                     <TextField
                       required
                       type="date"
                       id="outlined-required"
                       label="Data do valor inicial"
                       value={values.bac_date_inicial_value}
-                      error={touched.bac_date_inicial_value && errors.bac_date_inicial_value ? true : false}
+                      error={
+                        touched.bac_date_inicial_value &&
+                        errors.bac_date_inicial_value
+                          ? true
+                          : false
+                      }
                       name="bac_date_inicial_value"
                       onBlur={handleBlur}
                       fullWidth
                       onChange={handleChange}
                     />
-                  </div> 
+                  </div>
+
+                  <div className="form-group col-md-6">
+                    <TextField
+                      required
+                      id="outlined-required"
+                      label="Valor inicial"
+                      value={values.bac_inicial_value}
+                      error={
+                        touched.bac_inicial_value && errors.bac_inicial_value
+                          ? true
+                          : false
+                      }
+                      name="bac_inicial_value"
+                      onBlur={handleBlur}
+                      fullWidth
+                      onChange={e => handleChange(mascaraMoeda(e))}
+                    />
+                  </div>
                 </div>
 
                 <div className="d-flex flex-row-reverse">

@@ -72,7 +72,7 @@ export default function List() {
       })
       .then((res) => {
         if (res.status == 200) {
-          list()
+          list(client)
             .catch((err) => {
               Swal.fire(
                 "Ops",

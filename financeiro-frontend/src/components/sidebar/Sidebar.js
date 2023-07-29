@@ -56,6 +56,7 @@ export default function SideBar() {
       className="sidebar_offcanva"
       onHide={handleClose}
       backdrop={false}
+      enforceFocus={false}
     >
       <Offcanvas.Header closeButton={showCloseButton} closeVariant="white">
         <Offcanvas.Title>

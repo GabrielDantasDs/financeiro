@@ -1,7 +1,8 @@
 import "../../style/cliente.css";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { Button } from "react-bootstrap";
+import { Button as ReactButton } from "react-bootstrap";
+import Button from '@mui/material/Button';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons/faPlus";
 import { useEffect, useState } from "react";
@@ -123,12 +124,12 @@ export default function Cliente() {
         >
           <FontAwesomeIcon icon="fa-solid fa-pen-to-square" />
         </Link>
-        <Button
+        <ReactButton
           variant="warning"
           onClick={(e) => {e.preventDefault();onSetSelectedCliente(rowData.id)}}
         >
           <FontAwesomeIcon icon="fa-solid fa-list" />
-        </Button>
+        </ReactButton>
         <button
           type="button"
           className="btn btn-danger"
