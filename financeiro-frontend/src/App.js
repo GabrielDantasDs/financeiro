@@ -60,14 +60,6 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route
-              path="categorias/*"
-              element={
-                <ProtectedRoute>
-                  <Categoria />
-                </ProtectedRoute>
-              }
-            />
             <Route exact path="/auth" element={<Login />} />
           </Routes>
         ) : (
@@ -90,7 +82,7 @@ function App() {
               }
             />
             <Route
-              path="categorias/*"
+              path="categories/*"
               element={
                 <ProtectedRoute>
                   <Categoria />

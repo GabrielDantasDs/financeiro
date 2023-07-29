@@ -97,6 +97,21 @@ export default function SideBar() {
                   Clientes
                 </Link>
               </div>
+
+              <h2>CONFIGURAÇÕES</h2>
+              <div
+                onClick={() => setActive("categorias")}
+                className={
+                  active == "categorias"
+                    ? "sidebar_link active_link"
+                    : "sidebar_link"
+                }
+              >
+                <i className="fa-regular fa-lightbulb"></i>
+                <Link to={`/categories/index`} type="button">
+                  Categorias
+                </Link>
+              </div>
             </>
           ) : (
             <>
