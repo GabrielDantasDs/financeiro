@@ -50,7 +50,7 @@ export default function Edit() {
         Swal.fire("Ops", "Houve um erro ao salvar o categoria", "error");
       })
       .then((res) => {
-        Swal.fire("Sucesso", "Categoria salvo com sucesso", "success");
+        Swal.fire("Sucesso", "Categoria salva com sucesso", "success");
         navigate("/categorias/index");
       })
       .finally(() => setSubmitting(false));

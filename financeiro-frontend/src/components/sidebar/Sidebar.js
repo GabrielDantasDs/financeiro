@@ -55,7 +55,7 @@ export default function SideBar() {
       show={showSideBar}
       className="sidebar_offcanva"
       onHide={handleClose}
-      backdrop={false}
+      backdrop={showCloseButton}
       enforceFocus={false}
     >
       <Offcanvas.Header closeButton={showCloseButton} closeVariant="white">
@@ -108,7 +108,7 @@ export default function SideBar() {
                 }
               >
                 <i className="fa-regular fa-lightbulb"></i>
-                <Link to={`/categories/index`} type="button">
+                <Link to={`/category/index`} type="button">
                   Categorias
                 </Link>
               </div>

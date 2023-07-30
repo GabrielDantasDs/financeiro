@@ -10,8 +10,9 @@ import Swal from "sweetalert2";
 import { InputText } from "primereact/inputtext";
 import { FilterMatchMode } from "primereact/api";
 import { Link } from "react-router-dom";
+import ListSubheader from '@mui/material/ListSubheader'
 
-export default function Categoria() {
+export default function List() {
   const [categorias, setCategorias] = useState([]);
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -84,7 +85,7 @@ export default function Categoria() {
     return (
       <div style={{ maxWidth: 100 }} className="d-flex justify-content-between">
         <Link
-          to={`/categorias/edit/${rowData.id}`}
+          to={`/category/edit/${rowData.id}`}
           type="button"
           className="btn btn-primary"
         >
@@ -115,7 +116,7 @@ export default function Categoria() {
         <div className="body">
           <div className="database-header">
             <Link
-              to="/categorias/new"
+              to="/category/new"
               variant="contained"
               type="button"
               className="btn btn-success"

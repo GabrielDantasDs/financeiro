@@ -24,8 +24,8 @@ export default function New() {
         Swal.fire("Ops", "Houve um erro ao salvar o categoria", "error");
       })
       .then((res) => {
-        Swal.fire("Sucesso", "Categoria salvo com sucesso", "success");
-        navigate("/categorias/index");
+        Swal.fire("Sucesso", "Categorai salva com sucesso", "success");
+        navigate("/category/index");
       })
       .finally(() => setSubmitting(false));
   };

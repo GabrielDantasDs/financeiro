@@ -1,6 +1,6 @@
 import Login from "./pages/Login";
 import Cliente from "./pages/Clientes/Index";
-import Categoria from "./pages/Categorias/Index";
+import Categoria from "./pages/Category/Index";
 import Dashboard from "./pages/Dashboard/Index";
 import BankAccount from "./pages/BankAccount/Index";
 import FinancialTransaction from "./pages/FinancialTransaction/Index";
@@ -82,7 +82,7 @@ function App() {
               }
             />
             <Route
-              path="categories/*"
+              path="category/*"
               element={
                 <ProtectedRoute>
                   <Categoria />

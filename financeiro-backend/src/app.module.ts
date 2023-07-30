@@ -11,11 +11,10 @@ import { DashboardModule } from './dashboard/dashboard.module';
 import { ClientModule } from './client/client.module';
 import { FinancialTransactionModule } from './financial_transaction/financial_transaction.module';
 import { BankAccountModule } from './bank_account/bank_account.module';
-import { CategoriesModule } from './categories/categories.module';
 import { CategoryModule } from './category/category.module';
 
 @Module({
-  imports: [PrismaModule, AuthModule, UserModule, DashboardModule, ClientModule, FinancialTransactionModule, BankAccountModule, CategoriesModule, CategoryModule],
+  imports: [PrismaModule, AuthModule, UserModule, DashboardModule, ClientModule, FinancialTransactionModule, BankAccountModule, CategoryModule],
   controllers: [AppController],
   providers: [
     AppService,
