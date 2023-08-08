@@ -3,6 +3,7 @@ import Cliente from "./pages/Clientes/Index";
 import Categoria from "./pages/Category/Index";
 import Dashboard from "./pages/Dashboard/Index";
 import BankAccount from "./pages/BankAccount/Index";
+import Subscriber from "./pages/Subscriber/Index";
 import FinancialTransaction from "./pages/FinancialTransaction/Index";
 import { useNavigate, Route, Routes } from "react-router-dom";
 import { Nav } from "react-bootstrap";
@@ -26,12 +27,16 @@ function App() {
   const navigate = useNavigate();
   //Corrigir isso aqui depois, não deve ser client.client
   const cliente = useSelector((state) => state.client.client);
+  const auth = useSelector((state) => state.auth);
 
+  useEffect(() => {
+    console.log(auth);
+  }, []);
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pt-br">
       <div>
-      <Navbar/>
-      <SideBar/>
+        <Navbar />
+        {auth.isAuthenticated && <SideBar />}
         <Nav />
         {cliente ? (
           <Routes>
@@ -57,6 +62,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <FinancialTransaction />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/subscriber/*"
+              element={
+                <ProtectedRoute>
+                  <Subscriber />
                 </ProtectedRoute>
               }
             />

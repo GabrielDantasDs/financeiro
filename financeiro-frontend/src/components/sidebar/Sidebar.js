@@ -15,14 +15,14 @@ export default function SideBar() {
   const navigate = useNavigate();
   //Não faz sentido usar redux aqui mas usei pra aprender a fazer
   const showSideBar = useSelector((state) => state.showSideBar.showSideBar);
-  
+
   const handleClose = () => dispatch(closeSideBar());
   const handleShow = () => dispatch(openSideBar());
 
   useEffect(() => {
     // Função para verificar o tamanho da tela e atualizar as classes do Offcanvas
     const handleScreenSize = () => {
-      if (window.matchMedia('(min-width: 992px)').matches) {
+      if (window.matchMedia("(min-width: 992px)").matches) {
         // Se a tela for grande (>= 992px), exiba o Offcanvas como uma sidebar
         handleShow();
         setShowCloseButton(false);
@@ -37,11 +37,11 @@ export default function SideBar() {
     handleScreenSize();
 
     // Adicionar um listener para atualizar o tamanho da tela quando a janela for redimensionada
-    window.addEventListener('resize', handleScreenSize);
-    
+    window.addEventListener("resize", handleScreenSize);
+
     // Limpar o listener quando o componente é desmontado
     return () => {
-      window.removeEventListener('resize', handleScreenSize);
+      window.removeEventListener("resize", handleScreenSize);
     };
   }, []);
 
@@ -157,6 +157,19 @@ export default function SideBar() {
                 </Link>
               </div>
               <div
+                onClick={() => setActive("subscribers")}
+                className={
+                  active == "subscribers"
+                    ? "sidebar_link active_link"
+                    : "sidebar_link"
+                }
+              >
+                <i className="fa fa-users"></i>
+                <Link to={`/subscriber/index`} type="button">
+                  Fornecedores/Clientes
+                </Link>
+              </div>
+              <div
                 onClick={() => exitClient()}
                 className={
                   active == "sair" ? "sidebar_link active_link" : "sidebar_link"
@@ -170,9 +183,5 @@ export default function SideBar() {
         </div>
       </Offcanvas.Body>
     </Offcanvas>
-    // <div className={sidebarOpen ? "sidebar-responsive" : ""} id="sidebar">
-    //
-    //   </div>
-    // </div>
   );
 }

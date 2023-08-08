@@ -12,7 +12,7 @@ export class FinancialTransactionController {
     return this.financialTransactionService.create(createFinancialTransactionDto);
   }
 
-  @Get()
+  @Get('list/:id')
   findAll() {
     return this.financialTransactionService.findAll();
   }

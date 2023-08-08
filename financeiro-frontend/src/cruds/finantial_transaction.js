@@ -10,11 +10,11 @@ export const create = async (data) => {
   return response
 }
 
-// export const list = async () => {
-//   let response = await axios.get(constants.baseUrl + '/customer')
+export const list = async (id) => {
+  let response = await axios.get(constants.baseUrl + `/financial-transaction/list/${id}`,)
 
-//   return response
-// }
+  return response
+}
 
 // export const edit = async () => {
 //   let response = await axios.get(constants.baseUrl + '/customer')

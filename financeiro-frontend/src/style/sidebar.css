@@ -104,3 +104,8 @@
     }
 }
 
+@media only screen and (max-width: 1366px) {
+    .sidebar_offcanva {
+        max-width: 300px;
+    }
+}

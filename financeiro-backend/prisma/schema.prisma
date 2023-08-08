@@ -49,6 +49,7 @@ model subscriber {
   sub_city              String
   sub_zip_code          String
   sub_id_client         Int
+  sub_type              String
   sub_client            client                  @relation(fields: [sub_id_client], references: [id])
   created_at            DateTime                @default(now())
   financial_transaction financial_transaction[]
