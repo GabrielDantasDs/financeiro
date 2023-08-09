@@ -2,7 +2,7 @@ import "../../style/cliente.css";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Button as ReactButton } from "react-bootstrap";
-import Button from '@mui/material/Button';
+import Button from "@mui/material/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons/faPlus";
 import { useEffect, useState } from "react";
@@ -14,7 +14,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setClient } from "../../store/actions";
 
-
 export default function Cliente() {
   const [subscribers, setSubscribers] = useState([]);
   const [filters, setFilters] = useState({
@@ -23,7 +22,6 @@ export default function Cliente() {
   const [globalFilterValue, setGlobalFilterValue] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
 
   useEffect(() => {
     list()
@@ -108,25 +106,19 @@ export default function Cliente() {
   };
 
   const onSetSelectedCliente = (id) => {
-        dispatch(setClient(id, navigate));
-  }
+    dispatch(setClient(id, navigate));
+  };
 
   const actionBody = (rowData) => {
     return (
       <div style={{ maxWidth: 200 }} className="d-flex justify-content-between">
         <Link
-          to={`/subscribers/edit/${rowData.id}`}
+          to={`/subscriber/edit/${rowData.id}`}
           type="button"
           className="btn btn-primary"
         >
           <FontAwesomeIcon icon="fa-solid fa-pen-to-square" />
         </Link>
-        <ReactButton
-          variant="warning"
-          onClick={(e) => {e.preventDefault();onSetSelectedCliente(rowData.id)}}
-        >
-          <FontAwesomeIcon icon="fa-solid fa-list" />
-        </ReactButton>
         <button
           type="button"
           className="btn btn-danger"
