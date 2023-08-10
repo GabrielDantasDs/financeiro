@@ -33,3 +33,9 @@ export const update = async (id, data) => {
 
   return response;
 }
+
+export const simpleList = async () => {
+  let response = await axios.get(constants.baseUrl + `/subscriber`)
+
+  return response;
+}

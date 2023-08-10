@@ -1,62 +1,116 @@
 import {
-    Button,
-    FormControl,
-    InputLabel,
-    MenuItem,
-    Select,
-    TextField,
-  } from "@mui/material";
-  import { Form, Formik } from "formik";
-  import { useEffect, useState } from "react";
-  import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-  import { faCheck } from "@fortawesome/free-solid-svg-icons/faCheck";
-  import { create, getBankInstitutionList } from "../../cruds/bank-account";
-  import { mascaraMoeda, validate, cleanCurrency } from "./Utils";
-  import Swal from "sweetalert2";
-  import { useNavigate } from "react-router";
-  import { types } from "./Utils";
-  import { useSelector } from "react-redux";
-  import "dayjs/locale/pt-br";
-  import dayjs from "dayjs";
-  
-  export default function New() {
-    const [isSubmitting, setSubmitting] = useState(false);
-    const navigate = useNavigate();
-    const client = useSelector((state) => state.client.client);
-    const [bankInstitutionList, setBankInstitutionList] = useState([]);
-  
-    const getIniitalState = () => {
-      return {
-        fin_type: "",
-        fin_value: "",
-        fin_id_category: "",
-        fin_note: "",
-        subscriberId: "",
-        fin_id_center_cost: "",
-        fin_payed: false,
-        fin_payment_day: dayjs(),
-        fin_periodicity: 0,
-        fin_periodicity_type: ""
-      };
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
+import { Form, Formik } from "formik";
+import { useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck } from "@fortawesome/free-solid-svg-icons/faCheck";
+import { create, getBankInstitutionList } from "../../cruds/bank-account";
+import { mascaraMoeda, validate, cleanCurrency } from "./Utils";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router";
+import { useSelector } from "react-redux";
+import "dayjs/locale/pt-br";
+import dayjs from "dayjs";
+import { DatePicker } from "@mui/x-date-pickers";
+import { simpleList as getCategories } from "../../cruds/category";
+import { simpleList as getCostCenters } from "../../cruds/cost-center";
+import { simpleList as getSubscribers } from "../../cruds/subscriber";
+
+export default function New() {
+  const [isSubmitting, setSubmitting] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const client = useSelector((state) => state.client.client);
+  const [bankInstitutionList, setBankInstitutionList] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [costCenters, setCostCenters] = useState([]);
+  const [subscribers, setSubscribers] = useState([]);
+
+  const getIniitalState = () => {
+    return {
+      fin_type: "",
+      fin_value: "",
+      fin_id_category: "",
+      fin_note: "",
+      subscriberId: "",
+      fin_id_center_cost: "",
+      fin_payed: false,
+      fin_payment_day: dayjs(),
+      fin_periodicity: 0,
+      fin_periodicity_type: "",
     };
-  
-    const onSubmit = (values) => {
-      create(values)
-        .catch((err) => {
-          Swal.fire("Ops", "Houve um erro ao salvar a conta", "error");
-        })
-        .then((res) => {
-          Swal.fire("Sucesso", "Categoria salva com sucesso", "success");
-          navigate("/category/index");
-        })
-        .finally(() => setSubmitting(false));
-    };
-  
-    return (
-      <div className="main">
+  };
+
+  useEffect(() => {
+    setLoading(true);
+
+    async function fetchData() {
+      const [categoriesList, cost_centers_list, subscribersList] = await Promise.all([
+        getCategories()
+          .then((res) => {
+            return res.data;
+          })
+          .catch((err) => {
+            Swal.fire("Ops", "Houve um erro ao buscar as categorias", "error");
+            return;
+          }),
+        getCostCenters()
+          .then((res) => {
+            return res.data;
+          })
+          .catch((err) => {
+            Swal.fire("Ops", "Houve um erro ao buscar as categorias", "error");
+            return;
+          }),
+        getSubscribers()
+          .then((res) => {
+            return res.data;
+          })
+          .catch((err) => {
+            Swal.fire("Ops", "Houve um erro ao buscar as categorias", "error");
+            return;
+          }),
+      ]);
+
+      console.log(categoriesList)
+      setCategories(categoriesList);
+      setCostCenters(cost_centers_list);
+      setSubscribers(subscribersList);
+    }
+
+    fetchData();
+
+    setLoading(false);
+  }, []);
+
+  const onChangeFinDate = (e, setFieldValue) => {
+    setFieldValue("fin_date", e);
+  };
+
+  const onSubmit = (values) => {
+    create(values)
+      .catch((err) => {
+        Swal.fire("Ops", "Houve um erro ao salvar a conta", "error");
+      })
+      .then((res) => {
+        Swal.fire("Sucesso", "Categoria salva com sucesso", "success");
+        navigate("/category/index");
+      })
+      .finally(() => setSubmitting(false));
+  };
+
+  return (
+    <div className="main">
+      {!loading ? (
         <div className="container">
           <div className="header">
-            <h1 className="list_title">Categoria: Nova categoria</h1>
+            <h1 className="list_title">Lançamento: Novo lançamento</h1>
           </div>
           <div className="form">
             <Formik
@@ -68,19 +122,19 @@ import {
             >
               {({
                 values,
-  
+
                 errors,
-  
+
                 touched,
-  
+
                 handleChange,
-  
+
                 handleBlur,
-  
+
                 handleSubmit,
-  
+
                 setFieldValue,
-  
+
                 isSubmitting,
               }) => (
                 <Form>
@@ -90,74 +144,67 @@ import {
                         required
                         id="outlined-required"
                         label="Nome"
-                        value={values.bac_name}
-                        error={touched.bac_name && errors.bac_name ? true : false}
-                        name="bac_name"
+                        value={values.fin_note}
+                        error={
+                          touched.fin_note && errors.fin_note ? true : false
+                        }
+                        name="fin_note"
                         onBlur={handleBlur}
                         fullWidth
                         onChange={handleChange}
                       />
                     </div>
-  
+
                     <div className="form-group col-md-6">
                       <FormControl fullWidth>
-                        <InputLabel id="select-state">Tipo da conta</InputLabel>
+                        <InputLabel id="select-state">Tipo</InputLabel>
                         <Select
                           labelId="select-state"
                           id="select-state"
-                          value={values.bac_type}
+                          value={values.fin_type}
                           name="bac_type"
-                          label="Tipo da conta "
+                          label="Tipo "
                           onChange={handleChange}
                         >
-                          {types.map((obj, i) => {
-                            return (
-                              <MenuItem key={i} value={obj.key}>
-                                {obj.label}
-                              </MenuItem>
-                            );
-                          })}
+                          <MenuItem value={"RECEITA"}>Receita</MenuItem>
+                          <MenuItem value={"DESPESA"}>Despesa</MenuItem>
                         </Select>
                       </FormControl>
                     </div>
                   </div>
-  
+
                   <div className="form-row">
                     <div className="form-group col-md-6">
                       <TextField
                         id="outlined"
-                        label="Descrição"
+                        label="Valor"
                         fullWidth
-                        value={values.bac_description}
+                        value={values.fin_value}
                         error={
-                          touched.bac_description && errors.bac_description
-                            ? true
-                            : false
+                          touched.fin_value && errors.fin_value ? true : false
                         }
-                        name="bac_description"
+                        name="fin_value"
                         onBlur={handleBlur}
-                        onChange={handleChange}
+                        onChange={(e) => handleChange(mascaraMoeda(e))}
                         inputProps={{ maxLength: 70 }}
                       />
                     </div>
-  
+
                     <div className="form-group col-md-6">
                       <FormControl fullWidth>
-                        <InputLabel id="select-state">
-                          Instituição financeira
-                        </InputLabel>
+                        <InputLabel id="select-state">Categoria</InputLabel>
                         <Select
                           labelId="select-state"
                           id="select-state"
-                          value={values.bac_institution}
-                          name="bac_institution"
-                          label="Instituição financeira "
+                          value={values.fin_id_category}
+                          name="fin_id_category"
+                          label="Categoria "
                           onChange={handleChange}
                         >
-                          {bankInstitutionList.map((obj, i) => {
+                          {categories.map((obj, i) => {
                             return (
-                              <MenuItem key={i} value={obj.name}>
-                                {obj.fullName}
+                              <MenuItem key={i} value={obj.id}>
+                                {obj.cat_name}
                               </MenuItem>
                             );
                           })}
@@ -167,44 +214,62 @@ import {
                   </div>
                   <div className="form-row">
                     <div className="form-group col-md-6">
+                      <FormControl fullWidth>
+                        <InputLabel id="select-state">
+                          Centro de custo
+                        </InputLabel>
+                        <Select
+                          labelId="select-state"
+                          id="select-state"
+                          value={values.cost_center}
+                          name="fin_id_category"
+                          label="Centro de custo "
+                          onChange={handleChange}
+                        >
+                          {costCenters.map((obj, i) => {
+                            return (
+                              <MenuItem key={i} value={obj.id}>
+                                {obj.cat_name}
+                              </MenuItem>
+                            );
+                          })}
+                        </Select>
+                      </FormControl>
+                    </div>
+
+                    <div className="form-group col-md-6">
                       <TextField
                         required
-                        type="date"
                         id="outlined-required"
-                        label="Data do valor inicial"
-                        value={values.bac_date_inicial_value}
+                        label="Cliente/Fornecedor"
+                        value={values.subscriberId}
                         error={
-                          touched.bac_date_inicial_value &&
-                          errors.bac_date_inicial_value
+                          touched.subscriberId && errors.subscriberId
                             ? true
                             : false
                         }
-                        name="bac_date_inicial_value"
+                        name="subscriberId"
                         onBlur={handleBlur}
                         fullWidth
                         onChange={handleChange}
                       />
                     </div>
-  
+                  </div>
+
+                  <div className="form-row">
                     <div className="form-group col-md-6">
-                      <TextField
-                        required
-                        id="outlined-required"
-                        label="Valor inicial"
-                        value={values.bac_inicial_value}
+                      <DatePicker
+                        className="full-width"
+                        onChange={(e) => onChangeFinDate(e, setFieldValue)}
+                        value={values.fin_date}
                         error={
-                          touched.bac_inicial_value && errors.bac_inicial_value
-                            ? true
-                            : false
+                          touched.fin_date && errors.fin_date ? true : false
                         }
-                        name="bac_inicial_value"
                         onBlur={handleBlur}
-                        fullWidth
-                        onChange={e => handleChange(mascaraMoeda(e))}
                       />
                     </div>
                   </div>
-  
+
                   <div className="d-flex flex-row-reverse">
                     <Button
                       startIcon={<FontAwesomeIcon icon={faCheck} />}
@@ -221,7 +286,7 @@ import {
             </Formik>
           </div>
         </div>
-      </div>
-    );
-  }
-  
+      ) : null}
+    </div>
+  );
+}

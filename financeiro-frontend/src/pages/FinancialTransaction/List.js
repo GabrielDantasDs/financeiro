@@ -115,13 +115,13 @@ export default function List() {
         <div className="body">
           <div className="database-header">
             <Link
-              to="/financial-trasaction/new"
+              to="/financial-transaction/new"
               variant="contained"
               type="button"
               className="btn btn-success"
             >
               <FontAwesomeIcon style={{ marginRight: 5 }} icon={faPlus} />
-              Nova categoria
+              Novo lançamento
             </Link>
           </div>
           <div style={{ width: "100%" }}>

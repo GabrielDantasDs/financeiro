@@ -33,3 +33,9 @@ export const remove = async (id) => {
 
   return response
 }
+
+export const simpleList = async () => {
+  let response = await axios.get(constants.baseUrl + `/category`)
+
+  return response;
+}
