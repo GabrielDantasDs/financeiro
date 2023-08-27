@@ -11,7 +11,7 @@ export default function Index() {
   return (
     <div className="my_container">
       <Routes>
-        <Route path="index" element={<Cliente />} />
+        <Route path="/" element={<Cliente />} />
         <Route path="new" element={<New />} />
         <Route path={`edit/:id`} element={<Edit />} />
         <Route path={`financeiro/:id`} element={<Finantial />} />

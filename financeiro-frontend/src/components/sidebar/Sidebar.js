@@ -12,6 +12,7 @@ export default function SideBar() {
 	//Corrigir isso aqui depois, não deve ser client.client
 	const cliente = useSelector((state) => state.client.client);
 	const [showCloseButton, setShowCloseButton] = useState(false);
+	const [itensData, setItensData] = useState([]);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	//Não faz sentido usar redux aqui mas usei pra aprender a fazer
@@ -21,7 +22,14 @@ export default function SideBar() {
 	const handleShow = () => dispatch(openSideBar());
 
 	useEffect(() => {
-		const datajson = await fetch('itens.json')
+		const fetchItensData = async () => {
+			const res = await fetch("/itens.json");
+
+			setItensData(await res.json());
+		};
+
+		fetchItensData();
+
 		// Função para verificar o tamanho da tela e atualizar as classes do Offcanvas
 		const handleScreenSize = () => {
 			if (window.matchMedia("(min-width: 992px)").matches) {
@@ -53,151 +61,6 @@ export default function SideBar() {
 	};
 
 	return (
-		// <Offcanvas
-		//   show={showSideBar}
-		//   className="sidebar_offcanva"
-		//   onHide={handleClose}
-		//   backdrop={showCloseButton}
-		//   enforceFocus={false}
-		// >
-		//   <Offcanvas.Header closeButton={showCloseButton} closeVariant="white">
-		//     <Offcanvas.Title>
-		//       <div className="sidebar_title">
-		//         <h1>Financeiro</h1>
-		//       </div>
-		//     </Offcanvas.Title>
-		//   </Offcanvas.Header>
-		//   <Offcanvas.Body>
-		//     <div className="sidebar_menu">
-		//       {!cliente ? (
-		//         <>
-		//           <div
-		//             onClick={(e) => setActive("dashboard")}
-		//             className={
-		//               active == "dashobard"
-		//                 ? "sidebar_link active_link"
-		//                 : "sidebar_link"
-		//             }
-		//           >
-		//             <i className="fa fa-house"> </i>
-		//             <Link to={`/dashboard`} type="button">
-		//               Dashboard
-		//             </Link>
-		//           </div>
-
-		//           <h2>PESSOAS</h2>
-		//           <div
-		//             onClick={() => setActive("clientes")}
-		//             className={
-		//               active == "clientes"
-		//                 ? "sidebar_link active_link"
-		//                 : "sidebar_link"
-		//             }
-		//           >
-		//             <i className="fa fa-users"></i>
-		//             <Link to={`/clientes/index`} type="button">
-		//               Clientes
-		//             </Link>
-		//           </div>
-
-		//           <h2>CONFIGURAÇÕES</h2>
-		//           <div
-		//             onClick={() => setActive("categorias")}
-		//             className={
-		//               active == "categorias"
-		//                 ? "sidebar_link active_link"
-		//                 : "sidebar_link"
-		//             }
-		//           >
-		//             <i className="fa-regular fa-lightbulb"></i>
-		//             <Link to={`/category/index`} type="button">
-		//               Categorias
-		//             </Link>
-		//           </div>
-		//         </>
-		//       ) : (
-		//         <>
-		//           <div
-		//             onClick={(e) => setActive("dashboard")}
-		//             className={
-		//               active == "dashobard"
-		//                 ? "sidebar_link active_link"
-		//                 : "sidebar_link"
-		//             }
-		//           >
-		//             <i className="fa fa-house"> </i>
-		//             <Link to={`/dashboard`} type="button">
-		//               Dashboard
-		//             </Link>
-		//           </div>
-
-		//           <h2>Finanças</h2>
-		//           <div
-		//             onClick={() => setActive("bankAccount")}
-		//             className={
-		//               active == "clientes"
-		//                 ? "sidebar_link active_link"
-		//                 : "sidebar_link"
-		//             }
-		//           >
-		//             <i className="fa fa-bank"></i>
-		//             <Link to={`/bank-account/index`} type="button">
-		//               Conta bancária
-		//             </Link>
-		//           </div>
-		//           <div
-		//             onClick={() => setActive("financialTransaction")}
-		//             className={
-		//               active == "financialTransaction"
-		//                 ? "sidebar_link active_link"
-		//                 : "sidebar_link"
-		//             }
-		//           >
-		//             <i className="fa fa-dollar-sign "></i>
-		//             <Link to={`/financial-transaction/index`} type="button">
-		//               Lançamentos
-		//             </Link>
-		//           </div>
-		//           <div
-		//             onClick={() => setActive("subscribers")}
-		//             className={
-		//               active == "subscribers"
-		//                 ? "sidebar_link active_link"
-		//                 : "sidebar_link"
-		//             }
-		//           >
-		//             <i className="fa fa-users"></i>
-		//             <Link to={`/subscriber/index`} type="button">
-		//               Fornecedores/Clientes
-		//             </Link>
-		//           </div>
-		//           <div
-		//             onClick={() => setActive("report")}
-		//             className={
-		//               active == "report"
-		//                 ? "sidebar_link active_link"
-		//                 : "sidebar_link"
-		//             }
-		//           >
-		//             <i className="fa fa-pie-chart"></i>
-		//             <Link to={`/report/index`} type="button">
-		//               Relatório
-		//             </Link>
-		//           </div>
-		//           <div
-		//             onClick={() => exitClient()}
-		//             className={
-		//               active == "sair" ? "sidebar_link active_link" : "sidebar_link"
-		//             }
-		//           >
-		//             <i className="fa fa-left-arrow "></i>
-		//             <Button>Sair do cliente</Button>
-		//           </div>
-		//         </>
-		//       )}
-		//     </div>
-		//   </Offcanvas.Body>
-		// </Offcanvas>
 		<div
 			class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark"
 			style={{ width: 280 }}
@@ -210,132 +73,25 @@ export default function SideBar() {
 			</a>
 			<hr />
 			<ul class="nav nav-pills flex-column mb-auto">
-				<Item active={active == "dashboard" ? true : false} icon="house" name="Dashboard"/>
-				{!cliente ? (
-					<>
-						<li
-							onClick={(e) => setActive("dashboard")}
-							className={
-								active == "dashobard"
-									? "sidebar_link active_link"
-									: "sidebar_link"
-							}
-						>
-							<i className="fa fa-house"> </i>
-							<Link to={`/dashboard`} type="button" className="nav-link">
-								Dashboardd
-							</Link>
-						</li>
-
-						<li
-							onClick={() => setActive("clientes")}
-							className={
-								active == "clientes"
-									? "sidebar_link active_link"
-									: "sidebar_link"
-							}
-						>
-							<i className="fa fa-users"></i>
-							<Link to={`/clientes/index`} type="button">
-								Clientes
-							</Link>
-						</li>
-
-						<li
-							onClick={() => setActive("categorias")}
-							className={
-								active == "categorias"
-									? "sidebar_link active_link"
-									: "sidebar_link"
-							}
-						>
-							<i className="fa-regular fa-lightbulb"></i>
-							<Link to={`/category/index`} type="button">
-								Categorias
-							</Link>
-						</li>
-					</>
-				) : (
-					<>
-						<li className="nav-item">
-							<div
-								onClick={(e) => setActive("dashboard")}
-								className={"sb-item"}
-							>
-								<i className="fa fa-house"> </i>
-								<Link to={`/dashboard`} type="button" className={"sb-link"}>
-									Dashboardd
-								</Link>
-							</div>
-						</li>
-
-						<li
-							onClick={() => setActive("bankAccount")}
-							className={
-								active == "clientes"
-									? "sidebar_link active_link"
-									: "sidebar_link"
-							}
-						>
-							<i className="fa fa-bank"></i>
-							<Link to={`/bank-account/index`} type="button">
-								Conta bancária
-							</Link>
-						</li>
-						<li
-							onClick={() => setActive("financialTransaction")}
-							className={
-								active == "financialTransaction"
-									? "sidebar_link active_link"
-									: "sidebar_link"
-							}
-						>
-							<i className="fa fa-dollar-sign "></i>
-							<Link
-								to={`/financial-transaction/index`}
-								type="button"
-							>
-								Lançamentos
-							</Link>
-						</li>
-						<li
-							onClick={() => setActive("subscribers")}
-							className={
-								active == "subscribers"
-									? "sidebar_link active_link"
-									: "sidebar_link"
-							}
-						>
-							<i className="fa fa-users"></i>
-							<Link to={`/subscriber/index`} type="button">
-								Fornecedores/Clientes
-							</Link>
-						</li>
-						<li
-							onClick={() => setActive("report")}
-							className={
-								active == "report"
-									? "sidebar_link active_link"
-									: "sidebar_link"
-							}
-						>
-							<i className="fa fa-pie-chart"></i>
-							<Link to={`/report/index`} type="button">
-								Relatório
-							</Link>
-						</li>
-						<li
-							onClick={() => exitClient()}
-							className={
-								active == "sair"
-									? "sidebar_link active_link"
-									: "sidebar_link"
-							}
-						>
-							<i className="fa fa-left-arrow "></i>
-							<Button>Sair do cliente</Button>
-						</li>
-					</>
+				{itensData?.map((item, i) => {
+					return (
+						<Item
+							key={i}
+							active={active == item.active ? true : false}
+							icon={item.icon}
+							name={item.name}
+							url={item.url}
+							clienteItem = {item.cliente}
+							cliente={cliente}
+						/>
+					);
+				})}
+				{cliente && (
+					<li className="sb-item">
+						<Button variant="warning" onClick={() => exitClient()}>
+							Sair do cliente
+						</Button>
+					</li>
 				)}
 			</ul>
 			<hr />
@@ -356,136 +112,18 @@ export default function SideBar() {
 					<strong>mdo</strong>
 				</a>
 				<ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-					{!cliente ? (
-						<>
-							<li
-								onClick={(e) => setActive("dashboard")}
-								className={
-									active == "dashobard"
-										? "sidebar_link active_link"
-										: "sidebar_link"
-								}
-							>
-								<i className="fa fa-house"> </i>
-								<Link to={`/dashboard`} type="button">
-									Dashboard
-								</Link>
-							</li>
-
-							<li
-								onClick={() => setActive("clientes")}
-								className={
-									active == "clientes"
-										? "sidebar_link active_link"
-										: "sidebar_link"
-								}
-							>
-								<i className="fa fa-users"></i>
-								<Link to={`/clientes/index`} type="button">
-									Clientes
-								</Link>
-							</li>
-
-							<li
-								onClick={() => setActive("categorias")}
-								className={
-									active == "categorias"
-										? "sidebar_link active_link"
-										: "sidebar_link"
-								}
-							>
-								<i className="fa-regular fa-lightbulb"></i>
-								<Link to={`/category/index`} type="button">
-									Categorias
-								</Link>
-							</li>
-						</>
-					) : (
-						<>
-							<li
-								onClick={(e) => setActive("dashboard")}
-								className={
-									active == "dashobard"
-										? "sidebar_link active_link"
-										: "sidebar_link"
-								}
-							>
-								<i className="fa fa-house"> </i>
-								<Link to={`/dashboard`} type="button">
-									Dashboard
-								</Link>
-							</li>
-
-							<li
-								onClick={() => setActive("bankAccount")}
-								className={
-									active == "clientes"
-										? "sidebar_link active_link"
-										: "sidebar_link"
-								}
-							>
-								<i className="fa fa-bank"></i>
-								<Link to={`/bank-account/index`} type="button">
-									Conta bancária
-								</Link>
-							</li>
-							<li
-								onClick={() =>
-									setActive("financialTransaction")
-								}
-								className={
-									active == "financialTransaction"
-										? "sidebar_link active_link"
-										: "sidebar_link"
-								}
-							>
-								<i className="fa fa-dollar-sign "></i>
-								<Link
-									to={`/financial-transaction/index`}
-									type="button"
-								>
-									Lançamentos
-								</Link>
-							</li>
-							<li
-								onClick={() => setActive("subscribers")}
-								className={
-									active == "subscribers"
-										? "sidebar_link active_link"
-										: "sidebar_link"
-								}
-							>
-								<i className="fa fa-users"></i>
-								<Link to={`/subscriber/index`} type="button">
-									Fornecedores/Clientes
-								</Link>
-							</li>
-							<li
-								onClick={() => setActive("report")}
-								className={
-									active == "report"
-										? "sidebar_link active_link"
-										: "sidebar_link"
-								}
-							>
-								<i className="fa fa-pie-chart"></i>
-								<Link to={`/report/index`} type="button">
-									Relatório
-								</Link>
-							</li>
-							<li
-								onClick={() => exitClient()}
-								className={
-									active == "sair"
-										? "sidebar_link active_link"
-										: "sidebar_link"
-								}
-							>
-								<i className="fa fa-left-arrow "></i>
-								<Button>Sair do cliente</Button>
-							</li>
-						</>
-					)}
+					{itensData?.map((item, i) => {
+						return (
+							<Item
+								key={i}
+								active={active == item.active ? true : false}
+								icon={item.icon}
+								name={item.name}
+								url={item.url}
+								cliente={cliente}
+							/>
+						);
+					})}
 				</ul>
 			</div>
 		</div>

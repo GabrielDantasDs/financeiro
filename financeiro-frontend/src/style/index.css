@@ -66,11 +66,13 @@ body {
 .my_container {
     display: grid;
     height: 100vh;
-    grid-template-columns: 0.8fr repeat(3, 1fr);
-    grid-template-rows: 0.2fr 3fr;
-    grid-template-areas: 
-    'sidebar nav nav nav'
-    'sidebar main main main';
+    width: 100vw;
+}
+
+.main {
+    background: #f3f4f6;
+    padding-top: 32px;
+    height: 100vh;
 }
 
 @media only screen and (max-width: 978px) {

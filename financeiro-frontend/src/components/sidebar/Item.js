@@ -1,9 +1,10 @@
+import { Link } from "react-router-dom";
+
 export default function Item(props) {
 	return (
 		<>
-			{props.cliente ? (
+			{(props.cliente && props.clienteItem) || (!props.cliente && !props.clienteItem) ? (
 				<li
-					onClick={(e) => props.callBack("dashboard")}
 					className={
 						props.active ? "sb-item sb-item-active" : "sb-item"
 					}

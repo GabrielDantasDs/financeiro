@@ -72,6 +72,14 @@ main {
 	margin-left: 10px;
 }
 
+.sb-link:visited {
+	color: white !important;
+}
+
+.sb-link:active {
+	color: gray !important;
+}
 .sb-item {
 	display: block;
+	margin: 10px
 }

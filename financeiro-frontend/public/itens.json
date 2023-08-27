@@ -1,0 +1,51 @@
+[
+	{
+		"name": "Dashborad",
+		"url": "dashboard",
+		"icon": "home",
+		"active": "dashboard",
+		"cliente": false
+	},
+	{
+		"name": "Clientes",
+		"url": "clientes",
+		"icon": "users",
+		"active": "clientes",
+		"cliente": false
+	},
+	{
+		"name": "Categorias",
+		"url": "category",
+		"icon": "lightbulb",
+		"active": "categorias",
+		"cliente": false
+	},
+	{
+		"name": "Conta bancária",
+		"url": "bank-account",
+		"icon": "bank",
+		"active": "bankAccount",
+		"cliente": true
+	},
+	{
+		"name": "Lançamentos",
+		"url": "financial-transaction",
+		"icon": "home",
+		"active": "financialTransaction",
+		"cliente": true
+	},
+	{
+		"name": "Fornecedores/Clientes",
+		"url": "subscriber",
+		"icon": "users",
+		"active": "users",
+		"cliente": true
+	},
+	{
+		"name": "Relatório",
+		"url": "report",
+		"icon": "pie-chart",
+		"active": "report",
+		"cliente": true
+	}
+]

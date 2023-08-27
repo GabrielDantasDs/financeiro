@@ -27,6 +27,7 @@ export default function Cliente() {
 
 
   useEffect(() => {
+    console.log('teste')
     list()
       .catch((err) => {
         Swal.fire(
