@@ -4,6 +4,7 @@ import Categoria from "./pages/Category/Index";
 import Dashboard from "./pages/Dashboard/Index";
 import BankAccount from "./pages/BankAccount/Index";
 import Subscriber from "./pages/Subscriber/Index";
+import Report from "./pages/Report/Index";
 import FinancialTransaction from "./pages/FinancialTransaction/Index";
 import { useNavigate, Route, Routes } from "react-router-dom";
 import { Nav } from "react-bootstrap";
@@ -24,90 +25,107 @@ import SideBar from "./components/sidebar/Sidebar";
 library.add(fas);
 
 function App() {
-  const navigate = useNavigate();
-  //Corrigir isso aqui depois, não deve ser client.client
-  const cliente = useSelector((state) => state.client.client);
-  const auth = useSelector((state) => state.auth);
+	const navigate = useNavigate();
+	//Corrigir isso aqui depois, não deve ser client.client
+	const cliente = useSelector((state) => state.client.client);
+	const auth = useSelector((state) => state.auth);
 
-  useEffect(() => {
-    console.log(auth);
-  }, []);
-  return (
-    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pt-br">
-      <div>
-        <Navbar />
-        {auth.isAuthenticated && <SideBar />}
-        <Nav />
-        {cliente ? (
-          <Routes>
-            <Route path="/" element={<ProtectedRoute></ProtectedRoute>}></Route>
-            <Route
-              path="/dashboard/*"
-              element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/bank-account/*"
-              element={
-                <ProtectedRoute>
-                  <BankAccount />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/financial-transaction/*"
-              element={
-                <ProtectedRoute>
-                  <FinancialTransaction />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/subscriber/*"
-              element={
-                <ProtectedRoute>
-                  <Subscriber />
-                </ProtectedRoute>
-              }
-            />
-            <Route exact path="/auth" element={<Login />} />
-          </Routes>
-        ) : (
-          <Routes>
-            <Route path="/" element={<ProtectedRoute></ProtectedRoute>}></Route>
-            <Route
-              path="/dashboard/*"
-              element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="clientes/*"
-              element={
-                <ProtectedRoute>
-                  <Cliente />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="category/*"
-              element={
-                <ProtectedRoute>
-                  <Categoria />
-                </ProtectedRoute>
-              }
-            />
-            <Route exact path="/auth" element={<Login />} />
-          </Routes>
-        )}
-      </div>
-    </LocalizationProvider>
-  );
+	useEffect(() => {
+		console.log(auth);
+	}, []);
+	return (
+		<LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pt-br">
+			<div className="min-vh-100">
+				<Navbar />
+				<div className="d-flex min-vh-100">
+					{auth.isAuthenticated && <SideBar />}
+					{cliente ? (
+						<Routes>
+							<Route
+								path="/"
+								element={
+									<ProtectedRoute></ProtectedRoute>
+								}></Route>
+							<Route
+								path="/dashboard/*"
+								element={
+									<ProtectedRoute>
+										<Dashboard />
+									</ProtectedRoute>
+								}
+							/>
+							<Route
+								path="/bank-account/*"
+								element={
+									<ProtectedRoute>
+										<BankAccount />
+									</ProtectedRoute>
+								}
+							/>
+							<Route
+								path="/financial-transaction/*"
+								element={
+									<ProtectedRoute>
+										<FinancialTransaction />
+									</ProtectedRoute>
+								}
+							/>
+							<Route
+								path="/subscriber/*"
+								element={
+									<ProtectedRoute>
+										<Subscriber />
+									</ProtectedRoute>
+								}
+							/>
+							<Route
+								path="/report/*"
+								element={
+									<ProtectedRoute>
+										<Report />
+									</ProtectedRoute>
+								}
+							/>
+							<Route exact path="/auth" element={<Login />} />
+						</Routes>
+					) : (
+						<Routes>
+							<Route
+								path="/"
+								element={
+									<ProtectedRoute></ProtectedRoute>
+								}></Route>
+							<Route
+								path="/dashboard/*"
+								element={
+									<ProtectedRoute>
+										<Dashboard />
+									</ProtectedRoute>
+								}
+							/>
+							<Route
+								path="clientes/*"
+								element={
+									<ProtectedRoute>
+										<Cliente />
+									</ProtectedRoute>
+								}
+							/>
+							<Route
+								path="category/*"
+								element={
+									<ProtectedRoute>
+										<Categoria />
+									</ProtectedRoute>
+								}
+							/>
+							<Route exact path="/auth" element={<Login />} />
+						</Routes>
+					)}
+				</div>
+			</div>
+		</LocalizationProvider>
+	);
 }
 
 export default App;

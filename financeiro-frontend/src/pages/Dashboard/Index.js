@@ -6,7 +6,7 @@ import { Navigate, Route, Routes } from "react-router";
 
 export default function Index(props) {
   return (
-    <div className="my_container">
+    <div className="min-vh-100 min-vw-100">
       <Dashboard />
     </div>
   );

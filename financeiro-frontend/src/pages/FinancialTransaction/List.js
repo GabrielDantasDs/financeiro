@@ -10,16 +10,19 @@ import Swal from "sweetalert2";
 import { InputText } from "primereact/inputtext";
 import { FilterMatchMode } from "primereact/api";
 import { Link } from "react-router-dom";
+import { maskCurrency } from "./Utils";
+import { useSelector } from "react-redux";
 
 export default function List() {
   const [financialTransactions, setFinancialTransactions] = useState([]);
+  const client = useSelector((state) => state.client.client);
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
   const [globalFilterValue, setGlobalFilterValue] = useState("");
 
   useEffect(() => {
-    list()
+    list(client)
       .catch((err) => {
         Swal.fire(
           "Ops",
@@ -138,7 +141,10 @@ export default function List() {
               header={header}
               emptyMessage="Não há registros."
             >
-              <Column field="cat_name" header="Nome"></Column>
+              <Column field="fin_note" header="Nome"></Column>
+              <Column field="fin_value" header="Valor" body={(rowData) => {
+                return maskCurrency(rowData.fin_value);
+              }}></Column>
               <Column header="Opções" body={actionBody}></Column>
             </DataTable>
           </div>

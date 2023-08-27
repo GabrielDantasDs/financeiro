@@ -10,7 +10,7 @@ import { Form, Formik } from "formik";
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons/faCheck";
-import { create, getBankInstitutionList } from "../../cruds/bank-account";
+import { create } from "../../cruds/finantial_transaction";
 import { mascaraMoeda, validate, cleanCurrency } from "./Utils";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router";
@@ -42,8 +42,9 @@ export default function New() {
       fin_id_center_cost: "",
       fin_payed: false,
       fin_payment_day: dayjs(),
-      fin_periodicity: 0,
+      fin_periodicity: null,
       fin_periodicity_type: "",
+      fin_number_installments: 1,
     };
   };
 
@@ -51,34 +52,46 @@ export default function New() {
     setLoading(true);
 
     async function fetchData() {
-      const [categoriesList, cost_centers_list, subscribersList] = await Promise.all([
-        getCategories()
-          .then((res) => {
-            return res.data;
-          })
-          .catch((err) => {
-            Swal.fire("Ops", "Houve um erro ao buscar as categorias", "error");
-            return;
-          }),
-        getCostCenters()
-          .then((res) => {
-            return res.data;
-          })
-          .catch((err) => {
-            Swal.fire("Ops", "Houve um erro ao buscar as categorias", "error");
-            return;
-          }),
-        getSubscribers()
-          .then((res) => {
-            return res.data;
-          })
-          .catch((err) => {
-            Swal.fire("Ops", "Houve um erro ao buscar as categorias", "error");
-            return;
-          }),
-      ]);
+      const [categoriesList, cost_centers_list, subscribersList] =
+        await Promise.all([
+          getCategories()
+            .then((res) => {
+              return res.data;
+            })
+            .catch((err) => {
+              Swal.fire(
+                "Ops",
+                "Houve um erro ao buscar as categorias",
+                "error"
+              );
+              return;
+            }),
+          getCostCenters()
+            .then((res) => {
+              return res.data;
+            })
+            .catch((err) => {
+              Swal.fire(
+                "Ops",
+                "Houve um erro ao buscar as categorias",
+                "error"
+              );
+              return;
+            }),
+          getSubscribers()
+            .then((res) => {
+              return res.data;
+            })
+            .catch((err) => {
+              Swal.fire(
+                "Ops",
+                "Houve um erro ao buscar as categorias",
+                "error"
+              );
+              return;
+            }),
+        ]);
 
-      console.log(categoriesList)
       setCategories(categoriesList);
       setCostCenters(cost_centers_list);
       setSubscribers(subscribersList);
@@ -90,17 +103,23 @@ export default function New() {
   }, []);
 
   const onChangeFinDate = (e, setFieldValue) => {
-    setFieldValue("fin_date", e);
+    setFieldValue("fin_payment_day", e.target.value);
   };
 
   const onSubmit = (values) => {
-    create(values)
+    const formatted_values = {
+      ...values,
+      fin_value: cleanCurrency(values.fin_value),
+      fin_id_client: 1,
+    };
+
+    create(formatted_values)
       .catch((err) => {
         Swal.fire("Ops", "Houve um erro ao salvar a conta", "error");
       })
       .then((res) => {
-        Swal.fire("Sucesso", "Categoria salva com sucesso", "success");
-        navigate("/category/index");
+        Swal.fire("Sucesso", "Lançamento salvo com sucesso", "success");
+        navigate("/financial-transaction/index");
       })
       .finally(() => setSubmitting(false));
   };
@@ -162,7 +181,7 @@ export default function New() {
                           labelId="select-state"
                           id="select-state"
                           value={values.fin_type}
-                          name="bac_type"
+                          name="fin_type"
                           label="Tipo "
                           onChange={handleChange}
                         >
@@ -221,15 +240,15 @@ export default function New() {
                         <Select
                           labelId="select-state"
                           id="select-state"
-                          value={values.cost_center}
-                          name="fin_id_category"
+                          value={values.fin_id_center_cost}
+                          name="fin_id_center_cost"
                           label="Centro de custo "
                           onChange={handleChange}
                         >
                           {costCenters.map((obj, i) => {
                             return (
                               <MenuItem key={i} value={obj.id}>
-                                {obj.cat_name}
+                                {obj.coc_name}
                               </MenuItem>
                             );
                           })}
@@ -238,21 +257,27 @@ export default function New() {
                     </div>
 
                     <div className="form-group col-md-6">
-                      <TextField
-                        required
-                        id="outlined-required"
-                        label="Cliente/Fornecedor"
-                        value={values.subscriberId}
-                        error={
-                          touched.subscriberId && errors.subscriberId
-                            ? true
-                            : false
-                        }
-                        name="subscriberId"
-                        onBlur={handleBlur}
-                        fullWidth
-                        onChange={handleChange}
-                      />
+                      <FormControl fullWidth>
+                        <InputLabel id="select-state">
+                          Cliente/Fornecedor
+                        </InputLabel>
+                        <Select
+                          labelId="select-state"
+                          id="select-state"
+                          value={values.subscriberId}
+                          name="subscriberId"
+                          label="Cliente/Fornecedor "
+                          onChange={handleChange}
+                        >
+                          {subscribers.map((obj, i) => {
+                            return (
+                              <MenuItem key={i} value={obj.id}>
+                                {obj.sub_name}
+                              </MenuItem>
+                            );
+                          })}
+                        </Select>
+                      </FormControl>
                     </div>
                   </div>
 
@@ -260,14 +285,96 @@ export default function New() {
                     <div className="form-group col-md-6">
                       <DatePicker
                         className="full-width"
-                        onChange={(e) => onChangeFinDate(e, setFieldValue)}
-                        value={values.fin_date}
+                        name="fin_payment_day"
+                        onChange={(newValue) =>
+                          setFieldValue("fin_payment_day", newValue)
+                        }
+                        value={values.fin_payment_day}
                         error={
-                          touched.fin_date && errors.fin_date ? true : false
+                          touched.fin_payment_day && errors.fin_payment_day
+                            ? true
+                            : false
                         }
                         onBlur={handleBlur}
                       />
                     </div>
+                    <div className="form-group col-md-6">
+                      <FormControl fullWidth>
+                        <InputLabel id="select-state">Recorrencia</InputLabel>
+                        <Select
+                          labelId="select-state"
+                          id="select-state"
+                          value={values.fin_periodicity_type}
+                          name="fin_periodicity_type"
+                          label="Recorrência"
+                          onChange={handleChange}
+                        >
+                          <MenuItem value={"UNICA"}>Única</MenuItem>
+                          <MenuItem value={"RECORRENTE"}>Recorrente</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </div>
+                  </div>
+
+                  {values.fin_periodicity_type === "RECORRENTE" && (
+                    <div className="form-row">
+                      <div className="form-group col-md-6">
+                        <FormControl fullWidth>
+                          <InputLabel id="select-state">Periocidade</InputLabel>
+                          <Select
+                            labelId="select-state"
+                            id="select-state"
+                            value={values.fin_periodicity}
+                            name="fin_periodicity"
+                            label="Periodicidade"
+                            onChange={handleChange}
+                          >
+                            <MenuItem value={7}>Semanal</MenuItem>
+                            <MenuItem value={15}>Quinzenal</MenuItem>
+                            <MenuItem value={30}>Mensal</MenuItem>
+                            <MenuItem value={60}>Bimestral</MenuItem>
+                            <MenuItem value={180}>Semestral</MenuItem>
+                            <MenuItem value={365}>Anual</MenuItem>
+                          </Select>
+                        </FormControl>
+                      </div>
+
+                      <div className="form-group col-md-6">
+                        <TextField
+                          id="outlined"
+                          label="Quantidade de parcelas"
+                          type="number"
+                          fullWidth
+                          value={values.fin_number_installments}
+                          error={
+                            touched.fin_number_installments &&
+                            errors.fin_number_installments
+                              ? true
+                              : false
+                          }
+                          name="fin_number_installments"
+                          onBlur={handleBlur}
+                          onChange={handleChange}
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="form-row">
+                    <FormControl fullWidth>
+                      <InputLabel id="select-state">Pago</InputLabel>
+                      <Select
+                        labelId="select-state"
+                        id="select-state"
+                        value={values.fin_payed}
+                        name="fin_payed"
+                        label="Pago"
+                        onChange={handleChange}
+                      >
+                        <MenuItem value={true}>Sim</MenuItem>
+                        <MenuItem value={false}>Não</MenuItem>
+                      </Select>
+                    </FormControl>
                   </div>
 
                   <div className="d-flex flex-row-reverse">
