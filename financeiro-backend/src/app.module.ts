@@ -14,9 +14,10 @@ import { BankAccountModule } from './bank_account/bank_account.module';
 import { CategoryModule } from './category/category.module';
 import { SubscriberModule } from './subscriber/subscriber.module';
 import { CostCenterModule } from './cost_center/cost_center.module';
+import { ReportModule } from './report/report.module';
 
 @Module({
-  imports: [PrismaModule, AuthModule, UserModule, DashboardModule, ClientModule, FinancialTransactionModule, BankAccountModule, CategoryModule, SubscriberModule, CostCenterModule],
+  imports: [PrismaModule, AuthModule, UserModule, DashboardModule, ClientModule, FinancialTransactionModule, BankAccountModule, CategoryModule, SubscriberModule, CostCenterModule, ReportModule],
   controllers: [AppController],
   providers: [
     AppService,

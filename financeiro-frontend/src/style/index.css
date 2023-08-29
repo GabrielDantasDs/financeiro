@@ -75,6 +75,11 @@ body {
     height: 100vh;
 }
 
+.button-side-text {
+    text-align: center;
+    margin: 8px;
+}
+
 @media only screen and (max-width: 978px) {
     .my_container {
         grid-template-columns: 1fr;
