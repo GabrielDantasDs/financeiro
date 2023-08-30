@@ -25,3 +25,7 @@ yarn-error.log*
 
 #env
 .env
+
+#Docker
+Dockerfile
+frontend.dockerfile
