@@ -20,13 +20,18 @@ import { search } from "../../cruds/report";
 import "dayjs/locale/br";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
+import { maskCurrency } from "../FinancialTransaction/Utils";
+import "../../style/report.css";
+import { simpleList } from "../../cruds/category";
 
 export default function Report() {
 	const [data, setData] = useState([]);
+	const [categories, setCategories] = useState([]);
 	const client = useSelector((state) => state.client.client);
 	const [initialDate, setInitialDate] = useState(dayjs());
 	const [finalDate, setFinalDate] = useState(dayjs());
 	const [type, setType] = useState("");
+	const [category, setCategory] = useState("");
 	const [dateType, setDateType] = useState("");
 	const [isSubmitting, setSubmitting] = useState(false);
 
@@ -35,34 +40,34 @@ export default function Report() {
 	dayjs.extend(timezone);
 
 	useEffect(() => {
-		console.log(dayjs())
-		// dayjs.tz.setDefault("America/Sao_Paulo");
-	}, []);
+		const fetch = async () => {
+			await simpleList()
+				.then((res) => {
+					setCategories(res.data);
+				})
+				.catch((err) => {
+					Swal.fire(
+						"Ops",
+						"Houve um erro ao buscar as categorias",
+						"error"
+					);
+					return;
+				});
+		};
 
-	const products = [
-		{
-			id: "1000",
-			code: "f230fh0g3",
-			name: "Bamboo Watch",
-			description: "Product Description",
-			image: "bamboo-watch.jpg",
-			price: 65,
-			category: "Accessories",
-			quantity: 24,
-			inventoryStatus: "INSTOCK",
-			rating: 5,
-		},
-	];
+		fetch();
+	}, []);
 
 	const onSubmit = () => {
 		setSubmitting(true);
-		console.log(initialDate.format())
+
 		search({
 			inital_date: initialDate.format(),
 			final_date: finalDate.format(),
 			type: type,
 			date_type: dateType,
 			client: client,
+			category: category,
 		})
 			.catch((err) => {
 				Swal.fire("Ops", "Houve um erro ao salvar a conta", "error");
@@ -71,6 +76,27 @@ export default function Report() {
 				setData(res.data);
 			})
 			.finally(() => setSubmitting(false));
+	};
+
+	const footer = () => {
+		if (data.length > 0) {
+			const total = data.reduce(
+				(accumulator, currentValue) =>
+					accumulator + currentValue.type == "DESPESA"
+						? -parseFloat(currentValue.fin_value)
+						: parseFloat(currentValue.fin_value),
+				0
+			);
+			console.log(total)
+			return (
+				<Card className="d-flex">
+					Total:{" "}
+					<span className={total > 0 ? "positive-value total-span": "negative-value total-span"}>{maskCurrency(total)}</span>
+				</Card>
+			);
+		}
+
+		return null;
 	};
 
 	return (
@@ -84,7 +110,7 @@ export default function Report() {
 						<Card>
 							<Card.Body>
 								<div className="form-row">
-									<div className="form-group col-md-3">
+									<div className="form-group col-md-6">
 										<DatePicker
 											className="full-width"
 											timezone="America/Sao_Paulo"
@@ -92,7 +118,7 @@ export default function Report() {
 											value={initialDate}
 										/>
 									</div>
-									<div className="form-group col-md-3">
+									<div className="form-group col-md-6">
 										<DatePicker
 											className="full-width"
 											timezone="America/Sao_Paulo"
@@ -114,12 +140,42 @@ export default function Report() {
 													setType(e.target.value)
 												}
 											>
+												<MenuItem value={"SALDO"}>
+													Saldo
+												</MenuItem>
 												<MenuItem value={"RECEITA"}>
 													Receita
 												</MenuItem>
 												<MenuItem value={"DESPESA"}>
 													Despesa
 												</MenuItem>
+											</Select>
+										</FormControl>
+									</div>
+									<div className="form-group col-md-3">
+										<FormControl fullWidth>
+											<InputLabel id="select-state">
+												Categoria
+											</InputLabel>
+											<Select
+												labelId="select-state"
+												id="select-state"
+												value={category}
+												label="Categoria "
+												onChange={(e) =>
+													setCategory(e.target.value)
+												}
+											>
+												{categories.map((item, i) => {
+													return (
+														<MenuItem
+															key={i}
+															value={item.id}
+														>
+															{item.cat_name}
+														</MenuItem>
+													);
+												})}
 											</Select>
 										</FormControl>
 									</div>
@@ -137,6 +193,7 @@ export default function Report() {
 													setDateType(e.target.value)
 												}
 											>
+												<MenuItem value={""}></MenuItem>
 												<MenuItem value={"DUE_DATE"}>
 													Dia de vencimento
 												</MenuItem>
@@ -167,18 +224,39 @@ export default function Report() {
 
 						<div className="card">
 							<DataTable
-								value={products}
+								value={data}
 								tableStyle={{ minWidth: "50rem" }}
+								scrollable
+								scrollHeight="400px"
+								footer={footer}
 							>
-								<Column field="code" header="Code"></Column>
-								<Column field="name" header="Name"></Column>
+								<Column field="fin_note" header="Nome"></Column>
 								<Column
-									field="category"
-									header="Category"
+									field="fin_category"
+									header="Categoria"
+									body={(rowData) => {
+										return rowData.fin_category.cat_name;
+									}}
 								></Column>
 								<Column
-									field="quantity"
-									header="Quantity"
+									field="fin_value"
+									header="Valor"
+									body={(rowData) => {
+										return (
+											<span
+												className={
+													rowData.fin_type ==
+													"RECEITA"
+														? "positive-value"
+														: "negative-value"
+												}
+											>
+												{maskCurrency(
+													rowData.fin_value
+												)}
+											</span>
+										);
+									}}
 								></Column>
 							</DataTable>
 						</div>

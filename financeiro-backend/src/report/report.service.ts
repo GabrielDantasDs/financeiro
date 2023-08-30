@@ -10,30 +10,64 @@ export class ReportService {
   async search(requestDto: RequestDto) {
     let response = null;
 
-    if (requestDto.dateType == "DUE_DATE") {
-      response = await this.prisma.financial_transaction.findMany({ 
+    if (requestDto.date_type == 'DUE_DATE') {
+      response = await this.prisma.financial_transaction.findMany({
         where: {
           fin_invoice_date: {
-            lte: requestDto.finalDate.format(),
-            gte: requestDto.initialDate.format(),
+            lte: requestDto.final_date,
+            gte: requestDto.initial_date,
           },
-          fin_type: requestDto.type,
-          fin_id_client: requestDto.client
-        }
-      })
-    }
-
-    if (requestDto.dateType == "PAYDAY") {
-      response = await this.prisma.financial_transaction.findMany({ 
+          ...(requestDto.type != 'SALDO' ? {fin_type: requestDto.type} : {}),
+          ...(requestDto.category != "" ? {fin_id_category: +requestDto.category} : {}),
+          fin_id_client: +requestDto.client,
+        },
+        include: {
+          fin_client: true,
+          fin_category: true,
+        },
+      });
+    } else if (requestDto.date_type == 'PAYDAY') {
+      response = await this.prisma.financial_transaction.findMany({
         where: {
           fin_payment_day: {
-            lte: requestDto.finalDate.format(),
-            gte: requestDto.initialDate.format(),
+            lte: requestDto.final_date,
+            gte: requestDto.initial_date,
           },
-          fin_type: requestDto.type,
-          fin_id_client: requestDto.client
-        }
-      })
+          ...(requestDto.type != 'SALDO' ? {fin_type: requestDto.type} : {}),
+          ...(requestDto.category != "" ? {fin_id_category: +requestDto.category} : {}),
+          fin_id_client: +requestDto.client,
+        },
+        include: {
+          fin_client: true,
+          fin_category: true,
+        },
+      });
+    } else {
+      response = await this.prisma.financial_transaction.findMany({
+        where: {
+          OR: [
+            {
+              fin_payment_day: {
+                lte: requestDto.final_date,
+                gte: requestDto.initial_date,
+              },
+            },
+            {
+              fin_invoice_date: {
+                lte: requestDto.final_date,
+                gte: requestDto.initial_date,
+              },
+            },
+          ],
+          ...(requestDto.type != 'SALDO' ? {fin_type: requestDto.type} : {}),
+          ...(requestDto.category != "" ? {fin_id_category: +requestDto.category} : {}),
+          fin_id_client: +requestDto.client,
+        },
+        include: {
+          fin_client: true,
+          fin_category: true,
+        },
+      });
     }
 
     return response;

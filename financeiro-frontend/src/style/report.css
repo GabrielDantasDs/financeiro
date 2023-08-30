@@ -1,0 +1,11 @@
+.negative-value {
+    color: red;
+}
+
+.positive-value {
+    color: green;
+}
+
+.total-span {
+    display: contents;
+}
