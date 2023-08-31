@@ -62,7 +62,7 @@ export default function Edit() {
       })
       .then((res) => {
         Swal.fire("Sucesso", "Usuário salvo com sucesso", "success");
-        navigate("/clientes/index");
+        navigate("/clientes");
       })
       .finally(() => setSubmitting(false));
   };

@@ -5,6 +5,7 @@ import Dashboard from "./pages/Dashboard/Index";
 import BankAccount from "./pages/BankAccount/Index";
 import Subscriber from "./pages/Subscriber/Index";
 import Report from "./pages/Report/Index";
+import CostCenter from "./pages/CostCenter/Index";
 import FinancialTransaction from "./pages/FinancialTransaction/Index";
 import { useNavigate, Route, Routes } from "react-router-dom";
 import { Nav } from "react-bootstrap";
@@ -43,9 +44,8 @@ function App() {
 						<Routes>
 							<Route
 								path="/"
-								element={
-									<ProtectedRoute></ProtectedRoute>
-								}></Route>
+								element={<ProtectedRoute></ProtectedRoute>}
+							></Route>
 							<Route
 								path="/dashboard/*"
 								element={
@@ -92,9 +92,8 @@ function App() {
 						<Routes>
 							<Route
 								path="/"
-								element={
-									<ProtectedRoute></ProtectedRoute>
-								}></Route>
+								element={<ProtectedRoute></ProtectedRoute>}
+							></Route>
 							<Route
 								path="/dashboard/*"
 								element={
@@ -116,6 +115,14 @@ function App() {
 								element={
 									<ProtectedRoute>
 										<Categoria />
+									</ProtectedRoute>
+								}
+							/>
+							<Route
+								path="cost-center/*"
+								element={
+									<ProtectedRoute>
+										<CostCenter />
 									</ProtectedRoute>
 								}
 							/>

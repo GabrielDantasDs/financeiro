@@ -12,7 +12,9 @@ export class CostCenterService {
   }
 
   findAll() {
-    return this.prisma.cost_center.findMany();
+    return this.prisma.cost_center.findMany({ include: { 
+      category: true
+    }});
   }
 
   findOne(id: number) {

@@ -43,7 +43,7 @@ export default function New() {
       })
       .then((res) => {
         Swal.fire("Sucesso", "Usuário salvo com sucesso", "success");
-        navigate("/clientes/index");
+        navigate("/clientes");
       })
       .finally(() => setSubmitting(false));
   };

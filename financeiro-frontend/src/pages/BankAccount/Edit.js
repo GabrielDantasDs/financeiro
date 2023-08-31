@@ -68,7 +68,7 @@ export default function Edit() {
       })
       .then((res) => {
         Swal.fire("Sucesso", "Conta atualizada com sucesso", "success");
-        navigate("/bank-account/index");
+        navigate("/bank-account");
       })
       .finally(() => setSubmitting(false));
   };

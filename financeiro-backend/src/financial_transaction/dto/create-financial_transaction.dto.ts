@@ -13,7 +13,7 @@ export class CreateFinancialTransactionDto implements FinancialTransaction {
   fin_number_installments?: number | null;
   fin_payed: boolean;
   fin_periodicity_type?: Periodicity_type;
-  fin_periodicity: number;
+  fin_periodicity: number | null;
   fin_cost_center: Prisma.cost_centerCreateNestedOneWithoutFinancial_transactionInput;
   subscriber?: Prisma.subscriberCreateNestedOneWithoutFinancial_transactionInput;
 }

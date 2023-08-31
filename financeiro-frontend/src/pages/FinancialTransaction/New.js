@@ -1,10 +1,10 @@
 import {
-  Button,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
+	Button,
+	FormControl,
+	InputLabel,
+	MenuItem,
+	Select,
+	TextField,
 } from "@mui/material";
 import { Form, Formik } from "formik";
 import { useEffect, useState } from "react";
@@ -23,377 +23,471 @@ import { simpleList as getCostCenters } from "../../cruds/cost-center";
 import { simpleList as getSubscribers } from "../../cruds/subscriber";
 
 export default function New() {
-  const [isSubmitting, setSubmitting] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
-  const client = useSelector((state) => state.client.client);
-  const [bankInstitutionList, setBankInstitutionList] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [costCenters, setCostCenters] = useState([]);
-  const [subscribers, setSubscribers] = useState([]);
+	const [isSubmitting, setSubmitting] = useState(false);
+	const [loading, setLoading] = useState(true);
+	const navigate = useNavigate();
+	const client = useSelector((state) => state.client.client);
+	const [bankInstitutionList, setBankInstitutionList] = useState([]);
+	const [categories, setCategories] = useState([]);
+	const [costCenters, setCostCenters] = useState([]);
+	const [subscribers, setSubscribers] = useState([]);
 
-  const getIniitalState = () => {
-    return {
-      fin_type: "",
-      fin_value: "",
-      fin_id_category: "",
-      fin_note: "",
-      subscriberId: "",
-      fin_id_center_cost: "",
-      fin_payed: false,
-      fin_payment_day: dayjs(),
-      fin_periodicity: null,
-      fin_periodicity_type: "",
-      fin_number_installments: 1,
-    };
-  };
+	const getIniitalState = () => {
+		return {
+			fin_type: "",
+			fin_value: "",
+			fin_id_category: "",
+			fin_note: "",
+			subscriberId: "",
+			fin_id_center_cost: "",
+			fin_payed: false,
+			fin_payment_day: dayjs(),
+			fin_periodicity: null,
+			fin_periodicity_type: "",
+			fin_number_installments: 1,
+		};
+	};
 
-  useEffect(() => {
-    setLoading(true);
+	useEffect(() => {
+		setLoading(true);
 
-    async function fetchData() {
-      const [categoriesList, cost_centers_list, subscribersList] =
-        await Promise.all([
-          getCategories()
-            .then((res) => {
-              return res.data;
-            })
-            .catch((err) => {
-              Swal.fire(
-                "Ops",
-                "Houve um erro ao buscar as categorias",
-                "error"
-              );
-              return;
-            }),
-          getCostCenters()
-            .then((res) => {
-              return res.data;
-            })
-            .catch((err) => {
-              Swal.fire(
-                "Ops",
-                "Houve um erro ao buscar as categorias",
-                "error"
-              );
-              return;
-            }),
-          getSubscribers()
-            .then((res) => {
-              return res.data;
-            })
-            .catch((err) => {
-              Swal.fire(
-                "Ops",
-                "Houve um erro ao buscar as categorias",
-                "error"
-              );
-              return;
-            }),
-        ]);
+		async function fetchData() {
+			const [cost_centers_list, subscribersList] = await Promise.all([
+				getCostCenters()
+					.then((res) => {
+						return res.data;
+					})
+					.catch((err) => {
+						Swal.fire(
+							"Ops",
+							"Houve um erro ao buscar as categorias",
+							"error"
+						);
+						return;
+					}),
+				getSubscribers()
+					.then((res) => {
+						return res.data;
+					})
+					.catch((err) => {
+						Swal.fire(
+							"Ops",
+							"Houve um erro ao buscar as categorias",
+							"error"
+						);
+						return;
+					}),
+			]);
 
-      setCategories(categoriesList);
-      setCostCenters(cost_centers_list);
-      setSubscribers(subscribersList);
-    }
+			setCostCenters(cost_centers_list);
+			setSubscribers(subscribersList);
+		}
 
-    fetchData();
+		fetchData();
 
-    setLoading(false);
-  }, []);
+		setLoading(false);
+	}, []);
 
-  const onChangeFinDate = (e, setFieldValue) => {
-    setFieldValue("fin_payment_day", e.target.value);
-  };
+	const onChangeFinDate = (e, setFieldValue) => {
+		setFieldValue("fin_payment_day", e.target.value);
+	};
 
-  const onSubmit = (values) => {
-    const formatted_values = {
-      ...values,
-      fin_value: cleanCurrency(values.fin_value),
-      fin_id_client: 1,
-    };
+	const onChangeCostCenter = (cost_center) => {
+		const icategories = costCenters.find(
+			(item) => item.id == cost_center
+		).category;
 
-    create(formatted_values)
-      .catch((err) => {
-        Swal.fire("Ops", "Houve um erro ao salvar a conta", "error");
-      })
-      .then((res) => {
-        Swal.fire("Sucesso", "Lançamento salvo com sucesso", "success");
-        navigate("/financial-transaction/index");
-      })
-      .finally(() => setSubmitting(false));
-  };
+		setCategories(icategories);
+	};
 
-  return (
-    <div className="main">
-      {!loading ? (
-        <div className="container">
-          <div className="header">
-            <h1 className="list_title">Lançamento: Novo lançamento</h1>
-          </div>
-          <div className="form">
-            <Formik
-              initialValues={getIniitalState()}
-              validate={(values) => validate(values)}
-              onSubmit={(values) => {
-                onSubmit(values);
-              }}
-            >
-              {({
-                values,
+	const onSubmit = (values) => {
+		const formatted_values = {
+			...values,
+			fin_value: cleanCurrency(values.fin_value),
+			fin_id_client: 1,
+			fin_periodicity: values.fin_periodicity != "" ? values.fin_periodicity : null
+		};
 
-                errors,
+		create(formatted_values)
+			.catch((err) => {
+				Swal.fire("Ops", "Houve um erro ao salvar a conta", "error");
+			})
+			.then((res) => {
+				Swal.fire("Sucesso", "Lançamento salvo com sucesso", "success");
+				navigate("/financial-transaction");
+			})
+			.finally(() => setSubmitting(false));
+	};
 
-                touched,
+	return (
+		<div className="main">
+			{!loading ? (
+				<div className="container">
+					<div className="header">
+						<h1 className="list_title">
+							Lançamento: Novo lançamento
+						</h1>
+					</div>
+					<div className="form">
+						<Formik
+							initialValues={getIniitalState()}
+							validate={(values) => validate(values)}
+							onSubmit={(values) => {
+								onSubmit(values);
+							}}
+						>
+							{({
+								values,
 
-                handleChange,
+								errors,
 
-                handleBlur,
+								touched,
 
-                handleSubmit,
+								handleChange,
 
-                setFieldValue,
+								handleBlur,
 
-                isSubmitting,
-              }) => (
-                <Form>
-                  <div className="form-row">
-                    <div className="form-group col-md-6">
-                      <TextField
-                        required
-                        id="outlined-required"
-                        label="Nome"
-                        value={values.fin_note}
-                        error={
-                          touched.fin_note && errors.fin_note ? true : false
-                        }
-                        name="fin_note"
-                        onBlur={handleBlur}
-                        fullWidth
-                        onChange={handleChange}
-                      />
-                    </div>
+								handleSubmit,
 
-                    <div className="form-group col-md-6">
-                      <FormControl fullWidth>
-                        <InputLabel id="select-state">Tipo</InputLabel>
-                        <Select
-                          labelId="select-state"
-                          id="select-state"
-                          value={values.fin_type}
-                          name="fin_type"
-                          label="Tipo "
-                          onChange={handleChange}
-                        >
-                          <MenuItem value={"RECEITA"}>Receita</MenuItem>
-                          <MenuItem value={"DESPESA"}>Despesa</MenuItem>
-                        </Select>
-                      </FormControl>
-                    </div>
-                  </div>
+								setFieldValue,
 
-                  <div className="form-row">
-                    <div className="form-group col-md-6">
-                      <TextField
-                        id="outlined"
-                        label="Valor"
-                        fullWidth
-                        value={values.fin_value}
-                        error={
-                          touched.fin_value && errors.fin_value ? true : false
-                        }
-                        name="fin_value"
-                        onBlur={handleBlur}
-                        onChange={(e) => handleChange(mascaraMoeda(e))}
-                        inputProps={{ maxLength: 70 }}
-                      />
-                    </div>
+								isSubmitting,
+							}) => (
+								<Form>
+									<div className="form-row">
+										<div className="form-group col-md-6">
+											<TextField
+												required
+												id="outlined-required"
+												label="Nome"
+												value={values.fin_note}
+												error={
+													touched.fin_note &&
+													errors.fin_note
+														? true
+														: false
+												}
+												name="fin_note"
+												onBlur={handleBlur}
+												fullWidth
+												onChange={handleChange}
+											/>
+										</div>
 
-                    <div className="form-group col-md-6">
-                      <FormControl fullWidth>
-                        <InputLabel id="select-state">Categoria</InputLabel>
-                        <Select
-                          labelId="select-state"
-                          id="select-state"
-                          value={values.fin_id_category}
-                          name="fin_id_category"
-                          label="Categoria "
-                          onChange={handleChange}
-                        >
-                          {categories.map((obj, i) => {
-                            return (
-                              <MenuItem key={i} value={obj.id}>
-                                {obj.cat_name}
-                              </MenuItem>
-                            );
-                          })}
-                        </Select>
-                      </FormControl>
-                    </div>
-                  </div>
-                  <div className="form-row">
-                    <div className="form-group col-md-6">
-                      <FormControl fullWidth>
-                        <InputLabel id="select-state">
-                          Centro de custo
-                        </InputLabel>
-                        <Select
-                          labelId="select-state"
-                          id="select-state"
-                          value={values.fin_id_center_cost}
-                          name="fin_id_center_cost"
-                          label="Centro de custo "
-                          onChange={handleChange}
-                        >
-                          {costCenters.map((obj, i) => {
-                            return (
-                              <MenuItem key={i} value={obj.id}>
-                                {obj.coc_name}
-                              </MenuItem>
-                            );
-                          })}
-                        </Select>
-                      </FormControl>
-                    </div>
+										<div className="form-group col-md-6">
+											<FormControl fullWidth>
+												<InputLabel id="select-state">
+													Tipo
+												</InputLabel>
+												<Select
+													labelId="select-state"
+													id="select-state"
+													value={values.fin_type}
+													name="fin_type"
+													label="Tipo "
+													onChange={handleChange}
+												>
+													<MenuItem value={"RECEITA"}>
+														Receita
+													</MenuItem>
+													<MenuItem value={"DESPESA"}>
+														Despesa
+													</MenuItem>
+												</Select>
+											</FormControl>
+										</div>
+									</div>
 
-                    <div className="form-group col-md-6">
-                      <FormControl fullWidth>
-                        <InputLabel id="select-state">
-                          Cliente/Fornecedor
-                        </InputLabel>
-                        <Select
-                          labelId="select-state"
-                          id="select-state"
-                          value={values.subscriberId}
-                          name="subscriberId"
-                          label="Cliente/Fornecedor "
-                          onChange={handleChange}
-                        >
-                          {subscribers.map((obj, i) => {
-                            return (
-                              <MenuItem key={i} value={obj.id}>
-                                {obj.sub_name}
-                              </MenuItem>
-                            );
-                          })}
-                        </Select>
-                      </FormControl>
-                    </div>
-                  </div>
+									<div className="form-row">
+										<div className="form-group col-md-6">
+											<TextField
+												id="outlined"
+												label="Valor"
+												fullWidth
+												value={values.fin_value}
+												error={
+													touched.fin_value &&
+													errors.fin_value
+														? true
+														: false
+												}
+												name="fin_value"
+												onBlur={handleBlur}
+												onChange={(e) =>
+													handleChange(
+														mascaraMoeda(e)
+													)
+												}
+												inputProps={{ maxLength: 70 }}
+											/>
+										</div>
 
-                  <div className="form-row">
-                    <div className="form-group col-md-6">
-                      <DatePicker
-                        className="full-width"
-                        name="fin_payment_day"
-                        onChange={(newValue) =>
-                          setFieldValue("fin_payment_day", newValue)
-                        }
-                        value={values.fin_payment_day}
-                        error={
-                          touched.fin_payment_day && errors.fin_payment_day
-                            ? true
-                            : false
-                        }
-                        onBlur={handleBlur}
-                      />
-                    </div>
-                    <div className="form-group col-md-6">
-                      <FormControl fullWidth>
-                        <InputLabel id="select-state">Recorrencia</InputLabel>
-                        <Select
-                          labelId="select-state"
-                          id="select-state"
-                          value={values.fin_periodicity_type}
-                          name="fin_periodicity_type"
-                          label="Recorrência"
-                          onChange={handleChange}
-                        >
-                          <MenuItem value={"UNICA"}>Única</MenuItem>
-                          <MenuItem value={"RECORRENTE"}>Recorrente</MenuItem>
-                        </Select>
-                      </FormControl>
-                    </div>
-                  </div>
+										<div className="form-group col-md-6">
+											<FormControl fullWidth>
+												<InputLabel id="select-state">
+													Categoria
+												</InputLabel>
+												<Select
+													labelId="select-state"
+													id="select-state"
+													value={
+														values.fin_id_category
+													}
+													name="fin_id_category"
+													label="Categoria "
+													onChange={handleChange}
+												>
+													{categories.map(
+														(obj, i) => {
+															return (
+																<MenuItem
+																	key={i}
+																	value={
+																		obj.id
+																	}
+																>
+																	{
+																		obj.cat_name
+																	}
+																</MenuItem>
+															);
+														}
+													)}
+												</Select>
+											</FormControl>
+										</div>
+									</div>
+									<div className="form-row">
+										<div className="form-group col-md-6">
+											<FormControl fullWidth>
+												<InputLabel id="select-state">
+													Centro de custo
+												</InputLabel>
+												<Select
+													labelId="select-state"
+													id="select-state"
+													value={
+														values.fin_id_center_cost
+													}
+													name="fin_id_center_cost"
+													label="Centro de custo "
+													onChange={(e) => {
+														handleChange(e);
+														onChangeCostCenter(
+															e.target.value
+														);
+													}}
+												>
+													{costCenters.map(
+														(obj, i) => {
+															return (
+																<MenuItem
+																	key={i}
+																	value={
+																		obj.id
+																	}
+																>
+																	{
+																		obj.coc_name
+																	}
+																</MenuItem>
+															);
+														}
+													)}
+												</Select>
+											</FormControl>
+										</div>
 
-                  {values.fin_periodicity_type === "RECORRENTE" && (
-                    <div className="form-row">
-                      <div className="form-group col-md-6">
-                        <FormControl fullWidth>
-                          <InputLabel id="select-state">Periocidade</InputLabel>
-                          <Select
-                            labelId="select-state"
-                            id="select-state"
-                            value={values.fin_periodicity}
-                            name="fin_periodicity"
-                            label="Periodicidade"
-                            onChange={handleChange}
-                          >
-                            <MenuItem value={7}>Semanal</MenuItem>
-                            <MenuItem value={15}>Quinzenal</MenuItem>
-                            <MenuItem value={30}>Mensal</MenuItem>
-                            <MenuItem value={60}>Bimestral</MenuItem>
-                            <MenuItem value={180}>Semestral</MenuItem>
-                            <MenuItem value={365}>Anual</MenuItem>
-                          </Select>
-                        </FormControl>
-                      </div>
+										<div className="form-group col-md-6">
+											<FormControl fullWidth>
+												<InputLabel id="select-state">
+													Cliente/Fornecedor
+												</InputLabel>
+												<Select
+													labelId="select-state"
+													id="select-state"
+													value={values.subscriberId}
+													name="subscriberId"
+													label="Cliente/Fornecedor "
+													onChange={handleChange}
+												>
+													{subscribers.map(
+														(obj, i) => {
+															return (
+																<MenuItem
+																	key={i}
+																	value={
+																		obj.id
+																	}
+																>
+																	{
+																		obj.sub_name
+																	}
+																</MenuItem>
+															);
+														}
+													)}
+												</Select>
+											</FormControl>
+										</div>
+									</div>
 
-                      <div className="form-group col-md-6">
-                        <TextField
-                          id="outlined"
-                          label="Quantidade de parcelas"
-                          type="number"
-                          fullWidth
-                          value={values.fin_number_installments}
-                          error={
-                            touched.fin_number_installments &&
-                            errors.fin_number_installments
-                              ? true
-                              : false
-                          }
-                          name="fin_number_installments"
-                          onBlur={handleBlur}
-                          onChange={handleChange}
-                        />
-                      </div>
-                    </div>
-                  )}
+									<div className="form-row">
+										<div className="form-group col-md-6">
+											<DatePicker
+												className="full-width"
+												name="fin_payment_day"
+												onChange={(newValue) =>
+													setFieldValue(
+														"fin_payment_day",
+														newValue
+													)
+												}
+												value={values.fin_payment_day}
+												error={
+													touched.fin_payment_day &&
+													errors.fin_payment_day
+														? true
+														: false
+												}
+												onBlur={handleBlur}
+											/>
+										</div>
+										<div className="form-group col-md-6">
+											<FormControl fullWidth>
+												<InputLabel id="select-state">
+													Recorrencia
+												</InputLabel>
+												<Select
+													labelId="select-state"
+													id="select-state"
+													value={
+														values.fin_periodicity_type
+													}
+													name="fin_periodicity_type"
+													label="Recorrência"
+													onChange={handleChange}
+												>
+													<MenuItem value={"UNICA"}>
+														Única
+													</MenuItem>
+													<MenuItem
+														value={"RECORRENTE"}
+													>
+														Recorrente
+													</MenuItem>
+												</Select>
+											</FormControl>
+										</div>
+									</div>
 
-                  <div className="form-row">
-                    <FormControl fullWidth>
-                      <InputLabel id="select-state">Pago</InputLabel>
-                      <Select
-                        labelId="select-state"
-                        id="select-state"
-                        value={values.fin_payed}
-                        name="fin_payed"
-                        label="Pago"
-                        onChange={handleChange}
-                      >
-                        <MenuItem value={true}>Sim</MenuItem>
-                        <MenuItem value={false}>Não</MenuItem>
-                      </Select>
-                    </FormControl>
-                  </div>
+									{values.fin_periodicity_type ===
+										"RECORRENTE" && (
+										<div className="form-row">
+											<div className="form-group col-md-6">
+												<FormControl fullWidth>
+													<InputLabel id="select-state">
+														Periocidade
+													</InputLabel>
+													<Select
+														labelId="select-state"
+														id="select-state"
+														value={
+															values.fin_periodicity
+														}
+														name="fin_periodicity"
+														label="Periodicidade"
+														onChange={handleChange}
+													>
+														<MenuItem value={7}>
+															Semanal
+														</MenuItem>
+														<MenuItem value={15}>
+															Quinzenal
+														</MenuItem>
+														<MenuItem value={30}>
+															Mensal
+														</MenuItem>
+														<MenuItem value={60}>
+															Bimestral
+														</MenuItem>
+														<MenuItem value={180}>
+															Semestral
+														</MenuItem>
+														<MenuItem value={365}>
+															Anual
+														</MenuItem>
+													</Select>
+												</FormControl>
+											</div>
 
-                  <div className="d-flex flex-row-reverse">
-                    <Button
-                      startIcon={<FontAwesomeIcon icon={faCheck} />}
-                      variant="contained"
-                      color="success"
-                      disabled={isSubmitting}
-                      type="submit"
-                    >
-                      Salvar
-                    </Button>
-                  </div>
-                </Form>
-              )}
-            </Formik>
-          </div>
-        </div>
-      ) : null}
-    </div>
-  );
+											<div className="form-group col-md-6">
+												<TextField
+													id="outlined"
+													label="Quantidade de parcelas"
+													type="number"
+													fullWidth
+													value={
+														values.fin_number_installments
+													}
+													error={
+														touched.fin_number_installments &&
+														errors.fin_number_installments
+															? true
+															: false
+													}
+													name="fin_number_installments"
+													onBlur={handleBlur}
+													onChange={handleChange}
+												/>
+											</div>
+										</div>
+									)}
+
+									<div className="form-row">
+										<FormControl fullWidth>
+											<InputLabel id="select-state">
+												Pago
+											</InputLabel>
+											<Select
+												labelId="select-state"
+												id="select-state"
+												value={values.fin_payed}
+												name="fin_payed"
+												label="Pago"
+												onChange={handleChange}
+											>
+												<MenuItem value={true}>
+													Sim
+												</MenuItem>
+												<MenuItem value={false}>
+													Não
+												</MenuItem>
+											</Select>
+										</FormControl>
+									</div>
+
+									<div className="d-flex flex-row-reverse">
+										<Button
+											startIcon={
+												<FontAwesomeIcon
+													icon={faCheck}
+												/>
+											}
+											variant="contained"
+											color="success"
+											disabled={isSubmitting}
+											type="submit"
+										>
+											Salvar
+										</Button>
+									</div>
+								</Form>
+							)}
+						</Formik>
+					</div>
+				</div>
+			) : null}
+		</div>
+	);
 }

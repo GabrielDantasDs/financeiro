@@ -16,7 +16,7 @@ export class CostCenterController {
   findAll() {
     return this.costCenterService.findAll();
   }
-
+  
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.costCenterService.findOne(+id);

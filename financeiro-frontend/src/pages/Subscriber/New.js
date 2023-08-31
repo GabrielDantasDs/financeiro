@@ -47,7 +47,7 @@ export default function New() {
       })
       .then((res) => {
         Swal.fire("Sucesso", "Usuário salvo com sucesso", "success");
-        navigate("/subscriber/index");
+        navigate("/subscriber");
       })
       .finally(() => setSubmitting(false));
   };

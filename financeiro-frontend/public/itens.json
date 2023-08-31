@@ -1,6 +1,6 @@
 [
 	{
-		"name": "Dashborad",
+		"name": "Dashboard",
 		"url": "dashboard",
 		"icon": "home",
 		"active": "dashboard",
@@ -18,6 +18,13 @@
 		"url": "category",
 		"icon": "lightbulb",
 		"active": "categorias",
+		"cliente": false
+	},
+	{
+		"name": "Centros de custo",
+		"url": "cost-center",
+		"icon": "info",
+		"active": "costCenter",
 		"cliente": false
 	},
 	{
