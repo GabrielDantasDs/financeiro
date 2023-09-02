@@ -15,5 +15,6 @@ export class CreateFinancialTransactionDto implements FinancialTransaction {
   fin_periodicity_type?: Periodicity_type;
   fin_periodicity: number | null;
   fin_cost_center: Prisma.cost_centerCreateNestedOneWithoutFinancial_transactionInput;
+  fin_bank_account: Prisma.bank_accountCreateNestedOneWithoutFinancial_transactionInput;
   subscriber?: Prisma.subscriberCreateNestedOneWithoutFinancial_transactionInput;
 }

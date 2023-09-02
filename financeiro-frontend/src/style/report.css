@@ -9,3 +9,7 @@
 .total-span {
     display: contents;
 }
+
+.inline-end {
+    float: inline-end;
+}

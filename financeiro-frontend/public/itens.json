@@ -54,5 +54,12 @@
 		"icon": "pie-chart",
 		"active": "report",
 		"cliente": true
+	},
+	{
+		"name": "Calendário",
+		"url": "calendar",
+		"icon": "calendar",
+		"active": "calendar",
+		"cliente": true
 	}
 ]

@@ -7,4 +7,5 @@ export class RequestDto {
     category: string;
     type: string;
     client: number;
+    bank_account: string;
 }

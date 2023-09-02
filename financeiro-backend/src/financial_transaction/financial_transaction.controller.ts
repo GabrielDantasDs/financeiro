@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
 import { FinancialTransactionService } from './financial_transaction.service';
 import { CreateFinancialTransactionDto } from './dto/create-financial_transaction.dto';
 import { UpdateFinancialTransactionDto } from './dto/update-financial_transaction.dto';
@@ -22,9 +22,14 @@ export class FinancialTransactionController {
     return this.financialTransactionService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Patch('update/:id')
   update(@Param('id') id: string, @Body() updateFinancialTransactionDto: UpdateFinancialTransactionDto) {
     return this.financialTransactionService.update(+id, updateFinancialTransactionDto);
+  }
+
+  @Put('marked-paid/:id')
+  markedPaid(@Param('id') id: string, @Body() updateFinancialTransactionDto: UpdateFinancialTransactionDto) {
+    return this.financialTransactionService.markedPaid(+id, updateFinancialTransactionDto);
   }
 
   @Delete(':id')

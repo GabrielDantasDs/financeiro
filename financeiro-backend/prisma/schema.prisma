@@ -75,7 +75,9 @@ model financial_transaction {
   fin_periodicity_type    Periodicity_type @default(UNICA)
   fin_periodicity         Int?
   fin_id_center_cost      Int
+  fin_id_bank_account     Int
   fin_number_installments Int?
+  fin_bank_account        bank_account     @relation(fields: [fin_id_bank_account], references: [id])
   fin_cost_center         cost_center      @relation(fields: [fin_id_center_cost], references: [id])
   subscriber              subscriber?      @relation(fields: [subscriberId], references: [id])
   subscriberId            Int?
@@ -111,14 +113,15 @@ model payment_condition {
 }
 
 model bank_account {
-  id                     Int                 @id @default(autoincrement())
+  id                     Int                     @id @default(autoincrement())
   bac_id_client          Int
-  bac_client             client              @relation(fields: [bac_id_client], references: [id])
+  bac_client             client                  @relation(fields: [bac_id_client], references: [id])
   bac_name               String
   bac_institution        String
-  bac_inicial_value      Decimal             @db.Decimal(6, 2)
+  bac_inicial_value      Decimal                 @db.Decimal(6, 2)
   bac_date_inicial_value DateTime
   bac_type               String
   bac_description        String
   payment_condition      payment_condition[]
+  financial_transaction  financial_transaction[]
 }

@@ -10,7 +10,7 @@ import { Form, Formik } from "formik";
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons/faCheck";
-import { create, get } from "../../cruds/finantial_transaction";
+import { update, get } from "../../cruds/finantial_transaction";
 import { mascaraMoeda, validate, cleanCurrency } from "./Utils";
 import Swal from "sweetalert2";
 import { useNavigate, useParams } from "react-router";
@@ -80,8 +80,9 @@ export default function Edit() {
 
 			setData(data);
 			setCategories(
-				cost_centers_list.find((item) => item.id == data.fin_id_center_cost)
-					.category
+				cost_centers_list.find(
+					(item) => item.id == data.fin_id_center_cost
+				).category
 			);
 			setCostCenters(cost_centers_list);
 			setSubscribers(subscribersList);
@@ -93,7 +94,6 @@ export default function Edit() {
 	}, []);
 
 	const getIniitalState = () => {
-		console.log(data)
 		return {
 			fin_type: data?.fin_type ?? "",
 			fin_value: data.fin_value ?? "",
@@ -101,6 +101,7 @@ export default function Edit() {
 			fin_note: data?.fin_note ?? "",
 			subscriberId: data.subscriberId ?? "",
 			fin_id_center_cost: data.fin_id_center_cost ?? "",
+			fin_id_bank_account: data.fin_id_bank_account ?? "",
 			fin_payed: data.fin_payed ?? false,
 			fin_payment_day: data.fin_payment_day
 				? dayjs(data.fin_payment_day)
@@ -128,16 +129,17 @@ export default function Edit() {
 			...values,
 			fin_value: cleanCurrency(values.fin_value),
 			fin_id_client: 1,
-			fin_periodicity: values.fin_periodicity != "" ? values.fin_periodicity : null
+			fin_periodicity:
+				values.fin_periodicity != "" ? values.fin_periodicity : null,
 		};
 
-		create(formatted_values)
-			.catch((err) => {
-				Swal.fire("Ops", "Houve um erro ao salvar a conta", "error");
-			})
+		update(params.id, formatted_values)
 			.then((res) => {
 				Swal.fire("Sucesso", "Lançamento salvo com sucesso", "success");
 				navigate("/financial-transaction");
+			})
+			.catch((err) => {
+				Swal.fire("Ops", "Houve um erro ao salvar a conta", "error");
 			})
 			.finally(() => setSubmitting(false));
 	};

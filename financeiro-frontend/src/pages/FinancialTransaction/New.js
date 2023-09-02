@@ -21,13 +21,14 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { simpleList as getCategories } from "../../cruds/category";
 import { simpleList as getCostCenters } from "../../cruds/cost-center";
 import { simpleList as getSubscribers } from "../../cruds/subscriber";
+import { list as getBankAccounts } from "../../cruds/bank-account";
 
 export default function New() {
 	const [isSubmitting, setSubmitting] = useState(false);
 	const [loading, setLoading] = useState(true);
 	const navigate = useNavigate();
 	const client = useSelector((state) => state.client.client);
-	const [bankInstitutionList, setBankInstitutionList] = useState([]);
+	const [bankAccounts, setBankAccounts] = useState([]);
 	const [categories, setCategories] = useState([]);
 	const [costCenters, setCostCenters] = useState([]);
 	const [subscribers, setSubscribers] = useState([]);
@@ -40,6 +41,7 @@ export default function New() {
 			fin_note: "",
 			subscriberId: "",
 			fin_id_center_cost: "",
+			fin_id_bank_account: "",
 			fin_payed: false,
 			fin_payment_day: dayjs(),
 			fin_periodicity: null,
@@ -52,35 +54,49 @@ export default function New() {
 		setLoading(true);
 
 		async function fetchData() {
-			const [cost_centers_list, subscribersList] = await Promise.all([
-				getCostCenters()
-					.then((res) => {
-						return res.data;
-					})
-					.catch((err) => {
-						Swal.fire(
-							"Ops",
-							"Houve um erro ao buscar as categorias",
-							"error"
-						);
-						return;
-					}),
-				getSubscribers()
-					.then((res) => {
-						return res.data;
-					})
-					.catch((err) => {
-						Swal.fire(
-							"Ops",
-							"Houve um erro ao buscar as categorias",
-							"error"
-						);
-						return;
-					}),
-			]);
+			const [cost_centers_list, subscribersList, bankAccountList] =
+				await Promise.all([
+					getCostCenters()
+						.then((res) => {
+							return res.data;
+						})
+						.catch((err) => {
+							Swal.fire(
+								"Ops",
+								"Houve um erro ao buscar as categorias",
+								"error"
+							);
+							return;
+						}),
+					getSubscribers()
+						.then((res) => {
+							return res.data;
+						})
+						.catch((err) => {
+							Swal.fire(
+								"Ops",
+								"Houve um erro ao buscar as categorias",
+								"error"
+							);
+							return;
+						}),
+					getBankAccounts(client)
+						.then((res) => {
+							return res.data;
+						})
+						.catch((err) => {
+							Swal.fire(
+								"Ops",
+								"Houve um erro ao buscar as contas bancárias",
+								"error"
+							);
+							return;
+						}),
+				]);
 
 			setCostCenters(cost_centers_list);
 			setSubscribers(subscribersList);
+			setBankAccounts(bankAccountList);
 		}
 
 		fetchData();
@@ -105,7 +121,8 @@ export default function New() {
 			...values,
 			fin_value: cleanCurrency(values.fin_value),
 			fin_id_client: 1,
-			fin_periodicity: values.fin_periodicity != "" ? values.fin_periodicity : null
+			fin_periodicity:
+				values.fin_periodicity != "" ? values.fin_periodicity : null,
 		};
 
 		create(formatted_values)
@@ -199,7 +216,7 @@ export default function New() {
 									</div>
 
 									<div className="form-row">
-										<div className="form-group col-md-6">
+										<div className="form-group col-md-4">
 											<TextField
 												id="outlined"
 												label="Valor"
@@ -221,8 +238,41 @@ export default function New() {
 												inputProps={{ maxLength: 70 }}
 											/>
 										</div>
-
-										<div className="form-group col-md-6">
+										<div className="form-group col-md-4">
+											<FormControl fullWidth>
+												<InputLabel id="select-state">
+													Conta
+												</InputLabel>
+												<Select
+													labelId="select-state"
+													id="select-state"
+													value={
+														values.fin_id_bank_account
+													}
+													name="fin_id_bank_account"
+													label="Conta "
+													onChange={handleChange}
+												>
+													{bankAccounts.map(
+														(obj, i) => {
+															return (
+																<MenuItem
+																	key={i}
+																	value={
+																		obj.id
+																	}
+																>
+																	{
+																		obj.bac_name
+																	}
+																</MenuItem>
+															);
+														}
+													)}
+												</Select>
+											</FormControl>
+										</div>
+										<div className="form-group col-md-4">
 											<FormControl fullWidth>
 												<InputLabel id="select-state">
 													Categoria

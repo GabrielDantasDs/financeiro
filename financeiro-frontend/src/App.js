@@ -6,6 +6,7 @@ import BankAccount from "./pages/BankAccount/Index";
 import Subscriber from "./pages/Subscriber/Index";
 import Report from "./pages/Report/Index";
 import CostCenter from "./pages/CostCenter/Index";
+import Calendar from "./pages/Calendar/Index";
 import FinancialTransaction from "./pages/FinancialTransaction/Index";
 import { useNavigate, Route, Routes } from "react-router-dom";
 import { Nav } from "react-bootstrap";
@@ -83,6 +84,14 @@ function App() {
 								element={
 									<ProtectedRoute>
 										<Report />
+									</ProtectedRoute>
+								}
+							/>
+							<Route
+								path="/calendar/*"
+								element={
+									<ProtectedRoute>
+										<Calendar />
 									</ProtectedRoute>
 								}
 							/>

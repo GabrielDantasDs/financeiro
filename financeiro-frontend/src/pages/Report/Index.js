@@ -13,6 +13,9 @@ import {
 	InputLabel,
 	MenuItem,
 	Select,
+	Checkbox,
+	FormGroup,
+	FormControlLabel,
 } from "@mui/material";
 import { faSearch } from "@fortawesome/free-solid-svg-icons/faSearch";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -22,18 +25,22 @@ import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
 import { maskCurrency } from "../FinancialTransaction/Utils";
 import "../../style/report.css";
-import { simpleList } from "../../cruds/category";
+import { simpleList as simpleListCategories } from "../../cruds/category";
+import { list as simpleListBankAccounts } from "../../cruds/bank-account";
 
 export default function Report() {
 	const [data, setData] = useState([]);
 	const [categories, setCategories] = useState([]);
+	const [bankAccounts, setBankAccounts] = useState([]);
 	const client = useSelector((state) => state.client.client);
 	const [initialDate, setInitialDate] = useState(dayjs());
 	const [finalDate, setFinalDate] = useState(dayjs());
 	const [type, setType] = useState("");
 	const [category, setCategory] = useState("");
+	const [bankAccount, setBankAccount] = useState("");
 	const [dateType, setDateType] = useState("");
 	const [isSubmitting, setSubmitting] = useState(false);
+	const [includeInitialBalance, setIncludeInitialBalance] = useState(false);
 
 	dayjs.locale("br");
 	dayjs.extend(utc);
@@ -41,18 +48,33 @@ export default function Report() {
 
 	useEffect(() => {
 		const fetch = async () => {
-			await simpleList()
-				.then((res) => {
-					setCategories(res.data);
-				})
-				.catch((err) => {
-					Swal.fire(
-						"Ops",
-						"Houve um erro ao buscar as categorias",
-						"error"
-					);
-					return;
-				});
+			const [icategories, ibankAccounts] = await Promise.all([
+				simpleListCategories()
+					.then((res) => {
+						return res.data;
+					})
+					.catch((err) => {
+						Swal.fire(
+							"Ops",
+							"Houve um erro ao buscar as categorias",
+							"error"
+						);
+					}),
+				simpleListBankAccounts(client)
+					.then((res) => {
+						return res.data;
+					})
+					.catch((err) => {
+						Swal.fire(
+							"Ops",
+							"Houve um erro ao buscar as contas",
+							"error"
+						);
+					}),
+			]);
+
+			setCategories(icategories);
+			setBankAccounts(ibankAccounts);
 		};
 
 		fetch();
@@ -68,6 +90,7 @@ export default function Report() {
 			date_type: dateType,
 			client: client,
 			category: category,
+			bank_account: bankAccount,
 		})
 			.catch((err) => {
 				Swal.fire("Ops", "Houve um erro ao salvar a conta", "error");
@@ -80,18 +103,51 @@ export default function Report() {
 
 	const footer = () => {
 		if (data.length > 0) {
-			const total = data.reduce(
+			let balance = data.reduce(
 				(accumulator, currentValue) =>
-					accumulator + currentValue.type == "DESPESA"
+					accumulator +
+					(currentValue.fin_type === "DESPESA"
 						? -parseFloat(currentValue.fin_value)
-						: parseFloat(currentValue.fin_value),
+						: parseFloat(currentValue.fin_value)),
 				0
 			);
-			console.log(total)
+
+			let initialBalance = 0;
+			let total = 0;
+
+			if (includeInitialBalance) {
+				if (bankAccount != "") {
+					initialBalance = parseFloat(bankAccount.bac_inicial_value);
+					total = balance + initialBalance;
+				} else {
+					initialBalance = bankAccounts.reduce(
+						(accumulator, currentValue) =>
+							accumulator +
+							parseFloat(currentValue.bac_inicial_value),
+						0
+					);
+					total = balance + initialBalance;
+				}
+			} else {
+				total = balance;
+			}
+
+			console.log(initialBalance);
 			return (
 				<Card className="d-flex">
 					Total:{" "}
-					<span className={total > 0 ? "positive-value total-span": "negative-value total-span"}>{maskCurrency(total)}</span>
+					<span
+						className={
+							total > 0
+								? "positive-value total-span"
+								: "negative-value total-span"
+						}
+					>
+						{includeInitialBalance
+							? `${maskCurrency(initialBalance)} + ${maskCurrency(balance)} = ${maskCurrency(total)}`
+							: maskCurrency(total)
+						}
+					</span>
 				</Card>
 			);
 		}
@@ -179,7 +235,41 @@ export default function Report() {
 											</Select>
 										</FormControl>
 									</div>
-									<div className="form-group col-md-2">
+
+									<div className="form-group col-md-3">
+										<FormControl fullWidth>
+											<InputLabel id="select-state">
+												Conta bancária
+											</InputLabel>
+											<Select
+												labelId="select-state"
+												id="select-state"
+												value={bankAccount}
+												label="Conta bancária "
+												onChange={(e) =>
+													setBankAccount(
+														e.target.value
+													)
+												}
+											>
+												<MenuItem value="">
+													Todas
+												</MenuItem>
+												{bankAccounts.map((item, i) => {
+													return (
+														<MenuItem
+															key={i}
+															value={item.id}
+														>
+															{item.bac_name}
+														</MenuItem>
+													);
+												})}
+											</Select>
+										</FormControl>
+									</div>
+
+									<div className="form-group col-md-3">
 										<FormControl fullWidth>
 											<InputLabel id="select-state">
 												Por
@@ -203,7 +293,28 @@ export default function Report() {
 											</Select>
 										</FormControl>
 									</div>
-									<div className="form-group col-md-1 button-side-text">
+
+									<div className="form-group col-md-2">
+										<FormGroup>
+											<FormControlLabel
+												control={
+													<Checkbox
+														value={
+															includeInitialBalance
+														}
+														onChange={(e) => {
+															setIncludeInitialBalance(
+																e.target.checked
+															);
+														}}
+													/>
+												}
+												label="Incluir saldo inicial"
+											/>
+										</FormGroup>
+									</div>
+
+									<div className="form-group col-md offset-md-8">
 										<Button
 											startIcon={
 												<FontAwesomeIcon
@@ -214,6 +325,7 @@ export default function Report() {
 											color="success"
 											disabled={isSubmitting}
 											onClick={onSubmit}
+											className="inline-end"
 										>
 											Buscar
 										</Button>

@@ -61,7 +61,7 @@ export default function New() {
       })
       .then((res) => {
         Swal.fire("Sucesso", "Conta salva com sucesso", "success");
-        navigate("/bank-account/index");
+        navigate("/bank-account");
       })
       .finally(() => setSubmitting(false));
   };

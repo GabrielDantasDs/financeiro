@@ -10,10 +10,22 @@ export const create = async (data) => {
   return response
 }
 
+export const update = async (id, data) => {
+  let response = await axios.patch(constants.baseUrl + `/financial-transaction/update/${id}`, data)
+
+  return response
+}
+
 export const list = async (id) => {
   let response = await axios.get(constants.baseUrl + `/financial-transaction/list/${id}`,)
 
   return response
+}
+
+export const markedPaid = async (id) => {
+  let response = await axios.put(constants.baseUrl + `/financial-transaction/marked-paid/${id}`);
+
+  return response;
 }
 
 // export const edit = async () => {

@@ -10,6 +10,7 @@ export const validate = (values) => {
     "fin_payment_day",
     "fin_periodicity_type",
     "fin_number_installments",
+    "fin_id_bank_account"
   ];
 
   if (values.fin_periodicity_type === 'RECORRENTE') {

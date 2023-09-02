@@ -19,6 +19,7 @@ export class ReportService {
           },
           ...(requestDto.type != 'SALDO' ? {fin_type: requestDto.type} : {}),
           ...(requestDto.category != "" ? {fin_id_category: +requestDto.category} : {}),
+          ...(requestDto.bank_account != "" ? {fin_id_bank_account: +requestDto.bank_account} : {}),
           fin_id_client: +requestDto.client,
         },
         include: {
@@ -35,6 +36,7 @@ export class ReportService {
           },
           ...(requestDto.type != 'SALDO' ? {fin_type: requestDto.type} : {}),
           ...(requestDto.category != "" ? {fin_id_category: +requestDto.category} : {}),
+          ...(requestDto.bank_account != "" ? {fin_id_bank_account: +requestDto.bank_account} : {}),
           fin_id_client: +requestDto.client,
         },
         include: {
@@ -61,6 +63,7 @@ export class ReportService {
           ],
           ...(requestDto.type != 'SALDO' ? {fin_type: requestDto.type} : {}),
           ...(requestDto.category != "" ? {fin_id_category: +requestDto.category} : {}),
+          ...(requestDto.bank_account != "" ? {fin_id_bank_account: +requestDto.bank_account} : {}),
           fin_id_client: +requestDto.client,
         },
         include: {
