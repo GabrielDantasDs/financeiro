@@ -32,9 +32,6 @@ function App() {
 	const cliente = useSelector((state) => state.client.client);
 	const auth = useSelector((state) => state.auth);
 
-	useEffect(() => {
-		console.log(auth);
-	}, []);
 	return (
 		<LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pt-br">
 			<div className="min-vh-100">

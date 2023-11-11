@@ -35,10 +35,10 @@ export default function Report() {
 	const client = useSelector((state) => state.client.client);
 	const [initialDate, setInitialDate] = useState(dayjs());
 	const [finalDate, setFinalDate] = useState(dayjs());
-	const [type, setType] = useState("");
+	const [type, setType] = useState("SALDO");
 	const [category, setCategory] = useState("");
 	const [bankAccount, setBankAccount] = useState("");
-	const [dateType, setDateType] = useState("");
+	const [dateType, setDateType] = useState("DUE_DATE");
 	const [isSubmitting, setSubmitting] = useState(false);
 	const [includeInitialBalance, setIncludeInitialBalance] = useState(false);
 
@@ -132,7 +132,6 @@ export default function Report() {
 				total = balance;
 			}
 
-			console.log(initialBalance);
 			return (
 				<Card className="d-flex">
 					Total:{" "}
@@ -222,6 +221,7 @@ export default function Report() {
 													setCategory(e.target.value)
 												}
 											>
+												<MenuItem value="">Todas</MenuItem>
 												{categories.map((item, i) => {
 													return (
 														<MenuItem
@@ -341,6 +341,7 @@ export default function Report() {
 								scrollable
 								scrollHeight="400px"
 								footer={footer}
+								emptyMessage="Não foram encontrados resultados."
 							>
 								<Column field="fin_note" header="Nome"></Column>
 								<Column

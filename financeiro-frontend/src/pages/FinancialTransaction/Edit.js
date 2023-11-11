@@ -248,44 +248,7 @@ export default function Edit() {
 										</div>
 
 										<div className="form-group col-md-6">
-											<FormControl fullWidth>
-												<InputLabel id="select-state">
-													Categoria
-												</InputLabel>
-												<Select
-													labelId="select-state"
-													id="select-state"
-													value={
-														values.fin_id_category
-													}
-													name="fin_id_category"
-													label="Categoria "
-													onChange={handleChange}
-												>
-													{categories.map(
-														(obj, i) => {
-															console.log(obj);
-															return (
-																<MenuItem
-																	key={i}
-																	value={
-																		obj.id
-																	}
-																>
-																	{
-																		obj.cat_name
-																	}
-																</MenuItem>
-															);
-														}
-													)}
-												</Select>
-											</FormControl>
-										</div>
-									</div>
-									<div className="form-row">
-										<div className="form-group col-md-6">
-											<FormControl fullWidth>
+										<FormControl fullWidth>
 												<InputLabel id="select-state">
 													Centro de custo
 												</InputLabel>
@@ -315,6 +278,42 @@ export default function Edit() {
 																>
 																	{
 																		obj.coc_name
+																	}
+																</MenuItem>
+															);
+														}
+													)}
+												</Select>
+											</FormControl>
+										</div>
+									</div>
+									<div className="form-row">
+										<div className="form-group col-md-6">
+										<FormControl fullWidth>
+												<InputLabel id="select-state">
+													Categoria
+												</InputLabel>
+												<Select
+													labelId="select-state"
+													id="select-state"
+													value={
+														values.fin_id_category
+													}
+													name="fin_id_category"
+													label="Categoria "
+													onChange={handleChange}
+												>
+													{categories.map(
+														(obj, i) => {
+															return (
+																<MenuItem
+																	key={i}
+																	value={
+																		obj.id
+																	}
+																>
+																	{
+																		obj.cat_name
 																	}
 																</MenuItem>
 															);

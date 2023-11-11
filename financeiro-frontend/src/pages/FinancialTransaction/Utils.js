@@ -63,6 +63,5 @@ export function cleanCurrency(currencyValue) {
   // Remove trailing zeros after the decimal point, if any
   const valueWithoutExtraZeros = formattedValue.replace(/\.?0*$/g, "");
 
-  console.log('teste')
   return valueWithoutExtraZeros;
 }

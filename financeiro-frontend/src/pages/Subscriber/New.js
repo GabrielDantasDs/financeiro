@@ -39,7 +39,6 @@ export default function New() {
   };
 
   const onSubmit = (values) => {
-    console.log(values)
 
     create(values)
       .catch((err) => {

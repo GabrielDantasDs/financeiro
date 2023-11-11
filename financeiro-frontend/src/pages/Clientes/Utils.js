@@ -24,3 +24,5 @@ export const validate = (values) => {
 
   return errors;
 };
+
+export const goIndex = "/clientes"

@@ -16,7 +16,7 @@ import { useDispatch } from "react-redux";
 import { setClient } from "../../store/actions";
 
 
-export default function Cliente() {
+export default function List() {
   const [clientes, setClientes] = useState([]);
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -27,7 +27,6 @@ export default function Cliente() {
 
 
   useEffect(() => {
-    console.log('teste')
     list()
       .catch((err) => {
         Swal.fire(

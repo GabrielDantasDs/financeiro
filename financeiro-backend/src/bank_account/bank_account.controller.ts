@@ -46,9 +46,4 @@ export class BankAccountController {
   remove(@Param('id') id: string) {
     return this.bankAccountService.remove(+id);
   }
-
-  // @Post('testPost')
-  // async testPost(@Req() request:any) {
-  //   console.log(request.user)
-  // }
 }

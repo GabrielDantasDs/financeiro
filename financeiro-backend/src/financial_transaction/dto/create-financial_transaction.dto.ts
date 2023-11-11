@@ -2,7 +2,7 @@ import { Periodicity_type, Prisma } from '@prisma/client';
 import { Decimal, DecimalJsLike } from '@prisma/client/runtime';
 import { FinancialTransaction } from '../entities/financial_transaction.entity';
 
-export class CreateFinancialTransactionDto implements FinancialTransaction {
+export class CreateFinancialTransactionDto extends FinancialTransaction {
   fin_client: Prisma.clientCreateNestedOneWithoutFinancial_transactionInput;
   fin_type: string;
   fin_value: string | number | Decimal | DecimalJsLike;

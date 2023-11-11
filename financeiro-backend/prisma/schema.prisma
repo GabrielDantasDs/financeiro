@@ -81,6 +81,7 @@ model financial_transaction {
   fin_cost_center         cost_center      @relation(fields: [fin_id_center_cost], references: [id])
   subscriber              subscriber?      @relation(fields: [subscriberId], references: [id])
   subscriberId            Int?
+  installments            installments[]
 }
 
 enum Periodicity_type {
@@ -124,4 +125,13 @@ model bank_account {
   bac_description        String
   payment_condition      payment_condition[]
   financial_transaction  financial_transaction[]
+}
+
+model installments {
+  id                            Int                   @id @default(autoincrement())
+  ins_value                     Decimal               @db.Decimal(6, 2)
+  ins_number                    Int
+  ins_payday                    DateTime
+  ins_id_financial_transacation Int
+  ins_financial_transacation    financial_transaction @relation(fields: [id], references: [id])
 }

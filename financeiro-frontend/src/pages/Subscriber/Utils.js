@@ -1,5 +1,4 @@
 export const validate = (values) => {
-  console.log(values)
   const errors = {};
 
   Object.keys(values).map((key, i) => {
