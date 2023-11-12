@@ -8,6 +8,7 @@ declare const module: any;
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
+    allowedHeaders: '*',
     origin: ['http://localhost:8000', 'http://localhost:3000', 'https://financeiro-lac.vercel.app', "http://172.18.0.2:3000"],
     credentials: true
   })
