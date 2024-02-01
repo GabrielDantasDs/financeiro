@@ -30,7 +30,7 @@ class AuthController extends Controller {
             'password' => 'required|min:8',
         ]);
 
-        $user = User::where(['email' => $request->email])->first();
+        $user = User::where(['email' => $request->email])->firstOrFail();
 
         if (Hash::check($request->password, $user->password)) {
             $token = $user->createToken('access_token');

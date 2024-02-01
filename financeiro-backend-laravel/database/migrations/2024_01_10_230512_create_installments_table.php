@@ -16,7 +16,8 @@ return new class extends Migration
             $table->id();
             $table->double('value');
             $table->integer('number');
-            $table->datetime('payday');
+            $table->boolean('paid')->default(false);
+            $table->datetime('payday')->nullable();
             $table->datetime('dueday')->nullable();
 
             $table->foreignIdFor(new FinancialTransaction(), 'id_financial_transaction');

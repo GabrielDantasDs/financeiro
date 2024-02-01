@@ -15,8 +15,8 @@ return new class extends Migration
             $table->double('value');
             $table->string('note');
             $table->date('invoice_date');
-            $table->boolean('paid');
-            $table->date('payment_day');
+            $table->boolean('paid')->false();
+            $table->date('payment_day')->nullable();
             $table->integer('periodicity')->nullable();
             $table->string('periodicity_type');
 

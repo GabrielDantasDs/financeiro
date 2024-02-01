@@ -18,7 +18,8 @@ class FinancialTransaction extends Model
         'paid',
         'payment_day',
         'periodicity',
-        'periodicity_type'
+        'periodicity_type',
+        'id_subscriber'
     ];
 
     public function subscriber() : HasOne { 
