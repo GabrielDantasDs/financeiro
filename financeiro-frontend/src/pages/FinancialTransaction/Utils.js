@@ -36,13 +36,13 @@ export function cleanCurrency(currencyValue) {
 	console.log(currencyValue);
 	// Remove tudo que não é número ou pontuação relevante
 	const cleanedValue = currencyValue.replace(/[^\d.,]/g, "");
-	console.log(cleanedValue);
+
 	// Se existirem separadores de milhares, remover
 	const valueWithoutThousandSeparator = cleanedValue.replace(/\./g, "");
-	console.log(valueWithoutThousandSeparator);
+
 	// Substituir a vírgula decimal (se for o caso) por um ponto
 	const valueWithPeriod = valueWithoutThousandSeparator.replace(",", ".");
-	console.log(valueWithPeriod);
+
 	// Converter para número float
 	const floatValue = parseFloat(valueWithPeriod);
 	console.log(floatValue);
