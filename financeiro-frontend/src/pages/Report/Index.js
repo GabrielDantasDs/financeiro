@@ -348,7 +348,7 @@ export default function Report() {
 									field="category"
 									header="Categoria"
 									body={(rowData) => {
-										return rowData.category.cat_name;
+										return rowData.category.name;
 									}}
 								></Column>
 								<Column
