@@ -1,6 +1,6 @@
 export const validate = (values) => {
 	const errors = {};
-	const keys = ["type", "value", "category_id", "cost_center_id", "payed", "payment_day", "bank_account_id"];
+	const keys = ["type", "value", "category_id", "payed", "payment_day", "bank_account_id"];
 
 	Object.keys(values).map((key, i) => {
 		if (keys.includes(key)) {

@@ -87,23 +87,13 @@ export default function IForm({ data, onSubmit }) {
 								<Form>
 									<div className="form-row">
 										<div className="form-group col-md-6">
-											<TextField
-												required
-												id="outlined-required"
-												label="Nome"
-												value={values.note}
-												error={touched.note && errors.note ? true : false}
-												name="note"
-												onBlur={handleBlur}
-												fullWidth
-												onChange={handleChange}
-											/>
+											<TextField required id="outlined-required" label="Nome *" value={values.note} error={touched.note && errors.note ? true : false} name="note" onBlur={handleBlur} fullWidth onChange={handleChange} />
 										</div>
 
 										<div className="form-group col-md-6">
 											<FormControl fullWidth>
 												<InputLabel id="select-state">Tipo</InputLabel>
-												<Select labelId="select-state" id="select-state" value={values.type} name="type" label="Tipo " onChange={handleChange}>
+												<Select labelId="select-state" id="select-state" value={values.type} name="type" label="Tipo *" onChange={handleChange}>
 													<MenuItem value={"RECEITA"}>Receita</MenuItem>
 													<MenuItem value={"DESPESA"}>Despesa</MenuItem>
 												</Select>
@@ -115,7 +105,7 @@ export default function IForm({ data, onSubmit }) {
 										<div className="form-group col-md-6">
 											<FormControl fullWidth>
 												<InputLabel id="select-state">Conta</InputLabel>
-												<Select labelId="select-state" id="select-state" value={values.bank_account_id} name="bank_account_id" label="Conta " onChange={handleChange}>
+												<Select labelId="select-state" id="select-state" value={values.bank_account_id} name="bank_account_id" label="Conta *" onChange={handleChange}>
 													{bankAccounts.map((obj, i) => {
 														return (
 															<MenuItem key={i} value={obj.id}>
@@ -144,17 +134,7 @@ export default function IForm({ data, onSubmit }) {
 
 									<div className="form-row">
 										<div className="form-group col-md-4">
-											<TextField
-												id="outlined"
-												label="Valor"
-												fullWidth
-												value={values.value}
-												error={touched.value && errors.value ? true : false}
-												name="value"
-												onBlur={handleBlur}
-												onChange={(e) => handleChange(mascaraMoeda(e))}
-												inputProps={{ maxLength: 70 }}
-											/>
+											<TextField id="outlined" label="Valor *" fullWidth value={values.value} error={touched.value && errors.value ? true : false} name="value" onBlur={handleBlur} onChange={(e) => handleChange(mascaraMoeda(e))} inputProps={{ maxLength: 70 }} />
 										</div>
 										<div className="form-group col-md-4">
 											<FormControl fullWidth>
@@ -164,7 +144,7 @@ export default function IForm({ data, onSubmit }) {
 													id="select-state"
 													value={values.category_id}
 													name="category_id"
-													label="Categoria "
+													label="Categoria *"
 													onChange={(e) => {
 														handleChange(e);
 														onChangeCategory(e);
@@ -198,18 +178,11 @@ export default function IForm({ data, onSubmit }) {
 
 									<div className="form-row">
 										<div className="form-group col-md-4">
-											<DatePicker
-												className="full-width"
-												name="payment_day"
-												onChange={(newValue) => setFieldValue("payment_day", newValue)}
-												value={values.payment_day}
-												error={touched.payment_day && errors.payment_day ? true : false}
-												onBlur={handleBlur}
-											/>
+											<DatePicker label={"Data de vencimento *"} className="full-width" name="payment_day" onChange={(newValue) => setFieldValue("payment_day", newValue)} value={values.payment_day} error={touched.payment_day && errors.payment_day ? true : false} onBlur={handleBlur} />
 										</div>
 										<div className="form-group col-md-4">
 											<FormControl fullWidth>
-												<InputLabel id="select-state">Recorrencia</InputLabel>
+												<InputLabel id="select-state">Recorrência</InputLabel>
 												<Select labelId="select-state" id="select-state" value={values.periodicity_type} name="periodicity_type" label="Recorrência" onChange={handleChange}>
 													<MenuItem value={"UNICA"}>Única</MenuItem>
 													<MenuItem value={"RECORRENTE"}>Recorrente</MenuItem>
@@ -245,17 +218,7 @@ export default function IForm({ data, onSubmit }) {
 											</div>
 
 											<div className="form-group col-md-4">
-												<TextField
-													id="outlined"
-													label="Quantidade de parcelas"
-													type="number"
-													fullWidth
-													value={values.number_installments}
-													error={touched.number_installments && errors.number_installments ? true : false}
-													name="number_installments"
-													onBlur={handleBlur}
-													onChange={handleChange}
-												/>
+												<TextField id="outlined" label="Quantidade de parcelas" type="number" fullWidth value={values.number_installments} error={touched.number_installments && errors.number_installments ? true : false} name="number_installments" onBlur={handleBlur} onChange={handleChange} />
 											</div>
 										</div>
 									)}
