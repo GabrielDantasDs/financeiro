@@ -17,10 +17,11 @@ class SubscriberController extends Controller
             'name' => 'required|min:3|max:100',
             'document' => 'required|min:3|max:20',
             'email' => 'required|email|unique:subscribers,email',
-            'distrcit' => 'required|max:255',
+            'district' => 'required|max:255',
+            'address' => 'required|max:255',
             'number' => 'required|max:5',
             'state' => 'required|min:2|max:2',
-            'zip_code' => 'required|max:8'
+            'zip_code' => 'required'
         ]);
 
         $subscriber = new Subscriber();
@@ -29,6 +30,7 @@ class SubscriberController extends Controller
         $subscriber->email = $request->email;
         $subscriber->phone = $request->phone;
         $subscriber->district = $request->district;
+        $subscriber->address = $request->address;
         $subscriber->number = $request->number;
         $subscriber->state = $request->state;
         $subscriber->city = $request->city;
@@ -74,7 +76,7 @@ class SubscriberController extends Controller
     }
 
     public function list(Request $request) {
-        $financial_transaction = Subscriber::select(DB::raw('id, name'))->where('id', $request->id_subscriber)->paginate(10);
+        $financial_transaction = Subscriber::select(DB::raw('id, name'))->paginate(5);
 
         return response()->json($financial_transaction);
     }

@@ -10,8 +10,14 @@ export const create = async (data) => {
   return response
 }
 
-export const list = async () => {
-  let response = await axios.get(constants.baseUrl + '/category')
+export const list = async (params) => {
+  let url = constants.baseUrl + `/category/list/${params.client_id}?page=${params.page}`;
+
+  if (params.search !== "") {
+    url = url + `&search=${params.search}`;
+  }
+
+  let response = await axios.get(url)
 
   return response
 }
@@ -34,8 +40,8 @@ export const remove = async (id) => {
   return response
 }
 
-export const simpleList = async () => {
-  let response = await axios.get(constants.baseUrl + `/category`)
+export const simpleList = async (id) => {
+  let response = await axios.get(constants.baseUrl + `/category/simple-list/${id}`)
 
   return response;
 }

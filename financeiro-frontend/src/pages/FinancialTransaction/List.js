@@ -15,7 +15,7 @@ import { useSelector } from "react-redux";
 
 export default function List() {
 	const [financialTransactions, setFinancialTransactions] = useState([]);
-	const client = useSelector((state) => state.client.client);
+	const client = useSelector((state) => state.client);
 	const [filters, setFilters] = useState({
 		global: { value: null, matchMode: FilterMatchMode.CONTAINS },
 	});
@@ -93,7 +93,7 @@ export default function List() {
         Swal.fire('Ops', 'Marcado como pago com sucesso!', 'success');
         const auxFinancialTransactions = [...financialTransactions];
   
-        auxFinancialTransactions.find(x => x.id == id).fin_payed = 1;
+        auxFinancialTransactions.find(x => x.id == id).payed = 1;
 
         setFinancialTransactions(auxFinancialTransactions); 
       }
@@ -128,7 +128,7 @@ export default function List() {
 				>
 					<FontAwesomeIcon icon="fa-solid fa-trash" />
 				</button>
-				{!rowData?.fin_payed && (
+				{!rowData?.payed && (
 					<button
 						className="btn btn-success"
 						onClick={(e) => {
@@ -150,7 +150,7 @@ export default function List() {
 		<div className="main">
 			<div className="container">
 				<div className="header">
-					<h1 className="list_title">Lançamentos</h1>
+					<h1 className="screen-title">Lançamentos</h1>
 				</div>
 				<div className="body">
 					<div className="database-header">
@@ -181,12 +181,12 @@ export default function List() {
 							header={header}
 							emptyMessage="Não há registros."
 						>
-							<Column field="fin_note" header="Nome"></Column>
+							<Column field="note" header="Nome"></Column>
 							<Column
-								field="fin_value"
+								field="value"
 								header="Valor"
 								body={(rowData) => {
-									return maskCurrency(rowData.fin_value);
+									return maskCurrency(rowData.value);
 								}}
 							></Column>
 							<Column header="Opções" body={actionBody}></Column>

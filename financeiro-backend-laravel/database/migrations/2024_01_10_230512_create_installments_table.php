@@ -20,7 +20,7 @@ return new class extends Migration
             $table->datetime('payday')->nullable();
             $table->datetime('dueday')->nullable();
 
-            $table->foreignIdFor(new FinancialTransaction(), 'id_financial_transaction');
+            $table->foreignIdFor(FinancialTransaction::class, 'id_financial_transaction');
             $table->timestamps();
         });
     }

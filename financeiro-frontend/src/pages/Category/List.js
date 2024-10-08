@@ -11,27 +11,31 @@ import { InputText } from "primereact/inputtext";
 import { FilterMatchMode } from "primereact/api";
 import { Link } from "react-router-dom";
 import ListSubheader from '@mui/material/ListSubheader'
+import { useSelector } from "react-redux";
 
 export default function List() {
   const [categorias, setCategorias] = useState([]);
-  const [filters, setFilters] = useState({
-    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  const [reqParams, setReqParams] = useState({
+    page: 0, rows: 5, search: "", client_id: useSelector(state => state.client)
   });
-  const [globalFilterValue, setGlobalFilterValue] = useState("");
 
   useEffect(() => {
-    list()
+    fetchData();
+  }, [reqParams]);
+
+  const fetchData = async () => {
+    await list(reqParams)
+      .then((res) => {
+        setCategorias(res.data);
+      })
       .catch((err) => {
         Swal.fire(
           "Ops",
           "Houve um erro ao buscar a lista de categorias.",
           "error"
         );
-      })
-      .then((res) => {
-        setCategorias(res.data);
       });
-  }, []);
+  };
 
   const renderHeader = () => {
     return (
@@ -39,23 +43,13 @@ export default function List() {
         <span className="p-input-icon-left">
           <i className="pi pi-search" />
           <InputText
-            value={globalFilterValue}
-            onChange={onGlobalFilterChange}
+            value={reqParams.search}
+            onChange={e => setReqParams({...reqParams, search: e.target.value})}
             placeholder="Busque pelo nome"
           />
         </span>
       </div>
     );
-  };
-
-  const onGlobalFilterChange = (e) => {
-    const value = e.target.value;
-    let _filters = { ...filters };
-
-    _filters["global"].value = value;
-
-    setFilters(_filters);
-    setGlobalFilterValue(value);
   };
 
   const deleteRecord = (id) => {
@@ -111,7 +105,7 @@ export default function List() {
     <div className="main">
       <div className="container">
         <div className="header">
-          <h1 className="list_title">Categorias</h1>
+          <h1 className="screen-title">Categorias</h1>
         </div>
         <div className="body">
           <div className="database-header">
@@ -131,15 +125,14 @@ export default function List() {
               stripedRows
               showGridlines
               paginator
-              rows={5}
-              rowsPerPageOptions={[5, 10, 25, 50]}
+              rows={10}
+              onPage={fetchData}
               tableStyle={{ minWidth: "50rem" }}
-              filters={filters}
-              globalFilterFields={["cat_name"]}
               header={header}
               emptyMessage="Não há registros."
             >
-              <Column field="cat_name" header="Nome"></Column>
+              <Column field="name" header="Nome"></Column>
+              <Column field="type" header="Tipo"></Column>
               <Column header="Opções" body={actionBody}></Column>
             </DataTable>
           </div>

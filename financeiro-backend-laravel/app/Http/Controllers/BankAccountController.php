@@ -20,6 +20,7 @@ class BankAccountController extends Controller {
         $bank_account->name = $request->name;
         $bank_account->type = $request->type;
         $bank_account->description = $request->description;
+        $bank_account->id_subscriber = $request->id_subscriber;
 
         $bank_account->save();
 
@@ -48,8 +49,8 @@ class BankAccountController extends Controller {
         return response()->json($bank_account);
     }
 
-    public function list(Request $request) {
-        $bank_account = BankAccount::select(DB::raw('id, name, type'))->paginate(15);
+    public function list(Request $request, $id) {
+        $bank_account = BankAccount::select(DB::raw('id, name, type'))->where('id_subscriber', $id)->paginate(15);
 
         return response()->json($bank_account);
     }

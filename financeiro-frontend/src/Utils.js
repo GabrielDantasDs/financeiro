@@ -125,14 +125,14 @@ export const getViaCep = async (value) => {
   return response;
 };
 
-export async function handleViaCep(value, setFieldValue) {
+export async function handleViaCep(value, setFieldValue, page) {
   if (value.length == 9) {
     let payload = await getViaCep(removeSpecialCharacters(value));
 
-    setFieldValue("sub_address", payload.logradouro);
-    setFieldValue("sub_state", payload.uf);
-    setFieldValue("sub_city", payload.localidade);
-    setFieldValue("sub_district", payload.bairro);
+    setFieldValue("address", payload.logradouro);
+    setFieldValue("state", payload.uf);
+    setFieldValue("city", payload.localidade);
+    setFieldValue("neighborhood", payload.bairro);
   }
 }
 

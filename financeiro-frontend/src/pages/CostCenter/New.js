@@ -1,20 +1,34 @@
-import { Button, TextField } from "@mui/material";
+import { Button, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import { Form, Formik } from "formik";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons/faCheck";
 import { create } from "../../cruds/cost-center";
 import { validate } from "./Utils";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router";
+import { simpleList } from "../../cruds/category";
+import { useSelector } from "react-redux";
 
 export default function New() {
   const [isSubmitting, setSubmitting] = useState(false);
+  const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
+  const client = useSelector((state) => state.client) ;
+
+  useEffect(() => {
+    simpleList(client).then(res => {
+      setCategories(res.data);
+    }).catch(err => {
+      Swal.fire('Ops', 'Houve um erro ao buscar as categorias.', 'error');
+      return;
+    })
+  }, []);
 
   const getIniitalState = () => {
     return {
-      coc_name: "",
+      name: "",
+      category_id: "",
     };
   };
 
@@ -34,7 +48,7 @@ export default function New() {
     <div className="main">
       <div className="container">
         <div className="header">
-          <h1 className="list_title">Centro de custo: Novo centro de custo</h1>
+          <h1 className="screen-title">Centro de custo: Novo centro de custo</h1>
         </div>
         <div className="form">
           <Formik
@@ -63,19 +77,49 @@ export default function New() {
             }) => (
               <Form>
                 <div className="form-row">
-                  <div className="form-group col-md-12">
+                  <div className="form-group col-md-6">
                     <TextField
                       required
                       id="outlined-required"
                       label="Nome"
-                      value={values.coc_name}
-                      error={touched.coc_name && errors.coc_name ? true : false}
-                      name="coc_name"
+                      value={values.name}
+                      error={touched.name && errors.name ? true : false}
+                      name="name"
                       onBlur={handleBlur}
                       fullWidth
                       onChange={handleChange}
                     />
                   </div>
+
+                  <div className="form-group col-md-6">
+										<FormControl fullWidth>
+											<InputLabel id="select-state">
+												Categoria *
+											</InputLabel>
+											<Select
+												labelId="select-state"
+												value={
+													values.category_id
+												}
+												name="category_id"
+												required
+                        error={touched.category_id && errors.category_id ? true : false}
+												label="Categoria"
+												onChange={handleChange}
+											>
+												{categories.map((item, i) => {
+													return (
+														<MenuItem
+															key={i}
+															value={item.id}
+														>
+															{item.name}
+														</MenuItem>
+													);
+												})}
+											</Select>
+										</FormControl>
+									</div>
                 </div>
                 <div className="d-flex flex-row-reverse">
                   <Button

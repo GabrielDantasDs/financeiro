@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Subscriber;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,7 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('type');
             $table->string('description');
-
+            $table->foreignIdFor(Subscriber::class, 'id_subscriber');
             $table->timestamps();
         });
     }

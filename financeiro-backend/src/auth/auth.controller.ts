@@ -19,6 +19,15 @@ export class AuthController {
         })
     }
 
+    @IsPublic( )
+    @Post('register')
+    async register(@Request() req: AuthRequest) {
+        return this.authService.register(req.body).then(res => res)
+        .catch(error => {
+            return error;
+        })
+    }
+
     @IsPublic()
     @Get('tologin')
     toLogin() {

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('method');
             $table->boolean('paid');
 
-            $table->foreignIdFor(new BankAccount(), 'id_bank_account');
+            $table->foreignIdFor(BankAccount::class, 'id_bank_account');
 
             $table->timestamps();
         });

@@ -42,16 +42,16 @@ export default function Edit() {
 
 	const getIniitalState = () => {
 		return {
-			cli_address: customer.cli_address,
-			cli_city: customer.cli_city,
-			cli_district: customer.cli_district,
-			cli_document: customer.cli_document,
-			cli_email: customer.cli_email,
-			cli_name: customer.cli_name,
-			cli_number: customer.cli_number,
-			cli_state: customer.cli_state,
-			cli_zip_code: customer.cli_zip_code,
-			cli_phone: customer.cli_phone,
+			address: customer.address,
+			city: customer.city,
+			district: customer.district,
+			document: customer.document,
+			email: customer.email,
+			name: customer.name,
+			number: customer.number,
+			state: customer.state,
+			zip_code: customer.zip_code,
+			phone: customer.phone,
 		};
 	};
 
@@ -72,7 +72,7 @@ export default function Edit() {
 			{customer != null ? (
 				<div className="container">
 					<div className="header">
-						<h1 className="list_title">Clientes: Novo cliente</h1>
+						<h1 className="screen-title">Clientes: Novo cliente</h1>
 					</div>
 					<div className="form">
 						<Formik
@@ -99,14 +99,14 @@ export default function Edit() {
 												required
 												id="outlined-required"
 												label="Nome"
-												value={values.cli_name}
+												value={values.name}
 												error={
-													touched.cli_name &&
-													errors.cli_name
+													touched.name &&
+													errors.name
 														? true
 														: false
 												}
-												name="cli_name"
+												name="name"
 												onBlur={handleBlur}
 												fullWidth
 												onChange={handleChange}
@@ -118,12 +118,12 @@ export default function Edit() {
 												required
 												id="outlined-required"
 												label="Email"
-												name="cli_email"
+												name="email"
 												fullWidth
-												value={values.cli_email}
+												value={values.email}
 												error={
-													touched.cli_email &&
-													errors.cli_email
+													touched.email &&
+													errors.email
 														? true
 														: false
 												}
@@ -140,14 +140,14 @@ export default function Edit() {
 												id="outlined-required"
 												label="Telefone"
 												fullWidth
-												value={values.cli_phone}
+												value={values.phone}
 												error={
-													touched.cli_phone &&
-													errors.cli_phone
+													touched.phone &&
+													errors.phone
 														? true
 														: false
 												}
-												name="cli_phone"
+												name="phone"
 												onBlur={handleBlur}
 												onChange={(e) =>
 													handleChange(
@@ -163,12 +163,12 @@ export default function Edit() {
 												required
 												id="outlined-required"
 												label="Documento"
-												name="cli_document"
+												name="document"
 												fullWidth
-												value={values.cli_document}
+												value={values.document}
 												error={
-													touched.cli_document &&
-													errors.cli_document
+													touched.document &&
+													errors.document
 														? true
 														: false
 												}
@@ -192,8 +192,8 @@ export default function Edit() {
 												<Select
 													labelId="select-state"
 													id="select-state"
-													value={values.cli_state}
-													name="cli_state"
+													value={values.state}
+													name="state"
 													label="UF"
 													onChange={handleChange}
 												>
@@ -218,12 +218,12 @@ export default function Edit() {
 												required
 												id="outlined-required"
 												label="CEP"
-												name="cli_zip_code"
+												name="zip_code"
 												fullWidth
-												value={values.cli_zip_code}
+												value={values.zip_code}
 												error={
-													touched.cli_zip_code &&
-													errors.cli_zip_code
+													touched.zip_code &&
+													errors.zip_code
 														? true
 														: false
 												}
@@ -247,12 +247,12 @@ export default function Edit() {
 												required
 												id="outlined-required"
 												label="Cidade"
-												name="cli_city"
+												name="city"
 												fullWidth
-												value={values.cli_city}
+												value={values.city}
 												error={
-													touched.cli_city &&
-													errors.cli_city
+													touched.city &&
+													errors.city
 														? true
 														: false
 												}
@@ -266,12 +266,12 @@ export default function Edit() {
 												required
 												id="outlined-required"
 												label="Bairro"
-												name="cli_district"
+												name="district"
 												fullWidth
-												value={values.cli_district}
+												value={values.district}
 												error={
-													touched.cli_district &&
-													errors.cli_district
+													touched.district &&
+													errors.district
 														? true
 														: false
 												}
@@ -286,12 +286,12 @@ export default function Edit() {
 												required
 												id="outlined-required"
 												label="Rua"
-												name="cli_address"
+												name="address"
 												fullWidth
-												value={values.cli_address}
+												value={values.address}
 												error={
-													touched.cli_address &&
-													errors.cli_address
+													touched.address &&
+													errors.address
 														? true
 														: false
 												}
@@ -305,12 +305,12 @@ export default function Edit() {
 												required
 												id="outlined-required"
 												label="Número"
-												name="cli_number"
+												name="number"
 												fullWidth
-												value={values.cli_number}
+												value={values.number}
 												error={
-													touched.cli_number &&
-													errors.cli_number
+													touched.number &&
+													errors.number
 														? true
 														: false
 												}

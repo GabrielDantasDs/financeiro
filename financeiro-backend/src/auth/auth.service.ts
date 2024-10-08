@@ -5,13 +5,13 @@ import { User } from 'src/user/entities/user.entity';
 import { UserPayload } from './models/UserPayload';
 import { JwtService } from '@nestjs/jwt';
 import { UserToken } from './models/UserToken';
+import { CreateUserDto } from 'src/user/dto/create-user.dto';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly UserService: UserService, private readonly jwtService: JwtService
-    ) {}
+  constructor(private readonly UserService: UserService, private readonly jwtService: JwtService) {}
 
-  async login(user: User): Promise<UserToken> {
+  async login(user): Promise<UserToken> {
     //Transforma o user num JWT
     const payload:UserPayload = {
       sub: user.id,
@@ -24,6 +24,12 @@ export class AuthService {
       user:user,
       access_token: jwtToken
     }
+  }
+
+  async register(user:CreateUserDto) {
+    const response = await this.UserService.create(user).then(res => res).catch(err => console.log(err))
+
+    return response;
   }
 
   async validateUser(email: string, password: string) {

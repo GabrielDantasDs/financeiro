@@ -4,16 +4,22 @@ import Constants from '../constants'
 const constants = new Constants()
 axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*'
 
-export const simpleList = async (data) => {
-  let response = await axios.get(constants.baseUrl + '/cost-center', data)
+export const simpleList = async (client_id) => {
+  let response = await axios.get(constants.baseUrl + `/cost-center/simple-list/${client_id}`)
 
   return response
 }
 
-export const list = async () => {
-  let response = await axios.get(constants.baseUrl + '/cost-center');
+export const list = async (params) => {
+  let url = constants.baseUrl + `/cost-center/list/${params.client_id}?page=${params.page}`;
 
-  return response;
+  if (params.search !== "") {
+    url = url + `&search=${params.search}`;
+  }
+
+  let response = await axios.get(url)
+
+  return response
 }
 
 export const remove = async (id) => {

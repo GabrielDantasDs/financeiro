@@ -19,8 +19,9 @@ return new class extends Migration
             $table->date('payment_day')->nullable();
             $table->integer('periodicity')->nullable();
             $table->string('periodicity_type');
+            $table->string('form_payment');
 
-            $table->foreignIdFor(new Subscriber(), 'id_subscriber');
+            $table->foreignIdFor(Subscriber::class, 'id_subscriber');
 
             $table->timestamps();
         });

@@ -1,7 +1,7 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { CreateClientDto } from './dto/create-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class ClientService {
@@ -28,7 +28,7 @@ export class ClientService {
       where: {
         id: id,
       },
-      data: UpdateClientDto,
+      data: updateClientDto,
     });
   }
 

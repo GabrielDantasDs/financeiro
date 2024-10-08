@@ -38,12 +38,12 @@ export default function List() {
       .then((res) => {
         let formatted_clientes = [];
 
-        res.data.map((cliente, i) => {
+        res.data.data.map((cliente, i) => {
           formatted_clientes.push({
             id: cliente.id,
-            cli_name: cliente.cli_name,
-            cli_email: cliente.cli_email,
-            cli_document: cliente.cli_document,
+            name: cliente.name,
+            email: cliente.email,
+            document: cliente.document,
           });
         });
 
@@ -98,9 +98,9 @@ export default function List() {
               res.data.map((cliente, i) => {
                 formatted_clientes.push({
                   id: cliente.id,
-                  cli_name: cliente.cli_name,
-                  cli_email: cliente.cli_email,
-                  cli_document: cliente.cli_document,
+                  name: cliente.name,
+                  email: cliente.email,
+                  document: cliente.document,
                 });
               });
 
@@ -112,7 +112,7 @@ export default function List() {
 
   const onSetSelectedCliente = (id) => {
         dispatch(setClient(id, navigate));
-  }
+  };
 
   const actionBody = (rowData) => {
     return (
@@ -150,7 +150,7 @@ export default function List() {
     <div className="main">
       <div className="container">
         <div className="header">
-          <h1 className="list_title">Clientes</h1>
+          <h1 className="screen-title">Clientes</h1>
         </div>
         <div className="body">
           <div className="database-header">
@@ -174,13 +174,13 @@ export default function List() {
               rowsPerPageOptions={[5, 10, 25, 50]}
               tableStyle={{ minWidth: "50rem" }}
               filters={filters}
-              globalFilterFields={["cli_name", "cli_document"]}
+              globalFilterFields={["name", "document"]}
               header={header}
               emptyMessage="Não há registros."
             >
-              <Column field="cli_name" header="Nome"></Column>
-              <Column field="cli_email" header="Email"></Column>
-              <Column field="cli_document" header="Documento"></Column>
+              <Column field="name" header="Nome"></Column>
+              <Column field="email" header="Email"></Column>
+              <Column field="document" header="Documento"></Column>
               <Column header="Opções" body={actionBody}></Column>
             </DataTable>
           </div>

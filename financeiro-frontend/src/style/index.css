@@ -80,6 +80,24 @@ body {
     margin: 8px;
 }
 
+.vertical-button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.screen-title {
+    font-weight: 700;
+}
+
+.p-input-icon-left {
+    width: 100%;
+}
+
+.fullwidth {
+    width: 100%;
+}
+
 @media only screen and (max-width: 978px) {
     .my_container {
         grid-template-columns: 1fr;

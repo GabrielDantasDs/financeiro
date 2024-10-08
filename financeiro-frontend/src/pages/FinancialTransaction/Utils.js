@@ -1,67 +1,71 @@
 export const validate = (values) => {
-  const errors = {};
-  const keys = [
-    "fin_type",
-    "fin_value",
-    "fin_id_category",
-    "subscriberId",
-    "fin_id_center_cost",
-    "fin_payed",
-    "fin_payment_day",
-    "fin_periodicity_type",
-    "fin_number_installments",
-    "fin_id_bank_account"
-  ];
+	const errors = {};
+	const keys = ["type", "value", "category_id", "cost_center_id", "payed", "payment_day", "bank_account_id"];
 
-  if (values.fin_periodicity_type === 'RECORRENTE') {
-    keys.push("fin_number_installments");
-  }
+	Object.keys(values).map((key, i) => {
+		if (keys.includes(key)) {
+			if (values[key] === "" || values[key] === null) {
+				errors[key] = "Required";
+			}
+		}
+	});
 
-  Object.keys(values).map((key, i) => {
-    if (keys.includes(key)) {
-      if (values[key] === "" || values[key] === null) {
-        errors[key] = "Required";
-      }
-    }
-  });
-
-  return errors;
+	return errors;
 };
 
 export function mascaraMoeda(event) {
-  const onlyDigits = event.target.value
-    .split("")
-    .filter((s) => /\d/.test(s))
-    .join("")
-    .padStart(3, "0");
-  const digitsFloat = onlyDigits.slice(0, -2) + "." + onlyDigits.slice(-2);
-  event.target.value = maskCurrency(digitsFloat);
+	const onlyDigits = event.target.value
+		.split("")
+		.filter((s) => /\d/.test(s))
+		.join("")
+		.padStart(3, "0");
+	const digitsFloat = onlyDigits.slice(0, -2) + "." + onlyDigits.slice(-2);
+	event.target.value = maskCurrency(digitsFloat);
 
-  return event;
+	return event;
 }
 
 export function maskCurrency(valor, locale = "pt-BR", currency = "BRL") {
-  return new Intl.NumberFormat(locale, {
-    style: "currency",
-    currency,
-  }).format(valor);
+	return new Intl.NumberFormat(locale, {
+		style: "currency",
+		currency,
+	}).format(valor);
 }
 
 export function cleanCurrency(currencyValue) {
-  // Remove non-numeric characters, except for period and comma
-  const cleanedValue = currencyValue.replace(/[^\d,.]/g, "");
+	console.log(currencyValue);
+	// Remove tudo que não é número ou pontuação relevante
+	const cleanedValue = currencyValue.replace(/[^\d.,]/g, "");
+	console.log(cleanedValue);
+	// Se existirem separadores de milhares, remover
+	const valueWithoutThousandSeparator = cleanedValue.replace(/\./g, "");
+	console.log(valueWithoutThousandSeparator);
+	// Substituir a vírgula decimal (se for o caso) por um ponto
+	const valueWithPeriod = valueWithoutThousandSeparator.replace(",", ".");
+	console.log(valueWithPeriod);
+	// Converter para número float
+	const floatValue = parseFloat(valueWithPeriod);
+	console.log(floatValue);
+	// Se não for um número válido, retornar "0" ou algum valor padrão
+	if (isNaN(floatValue)) return "0";
 
-  // Replace comma with period (in case it's used as the decimal separator)
-  const valueWithPeriod = cleanedValue.replace(",", ".");
+	// Formatar com duas casas decimais
+	const formattedValue = floatValue.toFixed(2);
 
-  // Convert to a floating-point number
-  const floatValue = parseFloat(valueWithPeriod);
+	// Remover zeros desnecessários
+	return formattedValue.replace(/\.?0*$/g, "");
+}
 
-  // Convert back to a string with a maximum of 2 decimal places
-  const formattedValue = floatValue.toFixed(2);
+export function removeEmptyValues(values) {
+	for (const [key, value] of Object.entries(values)) {
+		if (value === null || value === "") {
+			delete values[key];
+		}
 
-  // Remove trailing zeros after the decimal point, if any
-  const valueWithoutExtraZeros = formattedValue.replace(/\.?0*$/g, "");
+		if (key == "periodicity_type") {
+			delete values[key];
+		}
+	}
 
-  return valueWithoutExtraZeros;
+	return values;
 }

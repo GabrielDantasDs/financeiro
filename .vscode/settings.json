@@ -1,2 +1,4 @@
 {
+    "javascript.memoryLimit": 8192,
+    "typescript.tsserver.maxTsServerIdleTime": 600000
 }

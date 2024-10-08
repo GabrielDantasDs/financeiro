@@ -14,35 +14,35 @@ export class ReportService {
     if (requestDto.date_type == 'DUE_DATE') {
       response = await this.prisma.financial_transaction.findMany({
         where: {
-          fin_invoice_date: {
+          invoice_date: {
             lte:dayjs(requestDto.final_date).endOf('day').format(),
             gte:dayjs(requestDto.final_date).startOf('day').format(),
           },
-          ...(requestDto.type != 'SALDO' ? {fin_type: requestDto.type} : {}),
-          ...(requestDto.category != "" ? {fin_id_category: +requestDto.category} : {}),
-          ...(requestDto.bank_account != "" ? {fin_id_bank_account: +requestDto.bank_account} : {}),
-          fin_id_client: +requestDto.client,
+          ...(requestDto.type != 'SALDO' ? {type: requestDto.type} : {}),
+          ...(requestDto.category != "" ? {category_id: +requestDto.category} : {}),
+          ...(requestDto.bank_account != "" ? {bank_account_id: +requestDto.bank_account} : {}),
+          client_id: +requestDto.client,
         },
         include: {
-          fin_client: true,
-          fin_category: true,
+          client: true,
+          category: true,
         },
       });
     } else if (requestDto.date_type == 'PAYDAY') {
       response = await this.prisma.financial_transaction.findMany({
         where: {
-          fin_payment_day: {
+          payment_day: {
             lte: requestDto.final_date,
             gte: requestDto.initial_date,
           },
-          ...(requestDto.type != 'SALDO' ? {fin_type: requestDto.type} : {}),
-          ...(requestDto.category != "" ? {fin_id_category: +requestDto.category} : {}),
-          ...(requestDto.bank_account != "" ? {fin_id_bank_account: +requestDto.bank_account} : {}),
-          fin_id_client: +requestDto.client,
+          ...(requestDto.type != 'SALDO' ? {type: requestDto.type} : {}),
+          ...(requestDto.category != "" ? {category_id: +requestDto.category} : {}),
+          ...(requestDto.bank_account != "" ? {bank_account_id: +requestDto.bank_account} : {}),
+          client_id: +requestDto.client,
         },
         include: {
-          fin_client: true,
-          fin_category: true,
+          client: true,
+          category: true,
         },
       });
     } else {
@@ -50,26 +50,26 @@ export class ReportService {
         where: {
           OR: [
             {
-              fin_payment_day: {
+              payment_day: {
                 lte: requestDto.final_date,
                 gte: requestDto.initial_date,
               },
             },
             {
-              fin_invoice_date: {
+              invoice_date: {
                 lte: requestDto.final_date,
                 gte: requestDto.initial_date,
               },
             },
           ],
-          ...(requestDto.type != 'SALDO' ? {fin_type: requestDto.type} : {}),
-          ...(requestDto.category != "" ? {fin_id_category: +requestDto.category} : {}),
-          ...(requestDto.bank_account != "" ? {fin_id_bank_account: +requestDto.bank_account} : {}),
-          fin_id_client: +requestDto.client,
+          ...(requestDto.type != 'SALDO' ? {type: requestDto.type} : {}),
+          ...(requestDto.category != "" ? {category_id: +requestDto.category} : {}),
+          ...(requestDto.bank_account != "" ? {bank_account_id: +requestDto.bank_account} : {}),
+          client_id: +requestDto.client,
         },
         include: {
-          fin_client: true,
-          fin_category: true,
+          client: true,
+          category: true,
         },
       });
     }

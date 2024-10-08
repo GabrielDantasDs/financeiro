@@ -37,7 +37,7 @@ export default function Dashboard() {
           <div className="main_title">
             <img src={hello} alt="hello" />
             <div className="main_greeting">
-              <h1>Olá {user.cus_name}</h1>
+              <h1>Olá {user.name}</h1>
               <p>Bem vindo ao seu painel</p>
             </div>
           </div>

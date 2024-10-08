@@ -26,13 +26,13 @@ import utc from "dayjs/plugin/utc";
 import { maskCurrency } from "../FinancialTransaction/Utils";
 import "../../style/report.css";
 import { simpleList as simpleListCategories } from "../../cruds/category";
-import { list as simpleListBankAccounts } from "../../cruds/bank-account";
+import { simpleList as simpleListBankAccounts } from "../../cruds/bank-account";
 
 export default function Report() {
 	const [data, setData] = useState([]);
 	const [categories, setCategories] = useState([]);
 	const [bankAccounts, setBankAccounts] = useState([]);
-	const client = useSelector((state) => state.client.client);
+	const client = useSelector((state) => state.client);
 	const [initialDate, setInitialDate] = useState(dayjs());
 	const [finalDate, setFinalDate] = useState(dayjs());
 	const [type, setType] = useState("SALDO");
@@ -48,8 +48,8 @@ export default function Report() {
 
 	useEffect(() => {
 		const fetch = async () => {
-			const [icategories, ibankAccounts] = await Promise.all([
-				simpleListCategories()
+			const [categories, bankAccounts] = await Promise.all([
+				simpleListCategories(client)
 					.then((res) => {
 						return res.data;
 					})
@@ -73,8 +73,8 @@ export default function Report() {
 					}),
 			]);
 
-			setCategories(icategories);
-			setBankAccounts(ibankAccounts);
+			setCategories(categories);
+			setBankAccounts(bankAccounts);
 		};
 
 		fetch();
@@ -106,9 +106,9 @@ export default function Report() {
 			let balance = data.reduce(
 				(accumulator, currentValue) =>
 					accumulator +
-					(currentValue.fin_type === "DESPESA"
-						? -parseFloat(currentValue.fin_value)
-						: parseFloat(currentValue.fin_value)),
+					(currentValue.type === "DESPESA"
+						? -parseFloat(currentValue.value)
+						: parseFloat(currentValue.value)),
 				0
 			);
 
@@ -159,7 +159,7 @@ export default function Report() {
 			<div className="main">
 				<div className="container">
 					<div className="header">
-						<h1 className="list_title">Relatório</h1>
+						<h1 className="screen-title">Relatório</h1>
 					</div>
 					<div className="body">
 						<Card>
@@ -228,7 +228,7 @@ export default function Report() {
 															key={i}
 															value={item.id}
 														>
-															{item.cat_name}
+															{item.name}
 														</MenuItem>
 													);
 												})}
@@ -261,7 +261,7 @@ export default function Report() {
 															key={i}
 															value={item.id}
 														>
-															{item.bac_name}
+															{item.name}
 														</MenuItem>
 													);
 												})}
@@ -343,29 +343,29 @@ export default function Report() {
 								footer={footer}
 								emptyMessage="Não foram encontrados resultados."
 							>
-								<Column field="fin_note" header="Nome"></Column>
+								<Column field="note" header="Nome"></Column>
 								<Column
-									field="fin_category"
+									field="category"
 									header="Categoria"
 									body={(rowData) => {
-										return rowData.fin_category.cat_name;
+										return rowData.category.cat_name;
 									}}
 								></Column>
 								<Column
-									field="fin_value"
+									field="value"
 									header="Valor"
 									body={(rowData) => {
 										return (
 											<span
 												className={
-													rowData.fin_type ==
+													rowData.type ==
 													"RECEITA"
 														? "positive-value"
 														: "negative-value"
 												}
 											>
 												{maskCurrency(
-													rowData.fin_value
+													rowData.value
 												)}
 											</span>
 										);

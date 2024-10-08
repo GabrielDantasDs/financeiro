@@ -18,7 +18,6 @@ export const types = [
   {key: 'savings_account', label: 'Poupança'}
 ];
 
-
 export function mascaraMoeda(event) {
   const onlyDigits = event.target.value
     .split("")

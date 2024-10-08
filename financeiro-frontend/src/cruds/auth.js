@@ -38,3 +38,7 @@ export const logout = (navigate) => {
     });
   };
 };
+
+export const register = (data) => {
+    return axios.post(`${constants.baseUrl}/register`, data)
+};

@@ -1,6 +1,6 @@
 export const validate = (values) => {
   const errors = {};
-
+  console.log(values)
   Object.keys(values).map((key, i) => {
     if (key == "cus_email") {
       if (!values[key]) {
@@ -21,7 +21,7 @@ export const validate = (values) => {
       }
     }
   });
-
+  console.log(errors)
   return errors;
 };
 

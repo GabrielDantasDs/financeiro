@@ -22,25 +22,44 @@ import {
 
 import Swal from "sweetalert2";
 import { useNavigate, useParams } from "react-router";
+import { simpleList } from "../../cruds/category";
 
 export default function Edit() {
   const [isSubmitting, setSubmitting] = useState(false);
-  const [category, setCategory] = useState();
+  const [costCenter, setCostCenter] = useState();
+  const [categories, setCategories] = useState();
   const navigate = useNavigate();
   const params = useParams();
 
   useEffect(() => {
-    async function fetchData() {
-      await get(params.id).then((res) => {
-        setCategory(res.data);
-      });
-    };
     fetchData();
   }, []);
 
+  async function fetchData() {
+    const [costCenter, categories] = await Promise.all([
+      get(params.id).then((res) => {
+        return res.data;
+      }).catch(err => {
+        Swal.fire('Ops', 'Houve um erro ao buscar o Centro de Custo', 'error');
+      }),
+      simpleList().then(res => {
+        if (res.status === 200) {
+          return res.data;
+        }
+      }).catch(err => {
+        Swal.fire('Ops', 'Houve um erro ao buscar as categorias.', 'error');
+      })
+    ])
+
+
+    setCostCenter(costCenter);
+    setCategories(categories);
+  };
+
   const getIniitalState = () => {
     return {
-      coc_name: category.coc_name
+      name: costCenter.name,
+      category_id: costCenter.category_id
     };
   };
 
@@ -51,17 +70,17 @@ export default function Edit() {
       })
       .then((res) => {
         Swal.fire("Sucesso", "Categoria salva com sucesso", "success");
-        navigate("/categorias");
+        navigate("/cost-center");
       })
       .finally(() => setSubmitting(false));
   };
 
   return (
     <div className="main">
-      {category != null ? (
+      {costCenter != null ? (
         <div className="container">
           <div className="header">
-            <h1 className="list_title">Clientes: Novo cliente</h1>
+            <h1 className="screen-title">Centro de custo: Editar centro de custo</h1>
           </div>
           <div className="form">
             <Formik
@@ -90,21 +109,50 @@ export default function Edit() {
               }) => (
                 <Form>
                   <div className="form-row">
-                    <div className="form-group col-md-12">
+                    <div className="form-group col-md-6">
                       <TextField
                         required
                         id="outlined-required"
                         label="Nome"
-                        value={values.coc_name}
+                        value={values.name}
                         error={
-                          touched.coc_name && errors.coc_name ? true : false
+                          touched.name && errors.name ? true : false
                         }
-                        name="coc_name"
+                        name="name"
                         onBlur={handleBlur}
                         fullWidth
                         onChange={handleChange}
                       />
                     </div>
+                    <div className="form-group col-md-6">
+										<FormControl fullWidth>
+											<InputLabel id="select-state">
+												Categoria *
+											</InputLabel>
+											<Select
+												labelId="select-state"
+												value={
+													values.category_id
+												}
+												name="category_id"
+												required
+                        error={touched.category_id && errors.category_id ? true : false}
+												label="Categoria"
+												onChange={handleChange}
+											>
+												{categories.map((item, i) => {
+													return (
+														<MenuItem
+															key={i}
+															value={item.id}
+														>
+															{item.name}
+														</MenuItem>
+													);
+												})}
+											</Select>
+										</FormControl>
+									</div>
                   </div>
                   <div className="d-flex flex-row-reverse">
                     <Button

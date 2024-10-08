@@ -1,0 +1,38 @@
+services:
+  database:
+    container_name: database
+    image: mysql:8.0
+    restart: always
+    volumes:
+      - dbdata:/var/lib/mysql
+    environment:
+      MYSQL_USER: root
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: financeiro
+    ports:
+      - "3360:3306"
+
+  backend:
+    env_file: 
+      - ./financeiro-backend/.env.production
+    depends_on:
+      - database
+    build:
+      context: ./financeiro-backend/
+      dockerfile: dockerfile
+    ports:
+      - 8000:8000
+  
+  frontend: 
+    env_file:
+      - ./financeiro-frontend/.env
+    build:
+      context: ./financeiro-frontend/
+      dockerfile: dockerfile
+    ports:
+      - 3000:3000
+    volumes:
+      - ./financeiro-frontend:/usr/src/app
+      
+volumes:
+  dbdata:

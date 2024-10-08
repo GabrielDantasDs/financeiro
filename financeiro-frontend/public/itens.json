@@ -8,7 +8,7 @@
 	},
 	{
 		"name": "Clientes",
-		"url": "clientes",
+		"url": "client",
 		"icon": "users",
 		"active": "clientes",
 		"cliente": false
@@ -18,14 +18,14 @@
 		"url": "category",
 		"icon": "lightbulb",
 		"active": "categorias",
-		"cliente": false
+		"cliente": true
 	},
 	{
 		"name": "Centros de custo",
 		"url": "cost-center",
 		"icon": "info",
 		"active": "costCenter",
-		"cliente": false
+		"cliente": true
 	},
 	{
 		"name": "Conta bancária",

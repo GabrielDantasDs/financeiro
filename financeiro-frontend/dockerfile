@@ -1,0 +1,19 @@
+# Use uma imagem base com Node.js
+FROM node:18-alpine
+
+# Define o diretório de trabalho dentro do contêiner
+WORKDIR /usr/src/app
+
+# Instala as dependências do projeto
+COPY package*.json ./
+RUN npm install
+
+
+# Copia o código-fonte da aplicação para o diretório de trabalho
+COPY . .
+
+# Exponha a porta que será usada pela aplicação Vue.js
+EXPOSE 3000
+
+# Comando para iniciar a aplicação em modo de desenvolvimento
+CMD ["npm", "run", "start"],

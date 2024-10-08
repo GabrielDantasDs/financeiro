@@ -15,6 +15,7 @@ class CategoryController extends Controller
 
         $category = new Category();
         $category->name = $request->name;
+        $category->id_subscriber = $request->id_subscriber;
         
         $category->save();
 

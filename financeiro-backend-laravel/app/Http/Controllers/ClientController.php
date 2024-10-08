@@ -18,7 +18,7 @@ class ClientController extends Controller
             'number' => 'required|max:4',
             'state' => 'required|min:2|max:2',
             'city' => 'required|max:100',
-            'zip_code' => 'required|max:8',
+            'zip_code' => 'required',
         ]);
 
         $client = new Client();

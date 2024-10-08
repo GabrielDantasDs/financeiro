@@ -9,8 +9,8 @@ import Item from "./Item";
 
 export default function SideBar() {
 	const [active, setActive] = useState("");
-	//Corrigir isso aqui depois, não deve ser client.client
-	const cliente = useSelector((state) => state.client.client);
+	//Corrigir isso aqui depois, não deve ser client
+	const cliente = useSelector((state) => state.client);
 	const [showCloseButton, setShowCloseButton] = useState(false);
 	const [itensData, setItensData] = useState([]);
 	const dispatch = useDispatch();

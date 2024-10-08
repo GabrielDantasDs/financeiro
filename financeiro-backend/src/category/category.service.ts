@@ -10,8 +10,24 @@ export class CategoryService {
     return this.prisma.category.create({ data: createCategoryDto });
   }
 
-  findAll() {
-    return this.prisma.category.findMany();
+  findAll(client_id: string, page: string, query: string) {
+    const _page = parseInt(page) ?? 0;
+    const _query = query ?? "";
+    const skip = _page * 10;
+    const take = 10;
+
+    return this.prisma.category.findMany({ 
+      skip,
+      take,
+      where: {
+        client_id: {
+          equals: parseInt(client_id)
+        },
+        name: { 
+          startsWith: _query
+        }
+      }
+    });
   }
 
   findOne(id: number) {
@@ -27,5 +43,15 @@ export class CategoryService {
 
   remove(id: number) {
     return this.prisma.category.delete({ where: { id } });
+  }
+
+  simpleList(client_id: string) {
+    return this.prisma.category.findMany({
+      where: {
+        client_id: {
+          equals: parseInt(client_id)
+        }
+      }
+    });
   }
 }

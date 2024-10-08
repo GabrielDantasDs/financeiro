@@ -5,7 +5,7 @@ import { PrismaService } from '../prisma/prisma.service';
 export class DashboardService {
   constructor(private readonly prisma:PrismaService){}
   find(id:number) {
-    return this.prisma.client.findFirst({
+    return this.prisma.user.findFirst({
       where: {
         id
       }

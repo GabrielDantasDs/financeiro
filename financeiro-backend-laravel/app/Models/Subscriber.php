@@ -14,6 +14,7 @@ class Subscriber extends Model
         'document',
         'email',
         'phone',
+        'address',
         'district',
         'number',
         'state',

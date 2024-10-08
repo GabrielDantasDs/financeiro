@@ -12,14 +12,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons/faCheck";
 import { get, edit, getBankInstitutionList } from "../../cruds/bank-account";
 import { validate } from "./Utils";
-import {
-	formatCnpjCpfInput,
-	formatTelefone,
-	formatTelefoneInput,
-	handleCepInput,
-	handleViaCep,
-	states,
-} from "../../Utils";
 
 import Swal from "sweetalert2";
 import { useNavigate, useParams } from "react-router";
@@ -29,13 +21,17 @@ import { useSelector } from "react-redux";
 export default function Edit() {
 	const [isSubmitting, setSubmitting] = useState(false);
 	const [data, setData] = useState();
-  const [bankInstitutionList, setBankInstitutionList] = useState([]);
+	const [bankInstitutionList, setBankInstitutionList] = useState([]);
 	const navigate = useNavigate();
-	const client = useSelector((state) => state.client.client);
 	const params = useParams();
 
 	useEffect(() => {
-		get(params.id, { client: client })
+		get(params.id)
+			.then((res) => {
+				if (res.status == 200) {
+					setData(res.data);
+				}
+			})
 			.catch((error) => {
 				Swal.fire(
 					"Ops",
@@ -43,14 +39,14 @@ export default function Edit() {
 					"error"
 				);
 				return;
-			})
-			.then((res) => {
-				if (res.status == 200) {
-					setData(res.data);
-				}
 			});
 
 		getBankInstitutionList()
+			.then((res) => {
+				if (res.status === 200) {
+					setBankInstitutionList(res.data);
+				}
+			})
 			.catch((e) => {
 				Swal.fire(
 					"Ops",
@@ -58,21 +54,15 @@ export default function Edit() {
 					"error"
 				);
 				return;
-			})
-			.then((res) => {
-				if (res.status === 200) {
-					setBankInstitutionList(res.data);
-				}
 			});
 	}, []);
 
 	const getIniitalState = () => {
 		return {
-			bac_id_client: parseInt(client),
-			bac_name: data.bac_name ?? "",
-			bac_type: data.bac_type ?? "",
-			bac_description: data.bac_description ?? "",
-			bac_institution: data.bac_institution ?? "",
+			name: data.name ?? "",
+			type: data.type ?? "",
+			description: data.description ?? "",
+			institution: data.institution ?? "",
 		};
 	};
 
@@ -80,12 +70,12 @@ export default function Edit() {
 		setSubmitting(true);
 
 		edit(params.id, values)
-			.catch((err) => {
-				Swal.fire("Ops", "Houve um erro ao salvar o usuário", "error");
-			})
 			.then((res) => {
 				Swal.fire("Sucesso", "Conta atualizada com sucesso", "success");
 				navigate("/bank-account");
+			})
+			.catch((err) => {
+				Swal.fire("Ops", "Houve um erro ao salvar o usuário", "error");
 			})
 			.finally(() => setSubmitting(false));
 	};
@@ -96,7 +86,7 @@ export default function Edit() {
 				<div className="main">
 					<div className="container">
 						<div className="header">
-							<h1 className="list_title">
+							<h1 className="screen-title">
 								Conta bancária: Editar conta
 							</h1>
 						</div>
@@ -132,14 +122,14 @@ export default function Edit() {
 													required
 													id="outlined-required"
 													label="Nome"
-													value={values.bac_name}
+													value={values.name}
 													error={
-														touched.bac_name &&
-														errors.bac_name
+														touched.name &&
+														errors.name
 															? true
 															: false
 													}
-													name="bac_name"
+													name="name"
 													onBlur={handleBlur}
 													fullWidth
 													onChange={handleChange}
@@ -154,9 +144,9 @@ export default function Edit() {
 													<Select
 														labelId="select-state"
 														id="select-state"
-														value={values.bac_type}
+														value={values.type}
 														label="Tipo da conta "
-														name="bac_type"
+														name="type"
 														onChange={handleChange}
 													>
 														{types.map((obj, i) => {
@@ -182,12 +172,10 @@ export default function Edit() {
 													id="outlined"
 													label="Descrição"
 													fullWidth
-													value={
-														values.bac_description
-													}
+													value={values.description}
 													error={
-														touched.bac_description &&
-														errors.bac_description
+														touched.description &&
+														errors.description
 															? true
 															: false
 													}
@@ -209,9 +197,9 @@ export default function Edit() {
 														labelId="select-state"
 														id="select-state"
 														value={
-															values.bac_institution
+															values.institution
 														}
-														name="bac_institution"
+														name="institution"
 														label="Instituição financeira "
 														onChange={handleChange}
 													>

@@ -10,6 +10,7 @@ use App\Http\Controllers\InstallmentController;
 use App\Http\Controllers\PaymentConditionController;
 use App\Http\Controllers\SubscriberController;
 use App\Http\Controllers\SubscriberTypeController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -34,8 +35,12 @@ Route::post('/forgot-password', [AuthController::class, 'requestPasswordResetLin
 Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::controller(DashboardController::class)->group(function() {
+        Route::get('/dashboard', 'get');
+    });
+
     Route::controller(ClientController::class)->group(function() {
-        Route::get('/client/list', 'list');
+        Route::post('/client/list', 'list');
         Route::get('/client/{id}', 'get');
         Route::post('/client', 'create');
         Route::put('/client/{id}', 'update');
@@ -54,7 +59,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/bank-account/{id}', 'get');
         Route::post('/bank-account', 'create');
         Route::put('/bank-account/{id}', 'update');
-        Route::put('/bank-account/list', 'list');
+        Route::post('/bank-account/list/{id}', 'list');
         Route::delete('/bank-account/{id}', 'delete');
     });
 
@@ -94,7 +99,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/subscriber/{id}', 'get');
         Route::post('/subscriber', 'create');
         Route::put('/subscriber/{id}', 'update');
-        Route::put('/subscriber/list', 'list');
+        Route::post('/subscriber/list', 'list');
         Route::delete('/subscriber/{id}', 'delete');
     });
 

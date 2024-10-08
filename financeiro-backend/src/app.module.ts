@@ -12,13 +12,16 @@ import { ClientModule } from './client/client.module';
 import { FinancialTransactionModule } from './financial_transaction/financial_transaction.module';
 import { BankAccountModule } from './bank_account/bank_account.module';
 import { CategoryModule } from './category/category.module';
-import { SubscriberModule } from './subscriber/subscriber.module';
 import { CostCenterModule } from './cost_center/cost_center.module';
 import { ReportModule } from './report/report.module';
-import { InstallmentsModule } from './installments/installments.module';
+import { ConfigModule } from '@nestjs/config';
+import { CustomerModule } from './customer/customer.module';
+import { SupplierModule } from './supplier/supplier.module';
+import { ProductModule } from './product/product.module';
+import { SubscriptionModule } from './subscription/subscription.module';
 
 @Module({
-  imports: [PrismaModule, AuthModule, UserModule, DashboardModule, ClientModule, FinancialTransactionModule, BankAccountModule, CategoryModule, SubscriberModule, CostCenterModule, ReportModule, InstallmentsModule],
+  imports: [ConfigModule.forRoot(), PrismaModule, AuthModule, UserModule, DashboardModule, ClientModule, FinancialTransactionModule, BankAccountModule, CategoryModule, CostCenterModule, ReportModule, CustomerModule, SupplierModule, ProductModule, SubscriptionModule],
   controllers: [AppController],
   providers: [
     AppService,
@@ -32,4 +35,5 @@ import { InstallmentsModule } from './installments/installments.module';
     }
   ],
 })
-export class AppModule {}
+export class AppModule {};
+

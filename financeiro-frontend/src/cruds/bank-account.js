@@ -10,8 +10,8 @@ export const create = async (data) => {
   return response
 }
 
-export const get = async (id, data) => {
-  let response = await axios.post(constants.baseUrl + `/bank-account/account/${id}`, data)
+export const get = async (id) => {
+  let response = await axios.get(constants.baseUrl + `/bank-account/${id}`)
 
   return response;
 }
@@ -28,8 +28,20 @@ export const remove = async (id) => {
   return response
 }
 
-export const list = async (id) => {
-  let response = await axios.get(constants.baseUrl + `/bank-account/${id}`)
+export const list = async (params) => {
+  let url = constants.baseUrl + `/bank-account/list/${params.client_id}?page=${params.page}`;
+
+  if (params.search !== "") {
+    url = url + `&search=${params.search}`;
+  }
+
+  let response = await axios.get(url)
+
+  return response
+}
+
+export const simpleList = async (client_id) => {
+  let response = await axios.get(constants.baseUrl + `/bank-account/simple-list/${client_id}`)
 
   return response
 }

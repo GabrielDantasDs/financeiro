@@ -7,37 +7,35 @@ import { useEffect, useState } from "react";
 import { list, remove } from "../../cruds/bank-account";
 import Swal from "sweetalert2";
 import { InputText } from "primereact/inputtext";
-import { FilterMatchMode, FilterOperator } from "primereact/api";
+import { FilterMatchMode } from "primereact/api";
 import { Link, useNavigate } from "react-router-dom";
-import { setClient as setClientAction } from "../../store/ducks/client";
 import { useDispatch, useSelector } from "react-redux";
-import { setClient } from "../../store/actions";
 import Button from '@mui/material/Button';
 import { types } from "./Utils";
 
 export default function List() {
-  const [bank_accounts, setBank_accounts] = useState([]);
-  const [filters, setFilters] = useState({
-    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  const [bank_accounts, setBankAccounts] = useState([]);
+  const [reqParams, setReqParams] = useState({
+    page: 0, rows: 5, search: "", client_id: useSelector(state => state.client)
   });
-  const [globalFilterValue, setGlobalFilterValue] = useState("");
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const client = useSelector((state) => state.client.client)
 
   useEffect(() => {
-    list(client)
+    fetchData();
+  }, [reqParams]);
+
+  const fetchData = async () => {
+    await list(reqParams)
+      .then((res) => {
+        setBankAccounts(res.data);
+      })
       .catch((err) => {
         Swal.fire(
           "Ops",
-          "Houve um erro ao buscar a lista de bank_accounts.",
+          "Houve um erro ao buscar a lista de centros de custo.",
           "error"
         );
-      })
-      .then((res) => {
-        setBank_accounts(res.data);
       });
-  }, [client]);
+  };
 
   const renderHeader = () => {
     return (
@@ -45,8 +43,8 @@ export default function List() {
         <span className="p-input-icon-left">
           <i className="pi pi-search" />
           <InputText
-            value={globalFilterValue}
-            onChange={onGlobalFilterChange}
+            value={reqParams.search}
+            onChange={e => setReqParams({...reqParams, search: e.target.value})}
             placeholder="Busque pelo nome ou doc"
           />
         </span>
@@ -54,15 +52,6 @@ export default function List() {
     );
   };
 
-  const onGlobalFilterChange = (e) => {
-    const value = e.target.value;
-    let _filters = { ...filters };
-
-    _filters["global"].value = value;
-
-    setFilters(_filters);
-    setGlobalFilterValue(value);
-  };
 
   const deleteRecord = (id) => {
     remove(id)
@@ -72,7 +61,7 @@ export default function List() {
       })
       .then((res) => {
         if (res.status == 200) {
-          list(client)
+          list()
             .catch((err) => {
               Swal.fire(
                 "Ops",
@@ -86,13 +75,13 @@ export default function List() {
               res.data.map((cliente, i) => {
                 formatted_bank_accounts.push({
                   id: cliente.id,
-                  cli_name: cliente.cli_name,
-                  cli_email: cliente.cli_email,
-                  cli_document: cliente.cli_document,
+                  name: cliente.name,
+                  email: cliente.email,
+                  document: cliente.document,
                 });
               });
 
-              setBank_accounts(res.data);
+              setBankAccounts(res.data);
             });
         }
       });
@@ -128,7 +117,7 @@ export default function List() {
     <div className="main">
       <div className="container">
         <div className="header">
-          <h1 className="list_title">Conta bancárias</h1>
+          <h1 className="screen-title">Conta bancárias</h1>
         </div>
         <div className="body">
           <div className="database-header">
@@ -151,14 +140,12 @@ export default function List() {
               rows={5}
               rowsPerPageOptions={[5, 10, 25, 50]}
               tableStyle={{ minWidth: "50rem" }}
-              filters={filters}
-              globalFilterFields={["bac_name"]}
               header={header}
               emptyMessage="Não há registros."
             >
-              <Column field="bac_name" header="Nome"></Column>
-              <Column field="bac_type" header="Tipo" body={(rowData) => 
-                types.find(x => x.key == rowData.bac_type).label
+              <Column field="name" header="Nome"></Column>
+              <Column field="type" header="Tipo" body={(rowData) => 
+                types.find(x => x.key == rowData.type).label
               }></Column>
               <Column header="Opções" body={actionBody}></Column>
             </DataTable>

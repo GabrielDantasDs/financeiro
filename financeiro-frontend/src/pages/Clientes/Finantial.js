@@ -209,7 +209,7 @@ export default function Finantial(props) {
     <div className="main">
       <div className="container">
         <div className="header">
-          <h1 className="list_title">Financeiro do cliente</h1>
+          <h1 className="screen-title">Financeiro do cliente</h1>
         </div>
         <div className="form form-container">
           <Formik

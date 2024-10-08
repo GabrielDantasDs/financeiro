@@ -1,8 +1,15 @@
 import { Prisma } from "@prisma/client";
 import { Category } from "../entities/category.entity";
+import { PartialType } from "@nestjs/mapped-types";
+import { IsNumberString, IsString } from "class-validator";
 
-export class CreateCategoryDto implements Category {
-    cat_name: string;
-    cat_cost_center?: Prisma.cost_centerCreateNestedOneWithoutCategoryInput;
-    financial_transaction?: Prisma.financial_transactionCreateNestedManyWithoutFin_categoryInput;
+export class CreateCategoryDto extends Category {
+    @IsString()
+    name: string;
+
+    @IsNumberString()
+    client_id: number;
+
+    @IsString()
+    type: string;
 }

@@ -7,49 +7,53 @@ import {
 	TextField,
 } from "@mui/material";
 import { Form, Formik } from "formik";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons/faCheck";
 import { create } from "../../cruds/category";
 import { validate } from "./Utils";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router";
-import { list } from "../../cruds/cost-center";
+import { useSelector } from "react-redux";
 
 export default function New() {
 	const [isSubmitting, setSubmitting] = useState(false);
-	const [costCenters, setCostCenters] = useState([]);
-	const navigate = useNavigate();
-
-	useEffect(() => {
-		async function fetchData() {
-			await list().then((res) => {
-				setCostCenters(res.data);
-			});
+	const client = useSelector((state) => state.client);
+	
+	const types = [
+		{
+			key: "Despesa",
+			value: "DESPESA"
+		},
+		{
+			key: "Receita",
+			value: "RECEITA"
 		}
+	];
 
-		fetchData();
-	}, []);
+	const navigate = useNavigate();
 
 	const getIniitalState = () => {
 		return {
-			cat_name: "",
-			cat_id_cost_center: "",
+			name: "",
+			type: "",
+			client_id: parseInt(client)
 		};
 	};
 
 	const onSubmit = (values) => {
 		create(values)
+			.then((res) => {
+				Swal.fire("Sucesso", "Categoria salva com sucesso", "success");
+				navigate("/category");
+			})
 			.catch((err) => {
 				Swal.fire(
 					"Ops",
 					"Houve um erro ao salvar o categoria",
 					"error"
 				);
-			})
-			.then((res) => {
-				Swal.fire("Sucesso", "Categorai salva com sucesso", "success");
-				navigate("/category");
+				return;
 			})
 			.finally(() => setSubmitting(false));
 	};
@@ -58,7 +62,7 @@ export default function New() {
 		<div className="main">
 			<div className="container">
 				<div className="header">
-					<h1 className="list_title">Categorias: Nova categoria</h1>
+					<h1 className="screen-title">Categorias: Nova categoria</h1>
 				</div>
 				<div className="form">
 					<Formik
@@ -92,14 +96,14 @@ export default function New() {
 											required
 											id="outlined-required"
 											label="Nome"
-											value={values.cat_name}
+											value={values.name}
 											error={
-												touched.cat_name &&
-												errors.cat_name
+												touched.name &&
+												errors.name
 													? true
 													: false
 											}
-											name="cat_name"
+											name="name"
 											onBlur={handleBlur}
 											fullWidth
 											onChange={handleChange}
@@ -109,25 +113,25 @@ export default function New() {
 									<div className="form-group col-md-6">
 										<FormControl fullWidth>
 											<InputLabel id="select-state">
-												Centro de custo
+												Tipo *
 											</InputLabel>
 											<Select
 												labelId="select-state"
-												id="select-state"
 												value={
-													values.cat_id_cost_center
+													values.type
 												}
-												name="cat_id_cost_center"
-												label="Centro de custo "
+												name="type"
+												required
+												label="Tipo"
 												onChange={handleChange}
 											>
-												{costCenters.map((item, i) => {
+												{types.map((item, i) => {
 													return (
 														<MenuItem
 															key={i}
-															value={item.id}
+															value={item.value}
 														>
-															{item.coc_name}
+															{item.key}
 														</MenuItem>
 													);
 												})}

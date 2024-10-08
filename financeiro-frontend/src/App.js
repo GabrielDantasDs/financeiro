@@ -3,7 +3,7 @@ import Cliente from "./pages/Clientes/Index";
 import Categoria from "./pages/Category/Index";
 import Dashboard from "./pages/Dashboard/Index";
 import BankAccount from "./pages/BankAccount/Index";
-import Subscriber from "./pages/Subscriber/Index";
+import Client from "./pages/Client/Index";
 import Report from "./pages/Report/Index";
 import CostCenter from "./pages/CostCenter/Index";
 import Calendar from "./pages/Calendar/Index";
@@ -23,13 +23,14 @@ import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import Navbar from "./components/navbar/Navbar";
 import SideBar from "./components/sidebar/Sidebar";
+import Register from "./pages/Register";
 
 library.add(fas);
 
 function App() {
 	const navigate = useNavigate();
-	//Corrigir isso aqui depois, não deve ser client.client
-	const cliente = useSelector((state) => state.client.client);
+	//Corrigir isso aqui depois, não deve ser client
+	const cliente = useSelector((state) => state.client);
 	const auth = useSelector((state) => state.auth);
 
 	return (
@@ -69,10 +70,10 @@ function App() {
 								}
 							/>
 							<Route
-								path="/subscriber/*"
+								path="/clients/*"
 								element={
 									<ProtectedRoute>
-										<Subscriber />
+										<Client />
 									</ProtectedRoute>
 								}
 							/>
@@ -89,30 +90,6 @@ function App() {
 								element={
 									<ProtectedRoute>
 										<Calendar />
-									</ProtectedRoute>
-								}
-							/>
-							<Route exact path="/auth" element={<Login />} />
-						</Routes>
-					) : (
-						<Routes>
-							<Route
-								path="/"
-								element={<ProtectedRoute></ProtectedRoute>}
-							></Route>
-							<Route
-								path="/dashboard/*"
-								element={
-									<ProtectedRoute>
-										<Dashboard />
-									</ProtectedRoute>
-								}
-							/>
-							<Route
-								path="clientes/*"
-								element={
-									<ProtectedRoute>
-										<Cliente />
 									</ProtectedRoute>
 								}
 							/>
@@ -133,6 +110,41 @@ function App() {
 								}
 							/>
 							<Route exact path="/auth" element={<Login />} />
+							<Route
+								exact
+								path="/register"
+								element={<Register />}
+							/>
+						</Routes>
+					) : (
+						<Routes>
+							<Route
+								path="/"
+								element={<ProtectedRoute></ProtectedRoute>}
+							></Route>
+							<Route
+								path="/dashboard/*"
+								element={
+									<ProtectedRoute>
+										<Dashboard />
+									</ProtectedRoute>
+								}
+							/>
+							<Route
+								path="client/*"
+								element={
+									<ProtectedRoute>
+										<Client />
+									</ProtectedRoute>
+								}
+							/>
+
+							<Route exact path="/auth" element={<Login />} />
+							<Route
+								exact
+								path="/register"
+								element={<Register />}
+							/>
 						</Routes>
 					)}
 				</div>

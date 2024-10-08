@@ -21,117 +21,155 @@ model user {
 
 model client {
   id                    Int                     @id @default(autoincrement())
-  cli_name              String
-  cli_email             String
-  cli_document          String
-  cli_phone             String
-  cli_address           String
-  cli_district          String
-  cli_number            String
-  cli_state             String
-  cli_city              String
-  cli_zip_code          String
+  name                  String
+  email                 String
+  document              String
+  phone                 String
+  address               String
+  neighborhood          String
+  number                String
+  state                 String
+  city                  String
+  zip_code              String
   created_at            DateTime                @default(now())
   financial_transaction financial_transaction[]
-  subscriber            subscriber[]
+  customer              customer[]
+  supplier              supplier[]
   bank_account          bank_account[]
+  category              category[]
+  product               product[]
 }
 
-model subscriber {
+model customer {
   id                    Int                     @id @default(autoincrement())
-  sub_name              String
-  sub_document          String
-  sub_phone             String
-  sub_address           String
-  sub_district          String
-  sub_number            String
-  sub_state             String
-  sub_city              String
-  sub_zip_code          String
-  sub_id_client         Int
-  sub_type              String
-  sub_client            client                  @relation(fields: [sub_id_client], references: [id])
+  client_id             Int
+  name                  String
+  document              String?
+  phone                 String
+  address               String?
+  neighborhood          String?
+  number                String?
+  state                 String?
+  city                  String?
+  zip_code              String?
+  client                client                  @relation(fields: [client_id], references: [id], onDelete: Cascade)
   created_at            DateTime                @default(now())
   financial_transaction financial_transaction[]
-}
-
-model subscriber_type {
-  id       Int    @id @default(autoincrement())
-  sut_name String
+  subscription_customer subscription_customer[]
 }
 
 model financial_transaction {
-  id                      Int              @id @default(autoincrement())
-  fin_id_client           Int
-  fin_client              client           @relation(fields: [fin_id_client], references: [id])
-  fin_type                String
-  fin_value               Decimal          @db.Decimal(6, 2)
-  fin_id_category         Int
-  fin_category            category         @relation(fields: [fin_id_category], references: [id])
-  fin_invoice_date        DateTime         @default(now())
-  fin_note                String?
-  fin_payment_day         DateTime
-  fin_payed               Boolean
-  fin_periodicity_type    Periodicity_type @default(UNICA)
-  fin_periodicity         Int?
-  fin_id_center_cost      Int
-  fin_id_bank_account     Int
-  fin_number_installments Int?
-  fin_bank_account        bank_account     @relation(fields: [fin_id_bank_account], references: [id])
-  fin_cost_center         cost_center      @relation(fields: [fin_id_center_cost], references: [id])
-  subscriber              subscriber?      @relation(fields: [subscriberId], references: [id])
-  subscriberId            Int?
-  installments            installments[]
-}
-
-enum Periodicity_type {
-  UNICA
-  RECORRENTE
+  id                   Int                     @id @default(autoincrement())
+  first_transaction_id Int?
+  subscription_id      Int?
+  client_id            Int
+  customer_id          Int?
+  supplier_id          Int?
+  cost_center_id       Int?
+  type                 String
+  value                Decimal                 @db.Decimal(6, 2)
+  category_id          Int
+  invoice_date         DateTime                @default(now())
+  note                 String?
+  payment_day          DateTime
+  payed                Boolean
+  periodicity          Int?
+  bank_account_id      Int
+  category             category                @relation(fields: [category_id], references: [id])
+  client               client                  @relation(fields: [client_id], references: [id], onDelete: Cascade)
+  bank_account         bank_account            @relation(fields: [bank_account_id], references: [id])
+  customer             customer?               @relation(fields: [customer_id], references: [id])
+  supplier             supplier?               @relation(fields: [supplier_id], references: [id])
+  first_transaction    financial_transaction?  @relation("installments", fields: [first_transaction_id], references: [id])
+  transactions         financial_transaction[] @relation("installments")
+  cost_center          cost_center?            @relation(fields: [cost_center_id], references: [id])
+  subscription         subscription_customer?   @relation(fields: [subscription_id], references: [id])
 }
 
 model category {
   id                    Int                     @id @default(autoincrement())
-  cat_name              String
-  cat_cost_center       cost_center?            @relation(fields: [cat_id_cost_center], references: [id])
-  cat_id_cost_center    Int?
+  client_id             Int
+  name                  String
+  type                  String
+  cost_center           cost_center[]
   financial_transaction financial_transaction[]
+  client                client?                 @relation(fields: [client_id], references: [id], onDelete: Cascade)
 }
 
 model cost_center {
   id                    Int                     @id @default(autoincrement())
-  category              category[]
-  coc_name              String
+  name                  String
+  category_id           Int
+  category              category                @relation(fields: [category_id], references: [id])
   financial_transaction financial_transaction[]
 }
 
-model payment_condition {
-  id                  Int          @id @default(autoincrement())
-  pac_installment     Int
-  pac_method          String
-  pac_id_bank_account Int
-  pac_bank_account    bank_account @relation(fields: [pac_id_bank_account], references: [id])
-  pac_paid            Boolean
+model payment_method {
+  id              Int          @id @default(autoincrement())
+  bank_account_id Int
+  name            String
+  tax             Decimal?     @db.Decimal(6, 2)
+  delay_days      Int?
+  bank_account    bank_account @relation(fields: [bank_account_id], references: [id])
+  check_paid      Boolean
 }
 
 model bank_account {
-  id                     Int                     @id @default(autoincrement())
-  bac_id_client          Int
-  bac_client             client                  @relation(fields: [bac_id_client], references: [id])
-  bac_name               String
-  bac_institution        String
-  bac_inicial_value      Decimal                 @db.Decimal(6, 2)
-  bac_date_inicial_value DateTime
-  bac_type               String
-  bac_description        String
-  payment_condition      payment_condition[]
-  financial_transaction  financial_transaction[]
+  id                    Int                     @id @default(autoincrement())
+  client_id             Int
+  name                  String
+  institution           String
+  inicial_value         Decimal                 @db.Decimal(6, 2)
+  date_inicial_value    DateTime
+  type                  String
+  description           String
+  client                client                  @relation(fields: [client_id], references: [id], onDelete: Cascade)
+  financial_transaction financial_transaction[]
+  payment_method        payment_method[]
 }
 
-model installments {
-  id                            Int                   @id @default(autoincrement())
-  ins_value                     Decimal               @db.Decimal(6, 2)
-  ins_number                    Int
-  ins_payday                    DateTime
-  ins_id_financial_transacation Int
-  ins_financial_transacation    financial_transaction @relation(fields: [id], references: [id])
+model supplier {
+  id                       Int                        @id @default(autoincrement())
+  client_id                Int
+  name                     String
+  document                 String?
+  phone                    String
+  address                  String?
+  neighborhood             String?
+  number                   String?
+  state                    String?
+  city                     String?
+  zip_code                 String?
+  client                   client                     @relation(fields: [client_id], references: [id], onDelete: Cascade)
+  created_at               DateTime                   @default(now())
+  financial_transaction    financial_transaction[]
+  recurring_supplier_order recurring_supplier_order[]
+}
+
+model product {
+  id                    Int                     @id @default(autoincrement())
+  client_id             Int
+  name                  String
+  value                 Decimal                 @db.Decimal(6, 2)
+  client                client                  @relation(fields: [client_id], references: [id], onDelete: Cascade)
+  subscription_customer subscription_customer[]
+}
+
+model subscription_customer {
+  id                      Int                     @id @default(autoincrement())
+  product_id              Int
+  customer_id             Int
+  recurrence_time_in_days Int
+  product                 product                 @relation(fields: [product_id], references: [id])
+  customer                customer                @relation(fields: [customer_id], references: [id])
+  financial_transaction   financial_transaction[]
+}
+
+model recurring_supplier_order {
+  id                      Int      @id @default(autoincrement())
+  supplier_id             Int
+  name                    String
+  value                   Decimal  @db.Decimal(6, 2)
+  recurrence_time_in_days Int
+  supplier                supplier @relation(fields: [supplier_id], references: [id])
 }

@@ -1,17 +1,28 @@
-import { Prisma } from "@prisma/client";
-import { BankAccount } from "../entities/bank_account.entity";
-import { DecimalJsLike } from "@prisma/client/runtime";
-import { IsDateString } from "class-validator";
+import { Prisma } from '@prisma/client';
+import { BankAccount } from '../entities/bank_account.entity';
+import { DecimalJsLike } from '@prisma/client/runtime';
+import { IsDateString, IsNumber, IsNumberString, IsString} from 'class-validator';
+import { PartialType } from '@nestjs/mapped-types';
 
-export class CreateBankAccountDto implements BankAccount {
-    bac_institution: string;
-    bac_inicial_value: string | number | Prisma.Decimal | DecimalJsLike;
+export class CreateBankAccountDto extends BankAccount {
+    @IsNumberString()
+    client_id:number;
+
+    @IsString()
+    institution: string;
 
     @IsDateString()
-    bac_date_inicial_value: string | Date;
-    bac_name: string;
-    bac_type: string;
-    bac_description: string;
-    bac_client: Prisma.clientCreateNestedOneWithoutBank_accountInput;
-    payment_condition?: Prisma.payment_conditionCreateNestedManyWithoutPac_bank_accountInput;
+    date_inicial_value: string | Date;
+
+    @IsString()
+    description: string;
+    
+    @IsString()
+    inicial_value: string | number | Prisma.Decimal | DecimalJsLike;
+
+    @IsString()
+    name: string;
+
+    @IsString()
+    type: string;
 }

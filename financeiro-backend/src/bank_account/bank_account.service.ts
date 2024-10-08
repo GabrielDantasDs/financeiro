@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateBankAccountDto } from './dto/create-bank_account.dto';
 import { UpdateBankAccountDto } from './dto/update-bank_account.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { User } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class BankAccountService {
@@ -10,24 +11,35 @@ export class BankAccountService {
     return this.prisma.bank_account.create({ data: createBankAccountDto });
   }
 
-  findAll(id: number) {
+  findAll(id: string) {
     return this.prisma.bank_account.findMany({
       where: {
-        bac_id_client: id,
+        client_id: parseInt(id),
       },
     });
   }
 
-  findOne(id: number, data: Object) {
+  simpleList(client_id: string) {
+    return this.prisma.bank_account.findMany({
+      where: {
+        client_id: parseInt(client_id)
+      },
+      select: {
+        id: true,
+        name: true
+      }
+    })
+  }
+
+  findOne(id: string) {
     return this.prisma.bank_account.findFirst({
       where: {
-        id: id,
-        bac_id_client: data['id']
+        id: parseInt(id)
       },
     });
   }
 
-  update(id: number, updateBankAccountDto: UpdateBankAccountDto) {
+  update(id: number, updateBankAccountDto: UpdateBankAccountDto, ) {
     return this.prisma.bank_account.update({
       where: {
         id: id,

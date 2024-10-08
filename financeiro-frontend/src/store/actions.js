@@ -13,7 +13,7 @@ export const unsetClient = (data, navigate) => {
   return async (dispatch) => {
     localStorage.removeItem("client");
     dispatch(unsetClientAction());
-    navigate("/clientes");
+    navigate("/clients");
   };
 };
 

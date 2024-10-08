@@ -22,7 +22,7 @@ import dayjs from "dayjs";
 export default function New() {
   const [isSubmitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
-  const client = useSelector((state) => state.client.client);
+  const client = useSelector((state) => state.client);
   const [bankInstitutionList, setBankInstitutionList] = useState([]);
 
   useEffect(() => {
@@ -37,25 +37,35 @@ export default function New() {
       })
       .then((res) => {
         if (res.status === 200) {
-          setBankInstitutionList(res.data);
+          function compare( a, b ) {
+            if ( a.code < b.code ){
+              return -1;
+            }
+            if ( a.code > b.code ){
+              return 1;
+            }
+            return 0;
+          }
+
+          setBankInstitutionList(res.data.sort(compare));
         }
       });
   }, []);
 
   const getIniitalState = () => {
     return {
-      bac_id_client: null,
-      bac_name: "",
-      bac_type: "",
-      bac_description: "",
-      bac_institution: "",
-      bac_date_inicial_value: dayjs(),
-      bac_inicial_value: "",
+      name: "",
+      type: "",
+      description: "",
+      institution: "",
+      date_inicial_value: dayjs(),
+      inicial_value: "",
+      client_id: parseInt(client)
     };
   };
 
   const onSubmit = (values) => {
-    create({ ...values, bac_id_client: parseInt(client), bac_inicial_value: cleanCurrency(values.bac_inicial_value), bac_date_inicial_value: new Date(values.bac_date_inicial_value) })
+    create({ ...values, inicial_value: cleanCurrency(values.inicial_value), date_inicial_value: new Date(values.date_inicial_value) })
       .catch((err) => {
         Swal.fire("Ops", "Houve um erro ao salvar a conta", "error");
       })
@@ -70,7 +80,7 @@ export default function New() {
     <div className="main">
       <div className="container">
         <div className="header">
-          <h1 className="list_title">Conta bancária: Nova conta</h1>
+          <h1 className="screen-title">Conta bancária: Nova conta</h1>
         </div>
         <div className="form">
           <Formik
@@ -104,9 +114,9 @@ export default function New() {
                       required
                       id="outlined-required"
                       label="Nome"
-                      value={values.bac_name}
-                      error={touched.bac_name && errors.bac_name ? true : false}
-                      name="bac_name"
+                      value={values.name}
+                      error={touched.name && errors.name ? true : false}
+                      name="name"
                       onBlur={handleBlur}
                       fullWidth
                       onChange={handleChange}
@@ -119,8 +129,8 @@ export default function New() {
                       <Select
                         labelId="select-state"
                         id="select-state"
-                        value={values.bac_type}
-                        name="bac_type"
+                        value={values.type}
+                        name="type"
                         label="Tipo da conta "
                         onChange={handleChange}
                       >
@@ -142,13 +152,13 @@ export default function New() {
                       id="outlined"
                       label="Descrição"
                       fullWidth
-                      value={values.bac_description}
+                      value={values.description}
                       error={
-                        touched.bac_description && errors.bac_description
+                        touched.description && errors.description
                           ? true
                           : false
                       }
-                      name="bac_description"
+                      name="description"
                       onBlur={handleBlur}
                       onChange={handleChange}
                       inputProps={{ maxLength: 70 }}
@@ -163,15 +173,15 @@ export default function New() {
                       <Select
                         labelId="select-state"
                         id="select-state"
-                        value={values.bac_institution}
-                        name="bac_institution"
+                        value={values.institution}
+                        name="institution"
                         label="Instituição financeira "
                         onChange={handleChange}
                       >
                         {bankInstitutionList.map((obj, i) => {
                           return (
                             <MenuItem key={i} value={obj.name}>
-                              {obj.fullName}
+                              {obj.code } - {obj.fullName}
                             </MenuItem>
                           );
                         })}
@@ -186,14 +196,14 @@ export default function New() {
                       type="date"
                       id="outlined-required"
                       label="Data do valor inicial"
-                      value={values.bac_date_inicial_value}
+                      value={values.date_inicial_value}
                       error={
-                        touched.bac_date_inicial_value &&
-                        errors.bac_date_inicial_value
+                        touched.date_inicial_value &&
+                        errors.date_inicial_value
                           ? true
                           : false
                       }
-                      name="bac_date_inicial_value"
+                      name="date_inicial_value"
                       onBlur={handleBlur}
                       fullWidth
                       onChange={handleChange}
@@ -205,13 +215,13 @@ export default function New() {
                       required
                       id="outlined-required"
                       label="Valor inicial"
-                      value={values.bac_inicial_value}
+                      value={values.inicial_value}
                       error={
-                        touched.bac_inicial_value && errors.bac_inicial_value
+                        touched.inicial_value && errors.inicial_value
                           ? true
                           : false
                       }
-                      name="bac_inicial_value"
+                      name="inicial_value"
                       onBlur={handleBlur}
                       fullWidth
                       onChange={e => handleChange(mascaraMoeda(e))}
