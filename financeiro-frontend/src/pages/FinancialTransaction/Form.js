@@ -87,13 +87,13 @@ export default function IForm({ data, onSubmit }) {
 								<Form>
 									<div className="form-row">
 										<div className="form-group col-md-6">
-											<TextField required id="outlined-required" label="Nome *" value={values.note} error={touched.note && errors.note ? true : false} name="note" onBlur={handleBlur} fullWidth onChange={handleChange} />
+											<TextField required id="outlined-required" label="Nome" value={values.note} error={touched.note && errors.note ? true : false} name="note" onBlur={handleBlur} fullWidth onChange={handleChange} />
 										</div>
 
 										<div className="form-group col-md-6">
 											<FormControl fullWidth>
-												<InputLabel id="select-state">Tipo</InputLabel>
-												<Select labelId="select-state" id="select-state" value={values.type} name="type" label="Tipo *" onChange={handleChange}>
+												<InputLabel required id="select-state">Tipo</InputLabel>
+												<Select labelId="select-state" id="select-state" value={values.type} name="type" label="Tipo  " onChange={handleChange}>
 													<MenuItem value={"RECEITA"}>Receita</MenuItem>
 													<MenuItem value={"DESPESA"}>Despesa</MenuItem>
 												</Select>
@@ -104,8 +104,8 @@ export default function IForm({ data, onSubmit }) {
 									<div className="form-row">
 										<div className="form-group col-md-6">
 											<FormControl fullWidth>
-												<InputLabel id="select-state">Conta</InputLabel>
-												<Select labelId="select-state" id="select-state" value={values.bank_account_id} name="bank_account_id" label="Conta *" onChange={handleChange}>
+												<InputLabel required id="select-state">Conta</InputLabel>
+												<Select labelId="select-state" id="select-state" value={values.bank_account_id} label="Conta  " name="bank_account_id" onChange={handleChange}>
 													{bankAccounts.map((obj, i) => {
 														return (
 															<MenuItem key={i} value={obj.id}>
@@ -134,11 +134,11 @@ export default function IForm({ data, onSubmit }) {
 
 									<div className="form-row">
 										<div className="form-group col-md-4">
-											<TextField id="outlined" label="Valor *" fullWidth value={values.value} error={touched.value && errors.value ? true : false} name="value" onBlur={handleBlur} onChange={(e) => handleChange(mascaraMoeda(e))} inputProps={{ maxLength: 70 }} />
+											<TextField id="outlined" required label="Valor" fullWidth value={values.value} error={touched.value && errors.value ? true : false} name="value" onBlur={handleBlur} onChange={(e) => handleChange(mascaraMoeda(e))} inputProps={{ maxLength: 70 }} />
 										</div>
 										<div className="form-group col-md-4">
 											<FormControl fullWidth>
-												<InputLabel id="select-state">Categoria</InputLabel>
+												<InputLabel required id="select-state">Categoria</InputLabel>
 												<Select
 													labelId="select-state"
 													id="select-state"
@@ -182,7 +182,7 @@ export default function IForm({ data, onSubmit }) {
 										</div>
 										<div className="form-group col-md-4">
 											<FormControl fullWidth>
-												<InputLabel id="select-state">Recorrência</InputLabel>
+												<InputLabel required id="select-state">Recorrência</InputLabel>
 												<Select labelId="select-state" id="select-state" value={values.periodicity_type} name="periodicity_type" label="Recorrência" onChange={handleChange}>
 													<MenuItem value={"UNICA"}>Única</MenuItem>
 													<MenuItem value={"RECORRENTE"}>Recorrente</MenuItem>
@@ -192,7 +192,7 @@ export default function IForm({ data, onSubmit }) {
 
 										<div className="form-group col-md-4">
 											<FormControl fullWidth>
-												<InputLabel id="select-state">Pago</InputLabel>
+												<InputLabel required id="select-state">Pago</InputLabel>
 												<Select labelId="select-state" id="select-state" value={values.payed} name="payed" label="Pago" onChange={handleChange}>
 													<MenuItem value={true}>Sim</MenuItem>
 													<MenuItem value={false}>Não</MenuItem>
