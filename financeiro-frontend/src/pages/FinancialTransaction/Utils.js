@@ -1,6 +1,6 @@
 export const validate = (values) => {
 	const errors = {};
-	const keys = ["type", "value", "category_id", "payed", "payment_day", "bank_account_id"];
+	const keys = ["type", "value", "category_id", "payed", "payment_date", "bank_account_id"];
 
 	Object.keys(values).map((key, i) => {
 		if (keys.includes(key)) {
@@ -45,7 +45,7 @@ export function cleanCurrency(currencyValue) {
 
 	// Converter para número float
 	const floatValue = parseFloat(valueWithPeriod);
-	console.log(floatValue);
+
 	// Se não for um número válido, retornar "0" ou algum valor padrão
 	if (isNaN(floatValue)) return "0";
 

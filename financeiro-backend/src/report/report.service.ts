@@ -31,7 +31,7 @@ export class ReportService {
     } else if (requestDto.date_type == 'PAYDAY') {
       response = await this.prisma.financial_transaction.findMany({
         where: {
-          payment_day: {
+          payment_date: {
             lte: requestDto.final_date,
             gte: requestDto.initial_date,
           },
@@ -50,7 +50,7 @@ export class ReportService {
         where: {
           OR: [
             {
-              payment_day: {
+              payment_date: {
                 lte: requestDto.final_date,
                 gte: requestDto.initial_date,
               },

@@ -16,7 +16,6 @@ class FinancialTransactionController extends Controller
             'value' => 'required|decimal',
             'type' => 'required|max:32',
             'invoice_date' => 'required|date',
-            'payment_day' => 'required|date',
             'periodicity' => 'required|max:32',
             'periodicity_type' => 'required|max:32',
             'id_subscriber' => 'required' 
@@ -27,7 +26,6 @@ class FinancialTransactionController extends Controller
         $financial_transaction = $request->type;
         $financial_transaction = $request->invoice_date;
         $financial_transaction = $request->paid;
-        $financial_transaction = $request->payment_day;
         $financial_transaction = $request->periodicity;
         $financial_transaction = $request->periodicity_type;
         $financial_transaction = $request->id_subscriber;
@@ -42,7 +40,6 @@ class FinancialTransactionController extends Controller
             'value' => 'required|decimal',
             'type' => 'required|max:32',
             'invoice_date' => 'required|date',
-            'payment_day' => 'required|date',
             'periodicity' => 'required|max:32',
             'periodicity_type' => 'required|max:32',
             'id_subscriber' => 'required' 
@@ -53,7 +50,6 @@ class FinancialTransactionController extends Controller
         $financial_transaction = $request->type;
         $financial_transaction = $request->invoice_date;
         $financial_transaction = $request->paid;
-        $financial_transaction = $request->payment_day;
         $financial_transaction = $request->periodicity;
         $financial_transaction = $request->periodicity_type;
         $financial_transaction = $request->id_subscriber;

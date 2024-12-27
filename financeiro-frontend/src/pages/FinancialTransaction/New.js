@@ -24,10 +24,10 @@ export default function New() {
 			cost_center_id: "",
 			bank_account_id: "",
 			payed: false,
-			payment_day: dayjs(),
-			periodicity: null,
+			payment_date: dayjs(),
+			periodicity_type: "",
 			periodicity: "",
-			number_installments: 1,
+			recurrencies: 1,
 		};
 	};
 

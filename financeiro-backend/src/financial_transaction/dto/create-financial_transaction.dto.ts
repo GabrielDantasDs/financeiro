@@ -1,7 +1,14 @@
 import { Prisma } from '@prisma/client';
 import { Decimal, DecimalJsLike } from '@prisma/client/runtime';
 import { FinancialTransaction } from '../entities/financial_transaction.entity';
-import { IsDate, IsDateString, IsDecimal, IsNumber, IsOptional, IsString } from 'class-validator';
+import {
+  IsDate,
+  IsDateString,
+  IsDecimal,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CreateFinancialTransactionDto extends FinancialTransaction {
   @IsString()
@@ -12,7 +19,7 @@ export class CreateFinancialTransactionDto extends FinancialTransaction {
   type: string;
 
   @IsDateString()
-  payment_day: string | Date;
+  payment_date: string | Date;
 
   @IsNumber()
   periodicity?: number;
@@ -25,5 +32,14 @@ export class CreateFinancialTransactionDto extends FinancialTransaction {
 
   @IsOptional()
   @IsNumber()
-  number_installments: number | null;
+  recurrencies: number | null;
+
+  @IsOptional()
+  cost_center_id?: number;
+
+  @IsOptional()
+  category_id: number;
+
+  @IsOptional()
+  recurrency: boolean;
 }

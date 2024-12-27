@@ -7,6 +7,7 @@ export class FinancialTransaction
 {
   bank_account_id: number;
   category_id: number;
+  cost_center_id?: number;
   client_id: number;
   customer_id?: number;
   type: string;
@@ -14,9 +15,10 @@ export class FinancialTransaction
   first_transaction_id?: number;
   id?: number;
   invoice_date?: string | Date;
+  due_date: string | Date;
   note?: string;
   payed: boolean;
-  payment_day: string | Date;
+  payment_date: string | Date;
   periodicity?: number;
   supplier_id?: number;
 }

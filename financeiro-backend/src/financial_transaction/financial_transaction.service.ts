@@ -4,17 +4,31 @@ import { UpdateFinancialTransactionDto } from './dto/update-financial_transactio
 import { PrismaService } from 'src/prisma/prisma.service';
 import { FinancialTransaction } from './entities/financial_transaction.entity';
 import * as dayjs from 'dayjs';
+import { calcRecurrenceDate } from './financial_transaction.utils';
 
 @Injectable()
 export class FinancialTransactionService {
   constructor(private readonly prisma: PrismaService) {}
   async create(createFinancialTransactionDto: CreateFinancialTransactionDto) {
-    const { number_installments, ...data } = createFinancialTransactionDto;
+    let data = createFinancialTransactionDto;
+    let due_date = data.due_date;
 
-    const financial_transaction =
-      await this.prisma.financial_transaction.create({
-        data: data,
-      });
+    const financial_transaction = await this.prisma.financial_transaction.create({
+      data: data,
+    });
+
+    if (data.recurrencies > 1) {
+      let i = 1;
+      while (i <= data.recurrencies - 1) {
+        data = data;
+        due_date = calcRecurrenceDate(due_date, data.periodicity);
+        await this.prisma.financial_transaction.create({
+          data: { ...data, due_date: due_date },
+        });
+
+        i++;
+      }
+    }
   }
 
   findAll() {
@@ -30,7 +44,7 @@ export class FinancialTransactionService {
   }
 
   async update(id: number, updateFinancialTransactionDto: UpdateFinancialTransactionDto) {
-    const { number_installments, ...data } = updateFinancialTransactionDto;
+    const { recurrencies, ...data } = updateFinancialTransactionDto;
 
     return this.prisma.financial_transaction.update({
       where: { id },
@@ -38,10 +52,7 @@ export class FinancialTransactionService {
     });
   }
 
-  markedPaid(
-    id: number,
-    updateFinancialTransactionDto: UpdateFinancialTransactionDto,
-  ) {
+  markedPaid(id: number, updateFinancialTransactionDto: UpdateFinancialTransactionDto) {
     return this.prisma.financial_transaction.update({
       where: { id },
       data: {

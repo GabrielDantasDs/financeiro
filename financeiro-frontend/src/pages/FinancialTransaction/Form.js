@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { fetchCommonData } from "../Client/Service";
 import dayjs from "dayjs";
 
-export default function IForm({ data, onSubmit }) {
+export default function IForm({ data, onSubmit, blockFields }) {
 	const [loading, setLoading] = useState(true);
 	const [initialValues, setInitialValues] = useState({
 		type: "",
@@ -21,8 +21,8 @@ export default function IForm({ data, onSubmit }) {
 		cost_center_id: "",
 		bank_account_id: "",
 		payed: false,
-		payment_day: dayjs(),
-		periodicity: null,
+		invoice_date: dayjs(),
+		periodicity_type: "",
 		periodicity: "",
 		number_installments: 1,
 	});
@@ -92,7 +92,9 @@ export default function IForm({ data, onSubmit }) {
 
 										<div className="form-group col-md-6">
 											<FormControl fullWidth>
-												<InputLabel required id="select-state">Tipo</InputLabel>
+												<InputLabel required id="select-state">
+													Tipo
+												</InputLabel>
 												<Select labelId="select-state" id="select-state" value={values.type} name="type" label="Tipo  " onChange={handleChange}>
 													<MenuItem value={"RECEITA"}>Receita</MenuItem>
 													<MenuItem value={"DESPESA"}>Despesa</MenuItem>
@@ -104,7 +106,9 @@ export default function IForm({ data, onSubmit }) {
 									<div className="form-row">
 										<div className="form-group col-md-6">
 											<FormControl fullWidth>
-												<InputLabel required id="select-state">Conta</InputLabel>
+												<InputLabel required id="select-state">
+													Conta
+												</InputLabel>
 												<Select labelId="select-state" id="select-state" value={values.bank_account_id} label="Conta  " name="bank_account_id" onChange={handleChange}>
 													{bankAccounts.map((obj, i) => {
 														return (
@@ -138,7 +142,9 @@ export default function IForm({ data, onSubmit }) {
 										</div>
 										<div className="form-group col-md-4">
 											<FormControl fullWidth>
-												<InputLabel required id="select-state">Categoria</InputLabel>
+												<InputLabel required id="select-state">
+													Categoria
+												</InputLabel>
 												<Select
 													labelId="select-state"
 													id="select-state"
@@ -178,12 +184,14 @@ export default function IForm({ data, onSubmit }) {
 
 									<div className="form-row">
 										<div className="form-group col-md-4">
-											<DatePicker label={"Data de vencimento *"} className="full-width" name="payment_day" onChange={(newValue) => setFieldValue("payment_day", newValue)} value={values.payment_day} error={touched.payment_day && errors.payment_day ? true : false} onBlur={handleBlur} />
+											<DatePicker label={"Data de vencimento *"} className="full-width" name="due_date" onChange={(newValue) => setFieldValue("due_date", newValue)} value={values.due_date} error={touched.due_date && errors.due_date ? true : false} onBlur={handleBlur} />
 										</div>
 										<div className="form-group col-md-4">
 											<FormControl fullWidth>
-												<InputLabel required id="select-state">Recorrência</InputLabel>
-												<Select labelId="select-state" id="select-state" value={values.periodicity_type} name="periodicity_type" label="Recorrência" onChange={handleChange}>
+												<InputLabel required id="select-state">
+													Recorrência
+												</InputLabel>
+												<Select disabled={blockFields} labelId="select-state" id="select-state" value={values.periodicity_type} name="periodicity_type" label="Recorrência" onChange={handleChange}>
 													<MenuItem value={"UNICA"}>Única</MenuItem>
 													<MenuItem value={"RECORRENTE"}>Recorrente</MenuItem>
 												</Select>
@@ -192,7 +200,9 @@ export default function IForm({ data, onSubmit }) {
 
 										<div className="form-group col-md-4">
 											<FormControl fullWidth>
-												<InputLabel required id="select-state">Pago</InputLabel>
+												<InputLabel required id="select-state">
+													Pago
+												</InputLabel>
 												<Select labelId="select-state" id="select-state" value={values.payed} name="payed" label="Pago" onChange={handleChange}>
 													<MenuItem value={true}>Sim</MenuItem>
 													<MenuItem value={false}>Não</MenuItem>
@@ -201,12 +211,12 @@ export default function IForm({ data, onSubmit }) {
 										</div>
 									</div>
 
-									{values.periodicity === "RECORRENTE" && (
+									{values.periodicity_type === "RECORRENTE" && (
 										<div className="form-row">
 											<div className="form-group col-md-4">
 												<FormControl fullWidth>
 													<InputLabel id="select-state">Periocidade</InputLabel>
-													<Select labelId="select-state" id="select-state" value={values.periodicity} name="periodicity" label="Periodicidade" onChange={handleChange}>
+													<Select disabled={blockFields}  labelId="select-state" id="select-state" value={values.periodicity} name="periodicity" label="Periodicidade" onChange={handleChange}>
 														<MenuItem value={7}>Semanal</MenuItem>
 														<MenuItem value={15}>Quinzenal</MenuItem>
 														<MenuItem value={30}>Mensal</MenuItem>
@@ -218,7 +228,7 @@ export default function IForm({ data, onSubmit }) {
 											</div>
 
 											<div className="form-group col-md-4">
-												<TextField id="outlined" label="Quantidade de parcelas" type="number" fullWidth value={values.number_installments} error={touched.number_installments && errors.number_installments ? true : false} name="number_installments" onBlur={handleBlur} onChange={handleChange} />
+												<TextField disabled={blockFields}  id="outlined" label="Quantidade de recorrências" type="number" fullWidth value={values.recurrencies} error={touched.recurrencies && errors.recurrencies ? true : false} name="recurrencies" onBlur={handleBlur} onChange={handleChange} />
 											</div>
 										</div>
 									)}

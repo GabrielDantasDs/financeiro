@@ -44,10 +44,11 @@ export default function Edit() {
 			cost_center_id: data.cost_center_id ?? "",
 			bank_account_id: data.bank_account_id ?? "",
 			payed: data.payed ?? false,
-			payment_day: data.payment_day ? dayjs(data.payment_day) : dayjs(),
+			due_date: data.due_date ? dayjs(data.due_date) : dayjs(),
 			periodicity: data.periodicity ?? null,
 			periodicity_type: data.periodicity ? "RECORRENTE" : "UNICA",
 			number_installments: data.installments ?? 1,
+			recurrencies: data.recurrencies ?? ""
 		});
 	};
 
@@ -69,5 +70,5 @@ export default function Edit() {
 			});
 	};
 
-	return <IForm data={initialState} onSubmit={onSubmit}></IForm>;
+	return <IForm data={initialState} onSubmit={onSubmit} blockFields={true}></IForm>;
 }

@@ -14,13 +14,11 @@ class InstallmentController extends Controller
         $validated = $request->validate([
             'type' => 'required|min:3|max:100',
             'value' => 'required|decimal',
-            'payment_day' => 'required|date',
         ]);
 
         $financial_transaction = new FinancialTransaction();
         $financial_transaction->value = $request->value;
         $financial_transaction->paid = $request->paid;
-        $financial_transaction->payment_day = $request->payment_day;
         $financial_transaction->due_day = $request->due_day;
         
         $financial_transaction->save();
@@ -40,7 +38,6 @@ class InstallmentController extends Controller
         $financial_transaction->note = $request->note;
         $financial_transaction->invoice_date = $request->invoice_date;
         $financial_transaction->paid = $request->paid;
-        $financial_transaction->payment_day = $request->payment_day;
         $financial_transaction->periodicity = $request->periodicity;
         $financial_transaction->periodicity_type = $request->periodicity_type;
         $financial_transaction->id_subscriber = $request->id_subscriber;

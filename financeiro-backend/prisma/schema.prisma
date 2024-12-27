@@ -70,20 +70,22 @@ model financial_transaction {
   value                Decimal                 @db.Decimal(6, 2)
   category_id          Int
   invoice_date         DateTime                @default(now())
+  due_date             DateTime                @default(now())
+  payment_date         DateTime?
   note                 String?
-  payment_day          DateTime
   payed                Boolean
   periodicity          Int?
+  recurrencies         Int?
   bank_account_id      Int
   category             category                @relation(fields: [category_id], references: [id])
   client               client                  @relation(fields: [client_id], references: [id], onDelete: Cascade)
   bank_account         bank_account            @relation(fields: [bank_account_id], references: [id])
   customer             customer?               @relation(fields: [customer_id], references: [id])
   supplier             supplier?               @relation(fields: [supplier_id], references: [id])
-  first_transaction    financial_transaction?  @relation("installments", fields: [first_transaction_id], references: [id])
-  transactions         financial_transaction[] @relation("installments")
+  first_transaction    financial_transaction?  @relation("financial_transaction", fields: [first_transaction_id], references: [id])
+  transactions         financial_transaction[] @relation("financial_transaction")
   cost_center          cost_center?            @relation(fields: [cost_center_id], references: [id])
-  subscription         subscription_customer?   @relation(fields: [subscription_id], references: [id])
+  subscription         subscription_customer?  @relation(fields: [subscription_id], references: [id])
 }
 
 model category {

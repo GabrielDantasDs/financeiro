@@ -39,7 +39,7 @@ class PaymentConditionController extends Controller
         $financial_transaction->note = $request->note;
         $financial_transaction->invoice_date = $request->invoice_date;
         $financial_transaction->paid = $request->paid;
-        $financial_transaction->payment_day = $request->payment_day;
+        $financial_transaction->payment_date = $request->payment_date;
         $financial_transaction->periodicity = $request->periodicity;
         $financial_transaction->periodicity_type = $request->periodicity_type;
         $financial_transaction->id_subscriber = $request->id_subscriber;
