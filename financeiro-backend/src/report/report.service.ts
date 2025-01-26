@@ -10,13 +10,13 @@ export class ReportService {
   constructor(private readonly prisma: PrismaService) {}
   async search(requestDto: RequestDto) {
     let response = null;
-
+    
     if (requestDto.date_type == 'DUE_DATE') {
       response = await this.prisma.financial_transaction.findMany({
         where: {
           invoice_date: {
             lte:dayjs(requestDto.final_date).endOf('day').format(),
-            gte:dayjs(requestDto.final_date).startOf('day').format(),
+            gte:dayjs(requestDto.initial_date).startOf('day').format(),
           },
           ...(requestDto.type != 'SALDO' ? {type: requestDto.type} : {}),
           ...(requestDto.category != "" ? {category_id: +requestDto.category} : {}),

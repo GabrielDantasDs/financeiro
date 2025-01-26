@@ -22,29 +22,27 @@ export default function List() {
 	const [globalFilterValue, setGlobalFilterValue] = useState("");
 
 	useEffect(() => {
-		list(client)
-			.catch((err) => {
-				Swal.fire(
-					"Ops",
-					"Houve um erro ao buscar a lista de lançamentos.",
-					"error"
-				);
-			})
+		fetch();
+	}, [globalFilterValue]);
+
+	const fetch = () => {
+		list(client, globalFilterValue)
 			.then((res) => {
-				setFinancialTransactions(res.data);
+				console.log(res.data);
+				setFinancialTransactions([...res.data]);
+			})
+			.catch((err) => {
+				console.log(err)
+				Swal.fire("Ops", "Houve um erro ao buscar a lista de lançamentos.", "error");
 			});
-	}, []);
+	};
 
 	const renderHeader = () => {
 		return (
 			<div className="flex justify-content-end">
 				<span className="p-input-icon-left">
 					<i className="pi pi-search" />
-					<InputText
-						value={globalFilterValue}
-						onChange={onGlobalFilterChange}
-						placeholder="Busque pelo nome"
-					/>
+					<InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Busque pelo nome" />
 				</span>
 			</div>
 		);
@@ -63,22 +61,14 @@ export default function List() {
 	const deleteRecord = (id) => {
 		remove(id)
 			.catch((error) => {
-				Swal.fire(
-					"Ops",
-					"Houve um erro ao remover esse registro.",
-					"error"
-				);
+				Swal.fire("Ops", "Houve um erro ao remover esse registro.", "error");
 				return;
 			})
 			.then((res) => {
 				if (res.status == 200) {
 					list()
 						.catch((err) => {
-							Swal.fire(
-								"Ops",
-								"Houve um erro ao buscar a lista de lançamentos.",
-								"error"
-							);
+							Swal.fire("Ops", "Houve um erro ao buscar a lista de lançamentos.", "error");
 						})
 						.then((res) => {
 							setFinancialTransactions(res.data);
@@ -87,35 +77,30 @@ export default function List() {
 			});
 	};
 
-  const markedPaid = (id) => {
-    markedPaidReq(id).then(res => {
-      if (res.status == 200) {
-        Swal.fire('Ops', 'Marcado como pago com sucesso!', 'success');
-        const auxFinancialTransactions = [...financialTransactions];
-  
-        auxFinancialTransactions.find(x => x.id == id).payed = 1;
+	const markedPaid = (id) => {
+		markedPaidReq(id)
+			.then((res) => {
+				if (res.status == 200) {
+					Swal.fire("Ops", "Marcado como pago com sucesso!", "success");
+					const auxFinancialTransactions = [...financialTransactions];
 
-        setFinancialTransactions(auxFinancialTransactions); 
-      }
+					auxFinancialTransactions.find((x) => x.id == id).payed = 1;
 
-      return;
-    }).catch(err => {
-      Swal.fire('Ops', 'Houve um erro ao marcar como pago.', 'error');
-      return;
-    })
-  };
+					setFinancialTransactions(auxFinancialTransactions);
+				}
+
+				return;
+			})
+			.catch((err) => {
+				Swal.fire("Ops", "Houve um erro ao marcar como pago.", "error");
+				return;
+			});
+	};
 
 	const actionBody = (rowData) => {
 		return (
-			<div
-				style={{ maxWidth: 150 }}
-				className="d-flex justify-content-between"
-			>
-				<Link
-					to={`/financial-transaction/edit/${rowData.id}`}
-					type="button"
-					className="btn btn-primary"
-				>
+			<div style={{ maxWidth: 150 }} className="d-flex justify-content-between">
+				<Link to={`/financial-transaction/edit/${rowData.id}`} type="button" className="btn btn-primary">
 					<FontAwesomeIcon icon="fa-solid fa-pen-to-square" />
 				</Link>
 				<button
@@ -124,8 +109,7 @@ export default function List() {
 					onClick={(e) => {
 						e.preventDefault();
 						deleteRecord(rowData.id);
-					}}
-				>
+					}}>
 					<FontAwesomeIcon icon="fa-solid fa-trash" />
 				</button>
 				{!rowData?.payed && (
@@ -134,8 +118,7 @@ export default function List() {
 						onClick={(e) => {
 							e.preventDefault();
 							markedPaid(rowData.id);
-						}}
-					>
+						}}>
 						{" "}
 						<FontAwesomeIcon icon="fa-solid fa-arrow-down" />
 					</button>
@@ -154,41 +137,20 @@ export default function List() {
 				</div>
 				<div className="body">
 					<div className="database-header">
-						<Link
-							to="/financial-transaction/new"
-							variant="contained"
-							type="button"
-							className="btn btn-success"
-						>
-							<FontAwesomeIcon
-								style={{ marginRight: 5 }}
-								icon={faPlus}
-							/>
+						<Link to="/financial-transaction/new" variant="contained" type="button" className="btn btn-success">
+							<FontAwesomeIcon style={{ marginRight: 5 }} icon={faPlus} />
 							Novo lançamento
 						</Link>
 					</div>
 					<div style={{ width: "100%" }}>
-						<DataTable
-							value={financialTransactions}
-							stripedRows
-							showGridlines
-							paginator
-							rows={5}
-							rowsPerPageOptions={[5, 10, 25, 50]}
-							tableStyle={{ minWidth: "50rem" }}
-							filters={filters}
-							globalFilterFields={["cat_name"]}
-							header={header}
-							emptyMessage="Não há registros."
-						>
+						<DataTable value={financialTransactions} stripedRows showGridlines paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: "50rem" }} filters={filters} globalFilterFields={["note"]} header={header} emptyMessage="Não há registros.">
 							<Column field="note" header="Nome"></Column>
 							<Column
 								field="value"
 								header="Valor"
 								body={(rowData) => {
 									return maskCurrency(rowData.value);
-								}}
-							></Column>
+								}}></Column>
 							<Column header="Opções" body={actionBody}></Column>
 						</DataTable>
 					</div>

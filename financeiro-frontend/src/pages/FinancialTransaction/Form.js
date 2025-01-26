@@ -26,6 +26,7 @@ export default function IForm({ data, onSubmit, blockFields }) {
 		periodicity: "",
 		number_installments: 1,
 	});
+
 	const [isSubmitting, setSubmitting] = useState(false);
 	const [bankAccounts, setBankAccounts] = useState([]);
 	const [categories, setCategories] = useState([]);
@@ -154,8 +155,7 @@ export default function IForm({ data, onSubmit, blockFields }) {
 													onChange={(e) => {
 														handleChange(e);
 														onChangeCategory(e);
-													}}
-												>
+													}}>
 													{categories.map((obj, i) => {
 														return (
 															<MenuItem key={i} value={obj.id}>
@@ -216,7 +216,7 @@ export default function IForm({ data, onSubmit, blockFields }) {
 											<div className="form-group col-md-4">
 												<FormControl fullWidth>
 													<InputLabel id="select-state">Periocidade</InputLabel>
-													<Select disabled={blockFields}  labelId="select-state" id="select-state" value={values.periodicity} name="periodicity" label="Periodicidade" onChange={handleChange}>
+													<Select disabled={blockFields} labelId="select-state" id="select-state" value={values.periodicity} name="periodicity" label="Periodicidade" onChange={handleChange}>
 														<MenuItem value={7}>Semanal</MenuItem>
 														<MenuItem value={15}>Quinzenal</MenuItem>
 														<MenuItem value={30}>Mensal</MenuItem>
@@ -228,7 +228,15 @@ export default function IForm({ data, onSubmit, blockFields }) {
 											</div>
 
 											<div className="form-group col-md-4">
-												<TextField disabled={blockFields}  id="outlined" label="Quantidade de recorrências" type="number" fullWidth value={values.recurrencies} error={touched.recurrencies && errors.recurrencies ? true : false} name="recurrencies" onBlur={handleBlur} onChange={handleChange} />
+												<TextField disabled={blockFields} id="outlined" label="Quantidade de recorrências" type="number" fullWidth value={values.recurrencies} error={touched.recurrencies && errors.recurrencies ? true : false} name="recurrencies" onBlur={handleBlur} onChange={handleChange} />
+											</div>
+										</div>
+									)}
+
+									{values.periodicity_type === "UNICA" && (
+										<div className="form-row">
+											<div className="form-group col-md-12">
+												<TextField disabled={blockFields} id="outlined" label="Quantidade de parcelas" type="number" fullWidth value={values.number_installments} error={touched.number_installments && errors.number_installments ? true : false} name="number_installments" onBlur={handleBlur} onChange={handleChange} />
 											</div>
 										</div>
 									)}

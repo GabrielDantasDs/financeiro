@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import { DecimalJsLike } from "@prisma/client/runtime";
+import { DecimalJsLike } from "@prisma/client/runtime/library";
 
 export class Product implements Prisma.productUncheckedCreateInput{
     id?: number;

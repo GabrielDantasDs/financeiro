@@ -76,6 +76,7 @@ model financial_transaction {
   payed                Boolean
   periodicity          Int?
   recurrencies         Int?
+  number_installments  Int?
   bank_account_id      Int
   category             category                @relation(fields: [category_id], references: [id])
   client               client                  @relation(fields: [client_id], references: [id], onDelete: Cascade)
@@ -86,6 +87,19 @@ model financial_transaction {
   transactions         financial_transaction[] @relation("financial_transaction")
   cost_center          cost_center?            @relation(fields: [cost_center_id], references: [id])
   subscription         subscription_customer?  @relation(fields: [subscription_id], references: [id])
+  installments         installments[]
+
+  @@fulltext([note])
+}
+
+model installments {
+  id                       Int                   @id @default(autoincrement())
+  financial_transaction_id Int
+  value                    Decimal               @db.Decimal(6, 2)
+  due_date                 DateTime
+  invoice_date             DateTime              @default(now())
+  payment_date             DateTime?
+  financial_transaction    financial_transaction @relation(fields: [financial_transaction_id], references: [id], onDelete: Cascade)
 }
 
 model category {
@@ -174,4 +188,13 @@ model recurring_supplier_order {
   value                   Decimal  @db.Decimal(6, 2)
   recurrence_time_in_days Int
   supplier                supplier @relation(fields: [supplier_id], references: [id])
+}
+
+model recurring_financial_transaction {
+  id Int @id @default(autoincrement())
+  financial_transaction_id Int
+  recurrence_in_days Int
+  original_date DateTime
+  current_date DateTime?
+  next_date DateTime?
 }

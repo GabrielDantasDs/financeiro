@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client';
-import { DecimalJsLike } from '@prisma/client/runtime';
+import { DecimalJsLike } from '@prisma/client/runtime/library';
 import dayjs from 'dayjs';
 
 export class FinancialTransaction
@@ -21,4 +21,5 @@ export class FinancialTransaction
   payment_date: string | Date;
   periodicity?: number;
   supplier_id?: number;
+  number_installments?: number;
 }

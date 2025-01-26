@@ -84,7 +84,7 @@ export default function Report() {
 		setSubmitting(true);
 
 		search({
-			inital_date: initialDate.format(),
+			initial_date: initialDate.format(),
 			final_date: finalDate.format(),
 			type: type,
 			date_type: dateType,

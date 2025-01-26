@@ -29,10 +29,24 @@ export class FinancialTransactionService {
         i++;
       }
     }
+
+    if (data.number_installments) {
+      let i = 1;
+
+      while (i <= data.number_installments - 1) {
+        await this.prisma.installments.create({ data: { financial_transaction_id: financial_transaction.id, due_date: financial_transaction.due_date, value: financial_transaction.value } });
+      }
+    }
   }
 
-  findAll() {
-    return this.prisma.financial_transaction.findMany();
+  async findAll(search:string) {
+    return await this.prisma.financial_transaction.findMany({
+      where: {
+        note: {
+          startsWith: search 
+        }  
+      }
+    });
   }
 
   findOne(id: number) {
@@ -63,5 +77,9 @@ export class FinancialTransactionService {
 
   remove(id: number) {
     return this.prisma.financial_transaction.delete({ where: { id } });
+  }
+
+  async getCalendar(id: number) {
+    return await this.prisma.financial_transaction.findMany();
   }
 }

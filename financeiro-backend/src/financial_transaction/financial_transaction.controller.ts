@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Put,
+  Query,
 } from '@nestjs/common';
 import { FinancialTransactionService } from './financial_transaction.service';
 import { CreateFinancialTransactionDto } from './dto/create-financial_transaction.dto';
@@ -26,8 +27,8 @@ export class FinancialTransactionController {
   }
 
   @Get('list/:id')
-  findAll() {
-    return this.financialTransactionService.findAll();
+  findAll(@Query('search') search: string) {
+    return this.financialTransactionService.findAll(search);
   }
 
   @Get(':id')
@@ -60,5 +61,10 @@ export class FinancialTransactionController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.financialTransactionService.remove(+id);
+  }
+
+  @Get('calendar/:id')
+  getCalendar(@Param('id') id: string) {
+    return this.financialTransactionService.getCalendar(+id)
   }
 }

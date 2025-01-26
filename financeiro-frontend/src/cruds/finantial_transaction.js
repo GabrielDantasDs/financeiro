@@ -16,8 +16,15 @@ export const update = async (id, data) => {
   return response
 }
 
-export const list = async (id) => {
-  let response = await axios.get(constants.baseUrl + `/financial-transaction/list/${id}`,)
+export const list = async (id, search = "") => {
+  let url = "";
+  if (search != "") {
+    url = `/financial-transaction/list/${id}?search=${search}`;
+  } else {
+    url = `/financial-transaction/list/${id}`;
+  }
+
+  let response = await axios.get(constants.baseUrl + url,)
 
   return response
 }
@@ -52,6 +59,11 @@ export const getFinanceiro = async (id) => {
   return response
 }
 
+export const getCalendar = async (id) => {
+    let response = await axios.get(constants.baseUrl + `/financial-transaction/calendar/${id}`);
+
+	return response;
+}
 // export const getChartsData = async (id) => {
 //   let response = await axios.get(constants.baseUrl + `/financial-transaction/charts/${id}`)
 

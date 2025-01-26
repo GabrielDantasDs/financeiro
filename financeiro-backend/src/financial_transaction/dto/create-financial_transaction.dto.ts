@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client';
-import { Decimal, DecimalJsLike } from '@prisma/client/runtime';
+import { Decimal, DecimalJsLike } from '@prisma/client/runtime/library';
 import { FinancialTransaction } from '../entities/financial_transaction.entity';
 import {
   IsDate,
@@ -42,4 +42,8 @@ export class CreateFinancialTransactionDto extends FinancialTransaction {
 
   @IsOptional()
   recurrency: boolean;
+
+  @IsOptional()
+  @IsNumber()
+  number_installments?: number;
 }

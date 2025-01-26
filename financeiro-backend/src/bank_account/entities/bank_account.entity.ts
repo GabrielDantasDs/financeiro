@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { PartialType } from '@nestjs/mapped-types';
-import { DecimalJsLike } from "@prisma/client/runtime";
+import { DecimalJsLike } from "@prisma/client/runtime/library";
 
 export class BankAccount implements Prisma.bank_accountUncheckedCreateInput {
     client_id: number;

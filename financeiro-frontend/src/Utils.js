@@ -66,6 +66,13 @@ export function formatBRLInput(input) {
   return input;
 }
 
+export function formatBRL(value) {
+  value = Number(value.toString().replace(/[^0-9\.-]+/g, ""));
+
+	value = Number(value).toLocaleString("pt-br", { style: "currency", currency: "BRL" });
+	return value;
+}
+
 export function formatTelefone(value) {
   if (!value) return "";
   value = value.replace(/\D/g, "");
