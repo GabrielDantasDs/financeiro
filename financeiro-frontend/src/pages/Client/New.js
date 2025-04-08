@@ -28,6 +28,8 @@ import { useSelector } from "react-redux";
 export default function New() {
 	const [isSubmitting, setSubmitting] = useState(false);
 	const navigate = useNavigate();
+	const currentUser = useSelector((state) => state.auth.user);
+
 
 	const getIniitalState = () => {
 		return {
@@ -40,6 +42,7 @@ export default function New() {
 			state: "",
 			number: "",
 			city: "",
+			user_id: currentUser.id
 		};
 	};
 

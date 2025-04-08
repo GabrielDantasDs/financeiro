@@ -13,5 +13,6 @@ export class BankAccount implements Prisma.bank_accountUncheckedCreateInput {
     name: string;
     payment_method?: Prisma.payment_methodUncheckedCreateNestedManyWithoutBank_accountInput;
     type: string;
+    default?: boolean;
 }
 

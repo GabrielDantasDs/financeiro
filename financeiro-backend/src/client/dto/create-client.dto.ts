@@ -38,4 +38,6 @@ export class CreateClientDto extends Client{
 
     @IsEmail()
     email: string;
+
+    user_id: number;
 }

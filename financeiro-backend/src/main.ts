@@ -26,8 +26,6 @@ async function bootstrap() {
     forbidNonWhitelisted: true
   }));
 
-
-
   //Filter
   //app.useGlobalFilters(new UnauthorizedExceptionFilter());
 

@@ -19,20 +19,25 @@ import { CustomerModule } from './customer/customer.module';
 import { SupplierModule } from './supplier/supplier.module';
 import { ProductModule } from './product/product.module';
 import { SubscriptionModule } from './subscription/subscription.module';
+import { RagModule } from './rag/rag.module';
+import EventsGateway from './events.gateway';
+import { MessageService } from './message.service';
 
 @Module({
-  imports: [ConfigModule.forRoot(), PrismaModule, AuthModule, UserModule, DashboardModule, ClientModule, FinancialTransactionModule, BankAccountModule, CategoryModule, CostCenterModule, ReportModule, CustomerModule, SupplierModule, ProductModule, SubscriptionModule],
+  imports: [ConfigModule.forRoot(), PrismaModule, AuthModule, UserModule, DashboardModule, ClientModule, FinancialTransactionModule, BankAccountModule, CategoryModule, CostCenterModule, ReportModule, CustomerModule, SupplierModule, ProductModule, SubscriptionModule, RagModule],
   controllers: [AppController],
   providers: [
     AppService,
     {
       provide: APP_GUARD,
-      useClass: JwtAuthGuard
+      useClass: JwtAuthGuard,
     },
     {
       provide: APP_GUARD,
-      useClass: RolesGuard
-    }
+      useClass: RolesGuard,
+    },
+    MessageService,
+    EventsGateway,
   ],
 })
 export class AppModule {};

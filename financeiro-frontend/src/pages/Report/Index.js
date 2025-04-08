@@ -33,7 +33,7 @@ export default function Report() {
 	const [categories, setCategories] = useState([]);
 	const [bankAccounts, setBankAccounts] = useState([]);
 	const client = useSelector((state) => state.client);
-	const [initialDate, setInitialDate] = useState(dayjs());
+	const [initialDate, setInitialDate] = useState(dayjs().subtract(1, "week"));
 	const [finalDate, setFinalDate] = useState(dayjs());
 	const [type, setType] = useState("SALDO");
 	const [category, setCategory] = useState("");
@@ -348,7 +348,7 @@ export default function Report() {
 									field="category"
 									header="Categoria"
 									body={(rowData) => {
-										return rowData.category.name;
+										return rowData.category ? rowData.category.name : 'Não especificado';
 									}}
 								></Column>
 								<Column

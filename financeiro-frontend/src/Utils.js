@@ -147,3 +147,14 @@ export function removeSpecialCharacters(value) {
   return value.replace(/^a-zA-Z0-9 ]/g, '');
 }
 
+export const formatCurrency = (value) => {
+  if (value < 0) {
+    value = value * -1;
+  }
+  
+  return new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL'
+  }).format(value || 0);
+};
+

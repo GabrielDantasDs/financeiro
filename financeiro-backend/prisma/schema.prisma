@@ -17,10 +17,12 @@ model user {
   email      String   @unique
   name       String?
   created_at DateTime @default(now())
+  client     client[]
 }
 
 model client {
   id                    Int                     @id @default(autoincrement())
+  user_id               Int
   name                  String
   email                 String
   document              String
@@ -32,6 +34,7 @@ model client {
   city                  String
   zip_code              String
   created_at            DateTime                @default(now())
+  user                  user                  @relation(fields: [user_id], references: [id])
   financial_transaction financial_transaction[]
   customer              customer[]
   supplier              supplier[]
@@ -68,7 +71,7 @@ model financial_transaction {
   cost_center_id       Int?
   type                 String
   value                Decimal                 @db.Decimal(6, 2)
-  category_id          Int
+  category_id          Int?
   invoice_date         DateTime                @default(now())
   due_date             DateTime                @default(now())
   payment_date         DateTime?
@@ -78,7 +81,7 @@ model financial_transaction {
   recurrencies         Int?
   number_installments  Int?
   bank_account_id      Int
-  category             category                @relation(fields: [category_id], references: [id])
+  category             category?                @relation(fields: [category_id], references: [id])
   client               client                  @relation(fields: [client_id], references: [id], onDelete: Cascade)
   bank_account         bank_account            @relation(fields: [bank_account_id], references: [id])
   customer             customer?               @relation(fields: [customer_id], references: [id])
@@ -139,6 +142,7 @@ model bank_account {
   date_inicial_value    DateTime
   type                  String
   description           String
+  default               Boolean                 @default(false)
   client                client                  @relation(fields: [client_id], references: [id], onDelete: Cascade)
   financial_transaction financial_transaction[]
   payment_method        payment_method[]

@@ -1,6 +1,9 @@
 import { Prisma } from "@prisma/client";
 
 export class Client implements Prisma.clientUncheckedCreateInput {
+    user_id: number;
+    category?: Prisma.categoryUncheckedCreateNestedManyWithoutClientInput;
+    product?: Prisma.productUncheckedCreateNestedManyWithoutClientInput;
     address: string;
     bank_account?: Prisma.bank_accountUncheckedCreateNestedManyWithoutClientInput;
     city: string;

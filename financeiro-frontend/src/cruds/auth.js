@@ -17,6 +17,7 @@ export const login = (data, navigate) => {
       axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + localStorage.getItem("access_token")?.replace(/['"]+/g, "");
+      console.log(res.data.user)
       dispatch(loginAction({user: res.data.user}));
       navigate("/");
     });

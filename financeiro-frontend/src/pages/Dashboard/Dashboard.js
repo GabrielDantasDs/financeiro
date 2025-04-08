@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 
 export default function Dashboard() {
   const [user, setUser] = useState();
+  const [data, setData] = useState();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -20,7 +21,8 @@ export default function Dashboard() {
           );
         })
         .then((res) => {
-          setUser(res.data);
+          setUser(res.data.user);
+          setData(res.data.dashboardData);
         })
         .finally(() => {
           setLoading(false);
@@ -35,7 +37,7 @@ export default function Dashboard() {
       {!loading && (
         <div className="main">
           <div className="main_title">
-            <img src={hello} alt="hello" />
+            {/* <img src={hello} alt="hello" /> */}
             <div className="main_greeting">
               <h1>Olá {user.name}</h1>
               <p>Bem vindo ao seu painel</p>
@@ -44,10 +46,10 @@ export default function Dashboard() {
 
           <div className="main_cards">
             <div className="card">
-              <i className="fa fa-file-text fa-2x text-lightblue"></i>
+              <i className="fa fa-user fa-2x text-lightblue"></i>
               <div className="card_inner">
-                <p className="text-primary-p">Número de clientes</p>
-                <span className="font-bold text-title">578</span>
+                <span className="text-primary-p">Número de clientes</span>
+                <span className="font-bold text-title">{data.clientsCount}</span>
               </div>
             </div>
           </div>

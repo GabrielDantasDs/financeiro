@@ -12,6 +12,20 @@ export class FinancialTransactionService {
   async create(createFinancialTransactionDto: CreateFinancialTransactionDto) {
     let data = createFinancialTransactionDto;
     let due_date = data.due_date;
+    console.log(data)
+    if (!data.bank_account_id) {
+      const bank_account = await this.prisma.bank_account.findFirst({
+        where: {
+          client_id: data.client_id,
+        }
+      });
+
+      if (!bank_account) {
+        throw new Error('Conta bancária não encontrada');
+      }
+
+      data = { ...data, bank_account_id: bank_account.id };
+    }
 
     const financial_transaction = await this.prisma.financial_transaction.create({
       data: data,

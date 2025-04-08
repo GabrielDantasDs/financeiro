@@ -61,5 +61,12 @@
 		"icon": "calendar",
 		"active": "calendar",
 		"cliente": true
+	},
+	{
+		"name": "Importar OFX",
+		"url": "import-ofx",
+		"icon": "file-import",
+		"active": "import-ofx",
+		"cliente": true
 	}
 ]

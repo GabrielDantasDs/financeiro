@@ -32,7 +32,6 @@ export default function List() {
 				setFinancialTransactions([...res.data]);
 			})
 			.catch((err) => {
-				console.log(err)
 				Swal.fire("Ops", "Houve um erro ao buscar a lista de lançamentos.", "error");
 			});
 	};
@@ -137,9 +136,10 @@ export default function List() {
 				</div>
 				<div className="body">
 					<div className="database-header">
-						<Link to="/financial-transaction/new" variant="contained" type="button" className="btn btn-success">
-							<FontAwesomeIcon style={{ marginRight: 5 }} icon={faPlus} />
-							Novo lançamento
+						<Link to="/financial-transaction/new" variant="contained" type="button">
+							<Button startIcon={<FontAwesomeIcon icon={faPlus} />} variant="contained" color="success">
+								Novo lançamento
+							</Button>
 						</Link>
 					</div>
 					<div style={{ width: "100%" }}>
@@ -151,6 +151,11 @@ export default function List() {
 								body={(rowData) => {
 									return maskCurrency(rowData.value);
 								}}></Column>
+							<Column header="Data de vencimento" field="due_date" body={
+								(rowData) => {
+									return new Date(rowData.due_date).toLocaleDateString();
+								}
+							}></Column>
 							<Column header="Opções" body={actionBody}></Column>
 						</DataTable>
 					</div>

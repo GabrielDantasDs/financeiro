@@ -13,7 +13,8 @@ export class DashboardController {
   async get(@Request() req: any) {
     const id_user = req.user.id
   
-    return this.dashboardService.find(id_user).then(data => {
+    return this.dashboardService.getDashboardData(id_user).then(data => {
+      console.log(data)
       return data
     }).catch(error => {
       return error;

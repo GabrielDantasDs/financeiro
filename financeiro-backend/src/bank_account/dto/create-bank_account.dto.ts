@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client';
 import { BankAccount } from '../entities/bank_account.entity';
 
-import { IsDateString, IsNumber, IsNumberString, IsString} from 'class-validator';
+import { IsBoolean, IsDateString, IsNumber, IsNumberString, IsString} from 'class-validator';
 import { PartialType } from '@nestjs/mapped-types';
 import { DecimalJsLike } from '@prisma/client/runtime/library';
 
@@ -26,4 +26,7 @@ export class CreateBankAccountDto extends BankAccount {
 
     @IsString()
     type: string;
+
+    @IsBoolean()
+    default: boolean;
 }

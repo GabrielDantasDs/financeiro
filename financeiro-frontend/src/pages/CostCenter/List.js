@@ -102,42 +102,27 @@ export default function List() {
   const header = renderHeader();
 
   return (
-    <div className="main">
-      <div className="container">
-        <div className="header">
-          <h1 className="screen-title">Centro de custo</h1>
-        </div>
-        <div className="body">
-          <div className="database-header">
-            <Link
-              to="/cost-center/new"
-              variant="contained"
-              type="button"
-              className="btn btn-success"
-            >
-              <FontAwesomeIcon style={{ marginRight: 5 }} icon={faPlus} />
-              Novo centro de custo
-            </Link>
-          </div>
-          <div style={{ width: "100%" }}>
-            <DataTable
-              value={cost_centers}
-              stripedRows
-              showGridlines
-              paginator
-              rows={5}
-              rowsPerPageOptions={[5, 10, 25, 50]}
-              tableStyle={{ minWidth: "50rem" }}
-              globalFilterFields={["cat_name"]}
-              header={header}
-              emptyMessage="Não há registros."
-            >
-              <Column field="name" header="Nome"></Column>
-              <Column header="Opções" body={actionBody}></Column>
-            </DataTable>
-          </div>
-        </div>
-      </div>
-    </div>
+		<div className="main">
+			<div className="container">
+				<div className="header">
+					<h1 className="screen-title">Centro de custo</h1>
+				</div>
+				<div className="body">
+					<div className="database-header">
+						<Link to="/cost-center/new" variant="contained" type="button">
+							<Button startIcon={<FontAwesomeIcon icon={faPlus} />} variant="contained" color="success">
+								Novo centro de custo
+							</Button>
+						</Link>
+					</div>
+					<div style={{ width: "100%" }}>
+						<DataTable value={cost_centers} stripedRows showGridlines paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: "50rem" }} globalFilterFields={["cat_name"]} header={header} emptyMessage="Não há registros.">
+							<Column field="name" header="Nome"></Column>
+							<Column header="Opções" body={actionBody}></Column>
+						</DataTable>
+					</div>
+				</div>
+			</div>
+		</div>
   );
 }

@@ -2,6 +2,7 @@ import Login from "./pages/Login";
 import Cliente from "./pages/Clientes/Index";
 import Categoria from "./pages/Category/Index";
 import Dashboard from "./pages/Dashboard/Index";
+import DashboardClient from "./pages/DashboardClient/Index";
 import BankAccount from "./pages/BankAccount/Index";
 import Client from "./pages/Client/Index";
 import Report from "./pages/Report/Index";
@@ -24,6 +25,7 @@ import { useEffect, useState } from "react";
 import Navbar from "./components/navbar/Navbar";
 import SideBar from "./components/sidebar/Sidebar";
 import Register from "./pages/Register";
+import OfxImport from "./pages/OfxImport/Index";
 
 library.add(fas);
 
@@ -36,20 +38,17 @@ function App() {
 	return (
 		<LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pt-br">
 			<div className="min-vh-100">
-				<Navbar />
+				{auth.isAuthenticated && <Navbar />}
 				<div className="d-flex min-vh-100">
 					{auth.isAuthenticated && <SideBar />}
 					{cliente ? (
 						<Routes>
-							<Route
-								path="/"
-								element={<ProtectedRoute></ProtectedRoute>}
-							></Route>
+							<Route path="/" element={<ProtectedRoute></ProtectedRoute>}></Route>
 							<Route
 								path="/dashboard/*"
 								element={
 									<ProtectedRoute>
-										<Dashboard />
+										<DashboardClient />
 									</ProtectedRoute>
 								}
 							/>
@@ -66,6 +65,14 @@ function App() {
 								element={
 									<ProtectedRoute>
 										<FinancialTransaction />
+									</ProtectedRoute>
+								}
+							/>
+							<Route
+								path="/import-ofx"
+								element={
+									<ProtectedRoute>
+										<OfxImport />
 									</ProtectedRoute>
 								}
 							/>
@@ -110,18 +117,11 @@ function App() {
 								}
 							/>
 							<Route exact path="/auth" element={<Login />} />
-							<Route
-								exact
-								path="/register"
-								element={<Register />}
-							/>
+							<Route exact path="/register" element={<Register />} />
 						</Routes>
 					) : (
 						<Routes>
-							<Route
-								path="/"
-								element={<ProtectedRoute></ProtectedRoute>}
-							></Route>
+							<Route path="/" element={<ProtectedRoute></ProtectedRoute>}></Route>
 							<Route
 								path="/dashboard/*"
 								element={
@@ -140,11 +140,7 @@ function App() {
 							/>
 
 							<Route exact path="/auth" element={<Login />} />
-							<Route
-								exact
-								path="/register"
-								element={<Register />}
-							/>
+							<Route exact path="/register" element={<Register />} />
 						</Routes>
 					)}
 				</div>

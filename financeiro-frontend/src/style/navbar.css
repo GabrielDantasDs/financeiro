@@ -1,27 +1,30 @@
 .navbar {
-    background: #FFF;
+    background: white;
     grid-area: nav;
     height: 60px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 30px 0 30px;
+    padding: 0 30px;
     border-bottom: 1px solid lightgrey;
+    color: black;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .nav_icon {
     display: none;
+    cursor: pointer;
 }
 
 .nav_icon > i {
     font-size: 26px;
-    color: #a5aaad;
+    color: black;
 }
 
 .navbar_left > a {
     margin-right: 30px;
     text-decoration: none;
-    color: #a5aaad;
+    color: black;
     font-size: 15px;
     font-weight: 700;
 }
@@ -30,6 +33,29 @@
     color: #265acc;
     border-bottom: 3px solid #265acc;
     padding-bottom: 12px;
+}
+
+.navbar_center {
+    position: relative;
+    flex-grow: 1;
+    max-width: 400px;
+    margin: 0 20px;
+}
+
+.search_input {
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    outline: none;
+}
+
+.search_icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
 }
 
 .navbar_right {
@@ -41,15 +67,33 @@
 .navbar_right > a {
     margin-left: 20px;
     text-decoration: none;
-}_
+    color: black;
+}
 
 .navbar_right > a > i {
-    color: #a5aaad;
+    color: black;
     font-size: 16px;
     border-radius: 50px;
     background: #FFF;
     box-shadow: 2px 2px 5px #d9d9d9, -2px -2px 5px #FFFF;
     padding: 7px;
+}
+
+.dropdown-toggle {
+    cursor: pointer;
+}
+
+.dropdown-menu {
+    background-color: white;
+    color: black;
+}
+
+.dropdown-item {
+    cursor: pointer;
+}
+
+.dropdown-item:hover {
+    background-color: #f1f1f1;
 }
 
 @media only screen and (max-width: 978px) {

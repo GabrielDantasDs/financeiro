@@ -20,7 +20,13 @@ export default function Index() {
 				const events = res.data.map(event => {
 					return {
 						'title': event.note + " " + formatBRL(event.value),
-						'date': dayjs(event.due_date).format('YYYY-MM-DD')
+						'date': dayjs(event.due_date).format('YYYY-MM-DD'),
+						'value': event.value,
+						'due_date': event.due_date,
+						'invoice_date': event.invoice_date,
+						'payed': event.payed,
+						'note': event.note,
+						'type': event.type
 					}
 				});
 
