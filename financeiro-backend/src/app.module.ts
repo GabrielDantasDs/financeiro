@@ -22,9 +22,11 @@ import { SubscriptionModule } from './subscription/subscription.module';
 import { RagModule } from './rag/rag.module';
 import EventsGateway from './events.gateway';
 import { MessageService } from './message.service';
+import { RagService } from './rag/rag.service';
+
 
 @Module({
-  imports: [ConfigModule.forRoot(), PrismaModule, AuthModule, UserModule, DashboardModule, ClientModule, FinancialTransactionModule, BankAccountModule, CategoryModule, CostCenterModule, ReportModule, CustomerModule, SupplierModule, ProductModule, SubscriptionModule, RagModule],
+  imports: [ConfigModule.forRoot(), PrismaModule, AuthModule, UserModule, DashboardModule, ClientModule, FinancialTransactionModule, BankAccountModule, CategoryModule, CostCenterModule, ReportModule, CustomerModule, SupplierModule, ProductModule, SubscriptionModule, RagModule, RagModule],
   controllers: [AppController],
   providers: [
     AppService,
@@ -38,6 +40,7 @@ import { MessageService } from './message.service';
     },
     MessageService,
     EventsGateway,
+    RagService,
   ],
 })
 export class AppModule {};

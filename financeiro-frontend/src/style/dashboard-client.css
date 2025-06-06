@@ -103,7 +103,7 @@
 }
 
 /* Add media queries for responsiveness */
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 1280px) {
     .main_cards {
         grid-template-columns: repeat(2, 1fr); /* 2 cards per row on medium screens */
     }

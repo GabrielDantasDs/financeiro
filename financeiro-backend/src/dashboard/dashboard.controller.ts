@@ -11,13 +11,31 @@ export class DashboardController {
 
   @Get()
   async get(@Request() req: any) {
-    const id_user = req.user.id
-  
-    return this.dashboardService.getDashboardData(id_user).then(data => {
-      console.log(data)
-      return data
-    }).catch(error => {
-      return error;
-    });
+    const id_user = req.user.id;
+
+    return this.dashboardService
+      .getDashboardData(id_user)
+      .then((data) => {
+        console.log(data);
+        return data;
+      })
+      .catch((error) => {
+        return error;
+      });
+  }
+
+  @Get('/client/:id')
+  async getDashboardClient(@Param('id') id: string) {
+    const id_number = parseInt(id);
+
+    return this.dashboardService
+      .getDashboardClientData(id_number)
+      .then((data) => {
+        console.log(data);
+        return data;
+      })
+      .catch((error) => {
+        return error;
+      });
   }
 }

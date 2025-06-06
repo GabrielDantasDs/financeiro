@@ -27,8 +27,9 @@ export class FinancialTransactionController {
   }
 
   @Get('list/:id')
-  findAll(@Query('search') search: string) {
-    return this.financialTransactionService.findAll(search);
+  findAll(@Param('id') id:string, @Query('search') search: string) {
+    const clientId = parseInt(id, 10);
+    return this.financialTransactionService.findAll(clientId, search);
   }
 
   @Get(':id')

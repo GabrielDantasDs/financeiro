@@ -21,8 +21,37 @@ export class DashboardService {
     return {
       user,
       dashboardData: {
-        clientsCount
+        clientsCount,
       },
     };
+  }
+
+  async getDashboardClientData(clientId: number) {
+    const receitaSum = await this.prisma.financial_transaction.aggregate({
+      _sum: {
+        value: true,
+      },
+      where: {
+        client_id: clientId,
+        type: 'RECEITA',
+      },
+    });
+
+    const despesaSum = await this.prisma.financial_transaction.aggregate({
+      _sum: {
+        value: true,
+      },
+      where: {
+        client_id: clientId,
+        type: 'DESPESA',
+      },
+    });
+
+    const data = {
+      receitaSum: receitaSum._sum.value || 0,
+      despesaSum: despesaSum._sum.value || 0,
+    };
+
+    return data;
   }
 }

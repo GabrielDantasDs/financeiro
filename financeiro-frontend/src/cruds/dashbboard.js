@@ -15,3 +15,9 @@ export const get = async () => {
 
   return response;
 };
+
+export const getDashboardClient = async (clientId) => {
+  let response = await axios.get(constants.baseUrl + `/dashboard/client/${clientId}`,);
+
+  return response;
+}

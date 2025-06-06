@@ -68,5 +68,12 @@
 		"icon": "file-import",
 		"active": "import-ofx",
 		"cliente": true
+	},
+	{
+		"name": "Chat Bot",
+		"url": "chat-bot",
+		"icon": "robot",
+		"active": "chat-bot",
+		"cliente": true
 	}
 ]

@@ -1,14 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { CreateMessageDto } from './dto/create-rag.dto';
 import { UpdateRagDto } from './dto/update-rag.dto';
-import { ChatInput } from 'rag-dantas';
+import { MessageService } from 'src/message.service';
 
 @Injectable()
 export class RagService {
-  create(CreateMessageDto: CreateMessageDto) {
-    const chatTemplate = new ChatInput();
-    chatTemplate.receiveMessage(CreateMessageDto.text);
-    return chatTemplate.getInput();
+  private messageService: MessageService;
+  constructor() {
+    this.messageService = new MessageService();
+  }
+
+  async create(CreateMessageDto: CreateMessageDto) {
+    await this.messageService.initializeChat();
+    const response = await this.messageService.processMessage(CreateMessageDto);
+    return response;
   }
 
   findAll() {

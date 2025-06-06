@@ -3,7 +3,6 @@ import { CreateFinancialTransactionDto } from './dto/create-financial_transactio
 import { UpdateFinancialTransactionDto } from './dto/update-financial_transaction.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { FinancialTransaction } from './entities/financial_transaction.entity';
-import * as dayjs from 'dayjs';
 import { calcRecurrenceDate } from './financial_transaction.utils';
 
 @Injectable()
@@ -12,7 +11,7 @@ export class FinancialTransactionService {
   async create(createFinancialTransactionDto: CreateFinancialTransactionDto) {
     let data = createFinancialTransactionDto;
     let due_date = data.due_date;
-    console.log(data)
+
     if (!data.bank_account_id) {
       const bank_account = await this.prisma.bank_account.findFirst({
         where: {
@@ -53,12 +52,13 @@ export class FinancialTransactionService {
     }
   }
 
-  async findAll(search:string) {
+  async findAll(client_id: number, search:string) {
     return await this.prisma.financial_transaction.findMany({
       where: {
         note: {
           startsWith: search 
-        }  
+        },
+        client_id: client_id, 
       }
     });
   }

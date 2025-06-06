@@ -18,8 +18,9 @@ export default class EventsGateway implements OnGatewayConnection, OnGatewayDisc
   }
 
   @SubscribeMessage('events')
-  handleEvents(@MessageBody() data: any) {
-    const response = this.ragService.create(data);
+  async handleEvents(@MessageBody() data: any) {
+    console.log(data)
+    const response = await this.ragService.create(data);
     this.server.emit("events", response)
   }
 }

@@ -26,6 +26,7 @@ import Navbar from "./components/navbar/Navbar";
 import SideBar from "./components/sidebar/Sidebar";
 import Register from "./pages/Register";
 import OfxImport from "./pages/OfxImport/Index";
+import ChatBot from "./pages/ChatBot/Index";
 
 library.add(fas);
 
@@ -73,6 +74,14 @@ function App() {
 								element={
 									<ProtectedRoute>
 										<OfxImport />
+									</ProtectedRoute>
+								}
+							/>
+							<Route
+								path="/chat-bot"
+								element={
+									<ProtectedRoute>
+										<ChatBot />
 									</ProtectedRoute>
 								}
 							/>

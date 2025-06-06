@@ -8,11 +8,17 @@ import { MessageService } from 'src/message.service';
 
 @Controller('chat')
 export class RagController {
-  constructor(private readonly ragService: RagService, private messageService: MessageService) {}
+  chat: any;
+  constructor(
+    private readonly ragService: RagService,
+    private messageService: MessageService,
+  ) {}
 
   @Post()
-  create(@Body() CreateMessageDto: CreateMessageDto, @Res() res: Response) {
-      return this.messageService.processMessage(CreateMessageDto.text);
+  async create(@Body() CreateMessageDto: CreateMessageDto, @Res() res: Response) {
+    await this.messageService.initializeChat();
+    const response = await this.messageService.processMessage(CreateMessageDto);
+    return response;
   }
 
   @Get()
