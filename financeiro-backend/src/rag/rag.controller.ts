@@ -5,14 +5,26 @@ import { UpdateRagDto } from './dto/update-rag.dto';
 import EventsGateway from 'src/events.gateway';
 import { Response } from 'express';
 import { MessageService } from 'src/message.service';
+import { ChatService } from './chat.service';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('chat')
 export class RagController {
-  constructor(private readonly ragService: RagService, private messageService: MessageService) {}
+  chat: any;
+  constructor(
+    private readonly ragService: RagService,
+    private messageService: MessageService,
+    private chatService: ChatService,
+    private configSerivce: ConfigService,
+  ) {
+    this.chatService = new ChatService(this.configSerivce);
+  }
 
   @Post()
-  create(@Body() CreateMessageDto: CreateMessageDto, @Res() res: Response) {
-      return this.messageService.processMessage(CreateMessageDto.text);
+  async create(@Body() createMessageDto: CreateMessageDto, @Res() res: Response) {
+    const response = await this.chatService.processMessage(createMessageDto.text);
+
+    return response;
   }
 
   @Get()

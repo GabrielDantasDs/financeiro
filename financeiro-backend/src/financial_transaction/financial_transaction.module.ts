@@ -4,10 +4,13 @@ import { RecurringFinancialTransactionService } from './recurring_financial_tran
 import { FinancialTransactionController } from './financial_transaction.controller';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { PrismaModule } from 'src/prisma/prisma.module';
+import { CategoryService } from 'src/category/category.service';
+import { AgentService } from 'src/rag/agent.service';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [PrismaModule],
+  imports: [PrismaModule, ConfigModule.forRoot()],
   controllers: [FinancialTransactionController],
-  providers: [FinancialTransactionService, RecurringFinancialTransactionService, PrismaService]
+  providers: [FinancialTransactionService, RecurringFinancialTransactionService, PrismaService, CategoryService, AgentService]
 })
 export class FinancialTransactionModule {}

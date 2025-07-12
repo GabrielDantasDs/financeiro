@@ -3,7 +3,7 @@ import { CreateReportDto } from './dto/create-report.dto';
 import { UpdateReportDto } from './dto/update-report.dto';
 import { RequestDto } from './dto/request-report.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import * as dayjs from 'dayjs'
+import dayjs from 'dayjs';
 
 @Injectable()
 export class ReportService {

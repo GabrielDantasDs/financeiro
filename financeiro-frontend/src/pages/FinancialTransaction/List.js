@@ -98,13 +98,13 @@ export default function List() {
 
 	const actionBody = (rowData) => {
 		return (
-			<div style={{ maxWidth: 150 }} className="d-flex justify-content-between">
-				<Link to={`/financial-transaction/edit/${rowData.id}`} type="button" className="btn btn-primary">
+			<div style={{ maxWidth: 300 }} className="d-flex">
+				<Link to={`/financial-transaction/edit/${rowData.id}`} type="button" className="btn btn-primary ms-2">
 					<FontAwesomeIcon icon="fa-solid fa-pen-to-square" />
 				</Link>
 				<button
 					type="button"
-					className="btn btn-danger"
+					className="btn btn-danger ms-2"
 					onClick={(e) => {
 						e.preventDefault();
 						deleteRecord(rowData.id);
@@ -113,7 +113,7 @@ export default function List() {
 				</button>
 				{!rowData?.payed && (
 					<button
-						className="btn btn-success"
+						className="btn btn-success ms-2"
 						onClick={(e) => {
 							e.preventDefault();
 							markedPaid(rowData.id);

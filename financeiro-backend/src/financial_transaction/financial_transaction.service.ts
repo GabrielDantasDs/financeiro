@@ -3,21 +3,31 @@ import { CreateFinancialTransactionDto } from './dto/create-financial_transactio
 import { UpdateFinancialTransactionDto } from './dto/update-financial_transaction.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { FinancialTransaction } from './entities/financial_transaction.entity';
-import * as dayjs from 'dayjs';
 import { calcRecurrenceDate } from './financial_transaction.utils';
+import { AgentService } from 'src/rag/agent.service';
+import { ConfigService } from '@nestjs/config';
+import { CategoryService } from 'src/category/category.service';
 
 @Injectable()
 export class FinancialTransactionService {
-  constructor(private readonly prisma: PrismaService) {}
+  private agent: AgentService;
+
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly category: CategoryService,
+    private config: ConfigService,
+  ) {
+    this.agent = new AgentService(config, 'Classificar as transações segundo o nome/descrição');
+  }
   async create(createFinancialTransactionDto: CreateFinancialTransactionDto) {
     let data = createFinancialTransactionDto;
     let due_date = data.due_date;
-    console.log(data)
+
     if (!data.bank_account_id) {
       const bank_account = await this.prisma.bank_account.findFirst({
         where: {
           client_id: data.client_id,
-        }
+        },
       });
 
       if (!bank_account) {
@@ -25,6 +35,24 @@ export class FinancialTransactionService {
       }
 
       data = { ...data, bank_account_id: bank_account.id };
+    }
+
+    if (!data.category_id) {
+      await this.agent.init('Classificar as transações segundo o nome/descrição');
+
+      const categories = await this.category.simpleList(data.client_id.toString());
+
+      if (categories.length > 0) {
+        const categoriesName = categories.map((item) => item.name);
+
+        const category = await this.agent.classify(data.note, categoriesName);
+
+        const findCategory = categories.find((item) => item.name == category);
+
+        if (findCategory) {
+          data.category_id = findCategory.id;
+        }
+      }
     }
 
     const financial_transaction = await this.prisma.financial_transaction.create({
@@ -53,13 +81,14 @@ export class FinancialTransactionService {
     }
   }
 
-  async findAll(search:string) {
+  async findAll(client_id: number, search: string) {
     return await this.prisma.financial_transaction.findMany({
       where: {
         note: {
-          startsWith: search 
-        }  
-      }
+          startsWith: search,
+        },
+        client_id: client_id,
+      },
     });
   }
 

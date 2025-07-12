@@ -28,7 +28,7 @@
 
 .main_cards {
     display: grid;
-    grid-template-columns: repeat(4, 1fr); /* Show 4 cards per row */
+    grid-template-columns: repeat(3, 1fr); /* Show 4 cards per row */
     gap: 20px;
     margin: 20px;
     padding: 0 20px;
@@ -58,7 +58,6 @@
     flex-direction: row; /* Change to row for horizontal alignment */
     align-items: center;
     justify-content: space-between; /* Space between text and value */
-    width: 100%;
 }
 
 .card_inner > .text-title {
@@ -66,7 +65,7 @@
 }
 
 .card_inner > .text-primary-p {
-    font-size: 20px !important;
+    font-size: 16px !important;
 }
 
 .text-primary-p {
@@ -103,7 +102,7 @@
 }
 
 /* Add media queries for responsiveness */
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 1280px) {
     .main_cards {
         grid-template-columns: repeat(2, 1fr); /* 2 cards per row on medium screens */
     }

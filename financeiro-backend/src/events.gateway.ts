@@ -1,11 +1,18 @@
 import { ConnectedSocket, MessageBody, OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Socket, Server } from 'socket.io';
 import { MessageService } from './message.service';
-import { RagService } from './rag/rag.service';
+import { ChatService } from './rag/chat.service';
+import { ConfigService } from '@nestjs/config';
 
 @WebSocketGateway(3001, {})
 export default class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
-  constructor(private messageService: MessageService, private ragService:RagService) {}
+  constructor(
+    private messageService: MessageService,
+    private chatService: ChatService,
+    private configService: ConfigService,
+  ) {
+    this.chatService = new ChatService(configService);
+  }
   @WebSocketServer()
   server: Server;
 
@@ -18,8 +25,11 @@ export default class EventsGateway implements OnGatewayConnection, OnGatewayDisc
   }
 
   @SubscribeMessage('events')
-  handleEvents(@MessageBody() data: any) {
-    const response = this.ragService.create(data);
-    this.server.emit("events", response)
+  async handleEvents(@MessageBody() data: any) {
+    await this.chatService.initChat();
+    console.log(data)
+    const response = await this.chatService.processMessage(data.text, data.clientId);
+
+    this.server.emit('events', response);
   }
 }

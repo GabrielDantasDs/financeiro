@@ -1,4 +1,4 @@
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 
 export function calcRecurrenceDate(due_date: string | Date, periodicity: number) {
   let date = dayjs(due_date, 'YYYY-MM-DD HH:mm:ss').toDate();
