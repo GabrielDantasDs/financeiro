@@ -9,7 +9,6 @@ import { ChatPromptTemplate } from '@langchain/core/prompts';
 @Injectable()
 export class RagService {
   private messageService: MessageService;
-
   constructor() {
     this.messageService = new MessageService();
   }
