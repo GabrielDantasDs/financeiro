@@ -22,7 +22,7 @@ export class RagController {
 
   @Post()
   async create(@Body() createMessageDto: CreateMessageDto, @Res() res: Response) {
-    const response = await this.chatService.processMessage(createMessageDto.text, 0);
+    const response = await this.chatService.processMessage(createMessageDto.text, '0');
 
     return response;
   }

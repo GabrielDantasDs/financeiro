@@ -148,9 +148,9 @@ export function removeSpecialCharacters(value) {
 }
 
 export const formatCurrency = (value) => {
-  if (value < 0) {
-    value = value * -1;
-  }
+  // if (value < 0) {
+  //   value = value * -1;
+  // }
   
   return new Intl.NumberFormat('pt-BR', {
     style: 'currency',
