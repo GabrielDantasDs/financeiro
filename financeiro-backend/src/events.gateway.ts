@@ -1,13 +1,11 @@
 import { ConnectedSocket, MessageBody, OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Socket, Server } from 'socket.io';
-import { MessageService } from './message.service';
 import { ChatService } from './rag/chat.service';
 import { ConfigService } from '@nestjs/config';
 
 @WebSocketGateway(3001, {})
 export default class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(
-    private messageService: MessageService,
     private chatService: ChatService,
     private configService: ConfigService,
   ) {

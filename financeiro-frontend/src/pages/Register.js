@@ -156,6 +156,8 @@ export default function Register() {
                   label="Repetir a senha"
                   onChange={handleChange}
                   onBlur={handleBlur}
+                  error={errors.confirm_password ? true : false}
+                  helperText={errors.confirm_password}
                   value={values.confirm_password}
                   InputProps={{
                     endAdornment: (

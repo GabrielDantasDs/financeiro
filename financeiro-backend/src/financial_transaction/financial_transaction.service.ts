@@ -7,6 +7,7 @@ import { calcRecurrenceDate } from './financial_transaction.utils';
 import { AgentService } from 'src/rag/agent.service';
 import { ConfigService } from '@nestjs/config';
 import { CategoryService } from 'src/category/category.service';
+import { Info } from 'src/rag/dto/info-create.dto';
 
 @Injectable()
 export class FinancialTransactionService {
@@ -79,6 +80,29 @@ export class FinancialTransactionService {
         await this.prisma.installments.create({ data: { financial_transaction_id: financial_transaction.id, due_date: financial_transaction.due_date, value: financial_transaction.value } });
       }
     }
+
+    const category = await this.prisma.category.findFirst({
+      where: {
+        id: financial_transaction.category_id,
+      },
+    });
+
+    const client = await this.prisma.client.findFirst({
+      where: {
+        id: financial_transaction.client_id,
+      },
+    });
+
+    const info: Info = {
+      id: `${financial_transaction.id}`,
+      text: `Uma transação financeira do tipo ${financial_transaction.type} no valor de ${financial_transaction.value} BRL na categoria ${category.name}`,
+      category: category.name,
+      value: financial_transaction.value.toNumber()
+    };
+
+    const nameSpace = `${client.id}_${client.name}`;
+
+    this.agent.addInfo(info, nameSpace);
   }
 
   async findAll(client_id: number, search: string) {

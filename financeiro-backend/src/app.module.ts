@@ -21,13 +21,25 @@ import { ProductModule } from './product/product.module';
 import { SubscriptionModule } from './subscription/subscription.module';
 import { RagModule } from './rag/rag.module';
 import EventsGateway from './events.gateway';
-import { MessageService } from './message.service';
-import { RagService } from './rag/rag.service';
 import { ChatService } from './rag/chat.service';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 
 
 @Module({
-  imports: [ConfigModule.forRoot(), PrismaModule, AuthModule, UserModule, DashboardModule, ClientModule, FinancialTransactionModule, BankAccountModule, CategoryModule, CostCenterModule, ReportModule, CustomerModule, SupplierModule, ProductModule, SubscriptionModule, RagModule, RagModule],
+  imports: [ConfigModule.forRoot(), PrismaModule, AuthModule, UserModule, DashboardModule, ClientModule, FinancialTransactionModule, BankAccountModule, CategoryModule, CostCenterModule, ReportModule, CustomerModule, SupplierModule, ProductModule, SubscriptionModule, RagModule, RagModule, MailerModule.forRoot({
+      transport: 'smtps://user@domain.com:pass@smtp.domain.com',
+      defaults: {
+        from: '"nest-modules" <modules@nestjs.com>',
+      },
+      template: {
+        dir: __dirname + '/templates',
+        adapter: new HandlebarsAdapter(),
+        options: {
+          strict: true,
+        },
+      },
+    }),],
   controllers: [AppController],
   providers: [
     AppService,
@@ -39,9 +51,7 @@ import { ChatService } from './rag/chat.service';
       provide: APP_GUARD,
       useClass: RolesGuard,
     },
-    MessageService,
     EventsGateway,
-    RagService,
     ChatService
   ],
 })

@@ -7,6 +7,8 @@ import { DataSource } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 import { RunnableSequence } from '@langchain/core/runnables';
 import { ChatPromptTemplate, MessagesPlaceholder, PromptTemplate } from '@langchain/core/prompts';
+import { Index, Pinecone } from "@pinecone-database/pinecone";
+import { Info } from './dto/info-create.dto';
 
 export class AgentService {
   private agentExecutor: Awaited<ReturnType<typeof createSqlAgent>>;
@@ -14,6 +16,8 @@ export class AgentService {
   private memoryBuffer: BufferMemory;
   private chain: RunnableSequence;
   private dbSchema: string;
+  private pinecone: Pinecone;
+  private index: Index;
 
   constructor(configService: ConfigService, promptTemplate: string) {
     this.memoryBuffer = new BufferMemory({
@@ -22,6 +26,9 @@ export class AgentService {
     });
 
     this.configService = configService;
+
+    this.pinecone = new Pinecone();
+    this.index = this.pinecone.Index("main");
   }
 
   async init(promptTemplate: string) {
@@ -91,5 +98,9 @@ export class AgentService {
     const response = await this.chain.invoke({ input });
 
     return response.content.trim();
+  }
+
+  async addInfo(info: Info, namespace: string): Promise<void> {
+    await this.index.namespace(namespace).upsertRecords([{id: info.id, text: info.text, category: info.category, value: info.value}]);
   }
 }
