@@ -9,7 +9,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
     allowedHeaders: '*',
-    origin: ['http://localhost:8000', 'http://localhost:8001','http://localhost:3000', 'https://financeiro-lac.vercel.app', "http://172.18.0.2:3000"],
+    origin: ['http://localhost:8000', 'http://localhost:8001','http://localhost:3000', 'http://localhost:3002', 'https://financeiro-lac.vercel.app', "http://172.18.0.2:3000"],
     credentials: true
   })
 
@@ -18,7 +18,7 @@ async function bootstrap() {
     module.hot.dispose(() => app.close());
   }
 
-  await app.listen(8000);
+  await app.listen(8001);
   // Pipes
   app.useGlobalPipes(new ValidationPipe({
     transform: true,

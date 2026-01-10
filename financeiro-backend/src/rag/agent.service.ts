@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import { ChatOpenAI } from '@langchain/openai';
-import { SqlDatabase } from 'langchain/sql_db';
+import { SqlDatabase } from "langchain/sql_db";
 import { createSqlAgent, SqlToolkit } from 'langchain/agents/toolkits/sql';
 import { BufferMemory } from 'langchain/memory';
 import { DataSource } from 'typeorm';
