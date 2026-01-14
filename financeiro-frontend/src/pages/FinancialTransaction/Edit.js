@@ -1,5 +1,5 @@
 import { get, update } from "../../cruds/finantial_transaction";
-import { cleanCurrency, removeEmptyValues } from "./Utils";
+import { cleanCurrency, maskCurrency, removeEmptyValues } from "./Utils";
 import Swal from "sweetalert2";
 import { useNavigate, useParams } from "react-router";
 import { useSelector } from "react-redux";
@@ -37,7 +37,7 @@ export default function Edit() {
 	const getIniitalState = (data) => {
 		setInitialState({
 			type: data.type ?? "",
-			value: data.value ?? "",
+			value: data.value ?  maskCurrency(data.value) : "",
 			category_id: data.category_id ?? "",
 			note: data.note ?? "",
 			subscriber_id: data.subscriber_id ?? "",
