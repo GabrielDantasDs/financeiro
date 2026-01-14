@@ -21,8 +21,6 @@ import { ProductModule } from './product/product.module';
 import { SubscriptionModule } from './subscription/subscription.module';
 import { RagModule } from './rag/rag.module';
 import EventsGateway from './events.gateway';
-import { MessageService } from './message.service';
-import { RagService } from './rag/rag.service';
 import { ChatService } from './rag/chat.service';
 
 
@@ -39,9 +37,7 @@ import { ChatService } from './rag/chat.service';
       provide: APP_GUARD,
       useClass: RolesGuard,
     },
-    MessageService,
     EventsGateway,
-    RagService,
     ChatService
   ],
 })

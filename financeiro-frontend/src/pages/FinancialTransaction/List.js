@@ -65,7 +65,7 @@ export default function List() {
 			})
 			.then((res) => {
 				if (res.status == 200) {
-					list()
+					list(client, globalFilterValue)
 						.catch((err) => {
 							Swal.fire("Ops", "Houve um erro ao buscar a lista de lançamentos.", "error");
 						})

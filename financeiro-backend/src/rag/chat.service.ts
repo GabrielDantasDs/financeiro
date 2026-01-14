@@ -66,11 +66,11 @@ export class ChatService {
 
     this.memorySave = new MemorySaver();
 
-    this.agent = new AgentService(this.configService, "Responder a qualquer pergunta do usuário.");
+    this.agent = new AgentService(this.configService);
 
     this.setDataSource();
 
-    this.agent.init("Responda qualquer pergunta do usuário");
+    this.agent.init();
   }
 
   async setDataSource() {
@@ -83,27 +83,7 @@ export class ChatService {
   }
 
   async processMessage(input: string, clientId: string) {
-    // console.log(input);
-    // this.input = input;
-    // const callModel = async (state: typeof MessagesAnnotation.State) => {
-    //   const response = await this.agent.invoke(state.messages);
-    //   return { messages: response };
-    // };
-    // const workflow = new StateGraph(MessagesAnnotation).addNode('model', callModel).addEdge(START, 'model').addEdge('model', END);
-    // const memory = new MemorySaver();
-    // /**PromptTemplate faz sentido quando eu quero passar um template de texto,
-    //  * que utilizam váriveis.
-    //  *
-    //  */
-    // const human_entry = new HumanMessage(input);
-    // this.messages.push(human_entry);
-    // const app = workflow.compile({ checkpointer: this.memorySave });
-    // const response = await app.invoke({ messages: [new HumanMessage(input)] }, this.config);
-    // return response.messages[response.messages.length - 1].content;
-    console.log('input ' + input);
     return await this.agent.ask(input, clientId);
-
-    return 'Desculpe, ainda não consigo responder isso.';
   }
 
   private isSqlQuestion(text: string): boolean {

@@ -15,7 +15,7 @@ export class AgentService {
   private chain: RunnableSequence;
   private dbSchema: string;
 
-  constructor(configService: ConfigService, promptTemplate: string) {
+  constructor(configService: ConfigService) {
     this.memoryBuffer = new BufferMemory({
       memoryKey: 'chat_history',
       returnMessages: true,
@@ -24,7 +24,7 @@ export class AgentService {
     this.configService = configService;
   }
 
-  async init(promptTemplate: string) {
+  async init() {
     const datasource = new DataSource({
       type: 'mysql',
       database: this.configService.get('DB_NAME'),
@@ -39,7 +39,7 @@ export class AgentService {
 
     const model = new ChatOpenAI({
       temperature: 0,
-      modelName: 'gpt-3.5-turbo',
+      modelName: 'gpt-4.1',
       openAIApiKey: process.env.OPENAI_API_KEY,
     });
 
@@ -49,14 +49,14 @@ export class AgentService {
     this.dbSchema = await db.getTableInfo();
 
     const prompt = ChatPromptTemplate.fromMessages([
-      ['system', `Você é um assistente especializado em responder perguntas sobre este banco de dados:\n\n{schema}\n\nSeja claro e conciso. Sua tarefa é: {promptTemplate}, se clientId: {clientId} representar um inteiro maior que 0 filtre as respostas apenas pelas transações, categorias, centros de custo e contas bancárias desse cliente. A sua resposta tem que ser objetivo e não expor detalhes do banco de dados de forma alguma, isso inclui expor o id do cliente em questão caso você esteja filtrando por um, não retorne por exemplo "clienteID: 1", a resposta deve conter apenas o que foi perguntado e não passar nenhum tipo de instrução para que o usuário chegue a resposta.`],
+      ['system', `Você é um assistente especializado em responder perguntas sobre este banco de dados:\n\n{schema}\n\nSeja claro e conciso. Sua tarefa é: Auxiliar o usuário com informações precisos e baseados em dados, se clientId: {clientId} representar um inteiro maior que 0 filtre as respostas apenas pelas transações, categorias, centros de custo e contas bancárias desse cliente. A sua resposta tem que ser objetivo e não expor detalhes do banco de dados de forma alguma, isso inclui expor o id do cliente em questão caso você esteja filtrando por um, não retorne por exemplo "clienteID: 1", a resposta deve conter apenas o que foi perguntado e não passar nenhum tipo de instrução para que o usuário chegue a resposta.`],
       new MessagesPlaceholder('chat_history'),
       ['human', '{input}'],
     ]);
 
     this.chain = RunnableSequence.from([
       async (input: { input: string, clientId: string }) => {
-        console.log(input)
+
         const chat_history = await this.memoryBuffer
           .loadMemoryVariables({})
           .then((vars) => vars.chat_history || []);
@@ -65,7 +65,6 @@ export class AgentService {
           clientId: input.clientId,
           schema: this.dbSchema,
           chat_history,
-          promptTemplate
         };
       },
       prompt,
