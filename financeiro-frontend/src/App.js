@@ -21,12 +21,12 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import "dayjs/locale/pt-br";
 import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
 import Navbar from "./components/navbar/Navbar";
 import SideBar from "./components/sidebar/Sidebar";
 import Register from "./pages/Register";
 import OfxImport from "./pages/OfxImport/Index";
 import ChatBot from "./pages/ChatBot/Index";
+import Customer from "./pages/Customer/Index";
 
 library.add(fas);
 
@@ -44,7 +44,10 @@ function App() {
 					{auth.isAuthenticated && <SideBar />}
 					{cliente ? (
 						<Routes>
-							<Route path="/" element={<ProtectedRoute></ProtectedRoute>}></Route>
+							<Route
+								path="/"
+								element={<ProtectedRoute></ProtectedRoute>}
+							></Route>
 							<Route
 								path="/dashboard/*"
 								element={
@@ -125,12 +128,35 @@ function App() {
 									</ProtectedRoute>
 								}
 							/>
+							<Route
+								path="customer/*"
+								element={
+									<ProtectedRoute>
+										<Customer />
+									</ProtectedRoute>
+								}
+							/>
+							{/* <Route
+								path="supplier/*"
+								element={
+									<ProtectedRoute>
+										<Supplier />
+									</ProtectedRoute>
+								}
+							/> */}
 							<Route exact path="/auth" element={<Login />} />
-							<Route exact path="/register" element={<Register />} />
+							<Route
+								exact
+								path="/register"
+								element={<Register />}
+							/>
 						</Routes>
 					) : (
 						<Routes>
-							<Route path="/" element={<ProtectedRoute></ProtectedRoute>}></Route>
+							<Route
+								path="/"
+								element={<ProtectedRoute></ProtectedRoute>}
+							></Route>
 							<Route
 								path="/dashboard/*"
 								element={
@@ -149,7 +175,11 @@ function App() {
 							/>
 
 							<Route exact path="/auth" element={<Login />} />
-							<Route exact path="/register" element={<Register />} />
+							<Route
+								exact
+								path="/register"
+								element={<Register />}
+							/>
 						</Routes>
 					)}
 				</div>

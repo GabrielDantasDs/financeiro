@@ -11,45 +11,69 @@ import Swal from "sweetalert2";
 import { InputText } from "primereact/inputtext";
 import { FilterMatchMode } from "primereact/api";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setClient } from "../../store/actions";
 
 export default function List() {
 	const [customers, setCustomers] = useState([]);
+	const [isLoading, setLoading] = useState(false);
 	const [filters, setFilters] = useState({
-		global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+		search: "",
+		page: 0,
+		rows: 10,
+		client_id: useSelector((state) => state.client),
 	});
-	const [globalFilterValue, setGlobalFilterValue] = useState("");
+
+	const [globalFilterValue, setGlobalFilterValue] = useState({
+		value: "",
+		matchMode: FilterMatchMode.CONTAINS,
+	});
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		list().then((res) => {
-			let formatted_customers = [];
+		fetchData();
+	}, [filters]);
 
-			res.data.data
-				.map((cliente, i) => {
-					formatted_customers.push({
+	const fetchData = async () => {
+		setLoading(true);
+
+		await list(filters)
+			.then((res) => {
+				let formatted_customers = [];
+
+				formatted_customers = res.data.map((cliente, i) => {
+					return {
 						id: cliente.id,
 						name: cliente.name,
 						email: cliente.email,
 						document: cliente.document,
-					});
-				})
-				.catch((err) => {
-					Swal.fire("Ops", "Houve um erro ao buscar a lista de clientes.", "error");
+					};
 				});
 
-			setCustomers();
-		});
-	}, []);
+				setCustomers(formatted_customers);
+			})
+			.catch((err) => {
+				Swal.fire(
+					"Ops",
+					"Houve um erro ao buscar a lista de customer.",
+					"error"
+				);
+			});
+
+		setLoading(false);
+	};
 
 	const renderHeader = () => {
 		return (
 			<div className="flex justify-content-end">
 				<span className="p-input-icon-left">
 					<i className="pi pi-search" />
-					<InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Busque pelo nome ou doc" />
+					<InputText
+						value={filters.search}
+						onChange={onGlobalFilterChange}
+						placeholder="Busque pelo nome ou doc"
+					/>
 				</span>
 			</div>
 		);
@@ -57,31 +81,36 @@ export default function List() {
 
 	const onGlobalFilterChange = (e) => {
 		const value = e.target.value;
-		let _filters = { ...filters };
+		setFilters({ ...filters, search: value });
 
-		_filters["global"].value = value;
-
-		setFilters(_filters);
 		setGlobalFilterValue(value);
 	};
 
 	const deleteRecord = (id) => {
 		remove(id)
 			.catch((error) => {
-				Swal.fire("Ops", "Houve um erro ao remover esse registro.", "error");
+				Swal.fire(
+					"Ops",
+					"Houve um erro ao remover esse registro.",
+					"error"
+				);
 				return;
 			})
 			.then((res) => {
 				if (res.status == 200) {
 					list()
 						.catch((err) => {
-							Swal.fire("Ops", "Houve um erro ao buscar a lista de categorias.", "error");
+							Swal.fire(
+								"Ops",
+								"Houve um erro ao buscar a lista de categorias.",
+								"error"
+							);
 						})
 						.then((res) => {
-							let formatted_clientes = [];
+							let formatted_customer = [];
 
 							res.data.map((cliente, i) => {
-								formatted_clientes.push({
+								formatted_customer.push({
 									id: cliente.id,
 									name: cliente.name,
 									email: cliente.email,
@@ -89,7 +118,7 @@ export default function List() {
 								});
 							});
 
-							setClientes(res.data);
+							setCustomers(res.data);
 						});
 				}
 			});
@@ -101,8 +130,15 @@ export default function List() {
 
 	const actionBody = (rowData) => {
 		return (
-			<div style={{ maxWidth: 200 }} className="d-flex justify-content-between">
-				<Link to={`/clientes/edit/${rowData.id}`} type="button" className="btn btn-primary">
+			<div
+				style={{ maxWidth: 200 }}
+				className="d-flex justify-content-between"
+			>
+				<Link
+					to={`/customer/edit/${rowData.id}`}
+					type="button"
+					className="btn btn-primary"
+				>
 					<FontAwesomeIcon icon="fa-solid fa-pen-to-square" />
 				</Link>
 				<ReactButton
@@ -110,7 +146,8 @@ export default function List() {
 					onClick={(e) => {
 						e.preventDefault();
 						onSetSelectedCliente(rowData.id);
-					}}>
+					}}
+				>
 					<FontAwesomeIcon icon="fa-solid fa-list" />
 				</ReactButton>
 				<button
@@ -119,7 +156,8 @@ export default function List() {
 					onClick={(e) => {
 						e.preventDefault();
 						deleteRecord(rowData.id);
-					}}>
+					}}
+				>
 					<FontAwesomeIcon icon="fa-solid fa-trash" />
 				</button>
 			</div>
@@ -132,21 +170,40 @@ export default function List() {
 		<div className="main">
 			<div className="container">
 				<div className="header">
-					<h1 className="screen-title">Clientes</h1>
+					<h1 className="screen-title">customer</h1>
 				</div>
 				<div className="body">
 					<div className="database-header">
-						<Link to={`/clientes/new`} type="button">
-							<Button startIcon={<FontAwesomeIcon icon={faPlus} />} variant="contained" color="success">
+						<Link to={`/customer/new`} type="button">
+							<Button
+								startIcon={<FontAwesomeIcon icon={faPlus} />}
+								variant="contained"
+								color="success"
+							>
 								Novo cliente
 							</Button>
 						</Link>
 					</div>
 					<div style={{ width: "100%" }}>
-						<DataTable value={clientes} stripedRows showGridlines paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: "50rem" }} filters={filters} globalFilterFields={["name", "document"]} header={header} emptyMessage="Não há registros.">
+						<DataTable
+							value={customers}
+							stripedRows
+							showGridlines
+							paginator
+							rows={5}
+							rowsPerPageOptions={[5, 10, 25, 50]}
+							tableStyle={{ minWidth: "50rem" }}
+							filters={globalFilterValue}
+							globalFilterFields={["name", "document"]}
+							header={header}
+							emptyMessage="Não há registros."
+						>
 							<Column field="name" header="Nome"></Column>
 							<Column field="email" header="Email"></Column>
-							<Column field="document" header="Documento"></Column>
+							<Column
+								field="document"
+								header="Documento"
+							></Column>
 							<Column header="Opções" body={actionBody}></Column>
 						</DataTable>
 					</div>

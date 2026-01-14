@@ -10,14 +10,23 @@ export const create = async (data) => {
 	return response;
 };
 
-export const list = async (customers_id) => {
-	let response = await axios.get(constants.baseUrl + "/customer", { customers_id });
+export const list = async (params) => {
+	let url = constants.baseUrl + `/customer/list/${params.client_id}?page=${params.page}`;
+
+	if (params.search && params.search !== "") {
+		url += `&search=${encodeURIComponent(params.search)}`;
+	}
+
+	let response = await axios.get(url);
 
 	return response;
 };
 
 export const edit = async (id, data) => {
-	let response = await axios.patch(constants.baseUrl + `/customer/${id}`, data);
+	let response = await axios.patch(
+		constants.baseUrl + `/customer/${id}`,
+		data
+	);
 
 	return response;
 };
@@ -35,7 +44,9 @@ export const remove = async (id) => {
 };
 
 export const simpleList = async (customer_id) => {
-	let response = await axios.get(constants.baseUrl + `/customer/simple-list/${client_id}`);
+	let response = await axios.get(
+		constants.baseUrl + `/customer/simple-list/${customer_id}`
+	);
 
 	return response;
 };

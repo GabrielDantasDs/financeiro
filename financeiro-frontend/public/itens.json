@@ -42,9 +42,16 @@
 		"cliente": true
 	},
 	{
-		"name": "Fornecedores/Clientes",
-		"url": "subscriber",
+		"name": "Clientes",
+		"url": "customer",
 		"icon": "users",
+		"active": "users",
+		"cliente": true
+	},
+		{
+		"name": "Fornecedores",
+		"url": "supplier",
+		"icon": "truck",
 		"active": "users",
 		"cliente": true
 	},
