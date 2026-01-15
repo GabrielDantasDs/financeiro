@@ -1,12 +1,11 @@
 import "../../style/cliente.css";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { Button as ReactButton } from "react-bootstrap";
 import Button from "@mui/material/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons/faPlus";
 import { useEffect, useState } from "react";
-import { list, remove } from "../../cruds/customers";
+import { list, remove } from "../../cruds/suppliers";
 import Swal from "sweetalert2";
 import { InputText } from "primereact/inputtext";
 import { FilterMatchMode } from "primereact/api";
@@ -15,7 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setClient } from "../../store/actions";
 
 export default function List() {
-	const [customers, setCustomers] = useState([]);
+	const [suppliers, setsuppliers] = useState([]);
 	const [isLoading, setLoading] = useState(false);
 	const [filters, setFilters] = useState({
 		search: "",
@@ -40,9 +39,9 @@ export default function List() {
 
 		await list(filters)
 			.then((res) => {
-				let formatted_customers = [];
+				let formatted_suppliers = [];
 
-				formatted_customers = res.data.map((cliente, i) => {
+				formatted_suppliers = res.data.map((cliente, i) => {
 					return {
 						id: cliente.id,
 						name: cliente.name,
@@ -51,12 +50,12 @@ export default function List() {
 					};
 				});
 
-				setCustomers(formatted_customers);
+				setsuppliers(formatted_suppliers);
 			})
 			.catch((err) => {
 				Swal.fire(
 					"Ops",
-					"Houve um erro ao buscar a lista de customer.",
+					"Houve um erro ao buscar a lista de fornecedor.",
 					"error"
 				);
 			});
@@ -118,7 +117,7 @@ export default function List() {
 								});
 							});
 
-							setCustomers(res.data);
+							setsuppliers(res.data);
 						});
 				}
 			});
@@ -130,15 +129,8 @@ export default function List() {
 
 	const actionBody = (rowData) => {
 		return (
-			<div
-				style={{ maxWidth: 200 }}
-				className="d-flex justify-content-between"
-			>
-				<Link
-					to={`/customer/edit/${rowData.id}`}
-					type="button"
-					className="btn btn-primary"
-				>
+			<div style={{ maxWidth: 200 }} className="d-flex justify-content-between">
+				<Link to={`/supplier/edit/${rowData.id}`} type="button" className="btn btn-primary">
 					<FontAwesomeIcon icon="fa-solid fa-pen-to-square" />
 				</Link>
 				<button
@@ -161,23 +153,19 @@ export default function List() {
 		<div className="main">
 			<div className="container">
 				<div className="header">
-					<h1 className="screen-title">Clientes</h1>
+					<h1 className="screen-title">Fornecedores</h1>
 				</div>
 				<div className="body">
 					<div className="database-header">
-						<Link to={`/customer/new`} type="button">
-							<Button
-								startIcon={<FontAwesomeIcon icon={faPlus} />}
-								variant="contained"
-								color="success"
-							>
-								Novo cliente
+						<Link to={`/supplier/new`} type="button">
+							<Button startIcon={<FontAwesomeIcon icon={faPlus} />} variant="contained" color="success">
+								Novo fornecedor
 							</Button>
 						</Link>
 					</div>
 					<div style={{ width: "100%" }}>
 						<DataTable
-							value={customers}
+							value={suppliers}
 							stripedRows
 							showGridlines
 							paginator
@@ -191,10 +179,7 @@ export default function List() {
 						>
 							<Column field="name" header="Nome"></Column>
 							<Column field="email" header="Email"></Column>
-							<Column
-								field="document"
-								header="Documento"
-							></Column>
+							<Column field="document" header="Documento"></Column>
 							<Column header="Opções" body={actionBody}></Column>
 						</DataTable>
 					</div>

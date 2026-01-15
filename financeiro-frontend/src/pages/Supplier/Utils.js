@@ -23,7 +23,7 @@ export const getInitialState = (currentClient, values = {}) => {
 		state: values.state ?? "",
 		number: values.number ?? "",
 		city: values.city ?? "",
-        zip_code: values.zip_code ?? "",
+		zip_code: values.zip_code ?? "",
 		client_id: currentClient ? parseInt(currentClient) : null,
 	};
 };

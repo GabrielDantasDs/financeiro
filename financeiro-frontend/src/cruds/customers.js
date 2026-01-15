@@ -22,7 +22,7 @@ export const list = async (params) => {
 	return response;
 };
 
-export const edit = async (id, data) => {
+export const update = async (id, data) => {
 	let response = await axios.patch(
 		constants.baseUrl + `/customer/${id}`,
 		data

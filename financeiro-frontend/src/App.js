@@ -27,6 +27,7 @@ import Register from "./pages/Register";
 import OfxImport from "./pages/OfxImport/Index";
 import ChatBot from "./pages/ChatBot/Index";
 import Customer from "./pages/Customer/Index";
+import Supplier from "./pages/Supplier/Index";
 
 library.add(fas);
 
@@ -136,14 +137,14 @@ function App() {
 									</ProtectedRoute>
 								}
 							/>
-							{/* <Route
+							<Route
 								path="supplier/*"
 								element={
 									<ProtectedRoute>
 										<Supplier />
 									</ProtectedRoute>
 								}
-							/> */}
+							/>
 							<Route exact path="/auth" element={<Login />} />
 							<Route
 								exact

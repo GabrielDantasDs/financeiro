@@ -17,7 +17,7 @@ export class ProductController {
     return this.productService.findAll(client_id, page, search);
   }
 
-  @Get('simpleList/:id')
+  @Get('simple-list/:id')
   simpleList(@Param('id') client_id: string) {
     return this.productService.simpleList(client_id);
   }

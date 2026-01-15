@@ -2,7 +2,7 @@ import Swal from "sweetalert2";
 import { useNavigate } from "react-router";
 import { useSelector } from "react-redux";
 import { simpleList } from "../../cruds/product";
-import { create } from "../../cruds/customers";
+import { create } from "../../cruds/suppliers";
 import { useEffect, useState } from "react";
 import Form from "./Form";
 import { getInitialState } from "./Utils";
@@ -37,11 +37,11 @@ export default function New() {
 
 		await create(values)
 			.then((res) => {
-				Swal.fire("Sucesso", "Usuário salvo com sucesso", "success");
-				navigate("/customer");
+				Swal.fire("Sucesso", "Fornecedor salvo com sucesso", "success");
+				navigate("/supplier");
 			})
 			.catch((err) => {
-				Swal.fire("Ops", err.response.data ?? "Houve um erro ao salvar o usuário", "error");
+				Swal.fire("Ops", err.response.data ?? "Houve um erro ao salvar o fornecedor", "error");
 			})
 			.finally(() => setSubmitting(false));
 	};
@@ -56,3 +56,4 @@ export default function New() {
 		/>
 	);
 }
+

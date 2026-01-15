@@ -34,7 +34,7 @@ model client {
   city                  String
   zip_code              String
   created_at            DateTime                @default(now())
-  user                  user                  @relation(fields: [user_id], references: [id])
+  user                  user                    @relation(fields: [user_id], references: [id])
   financial_transaction financial_transaction[]
   customer              customer[]
   supplier              supplier[]
@@ -82,7 +82,7 @@ model financial_transaction {
   recurrencies         Int?
   number_installments  Int?
   bank_account_id      Int
-  category             category?                @relation(fields: [category_id], references: [id])
+  category             category?               @relation(fields: [category_id], references: [id])
   client               client                  @relation(fields: [client_id], references: [id], onDelete: Cascade)
   bank_account         bank_account            @relation(fields: [bank_account_id], references: [id])
   customer             customer?               @relation(fields: [customer_id], references: [id])
@@ -155,6 +155,7 @@ model supplier {
   name                     String
   document                 String?
   phone                    String
+  email                    String
   address                  String?
   neighborhood             String?
   number                   String?
@@ -196,10 +197,10 @@ model recurring_supplier_order {
 }
 
 model recurring_financial_transaction {
-  id Int @id @default(autoincrement())
+  id                       Int       @id @default(autoincrement())
   financial_transaction_id Int
-  recurrence_in_days Int
-  original_date DateTime
-  current_date DateTime?
-  next_date DateTime?
+  recurrence_in_days       Int
+  original_date            DateTime
+  current_date             DateTime?
+  next_date                DateTime?
 }
