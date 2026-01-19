@@ -2,7 +2,7 @@ import Swal from "sweetalert2";
 import { useNavigate } from "react-router";
 import { useSelector } from "react-redux";
 import { create } from "../../cruds/product";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Form from "./Form";
 import { getInitialState } from "./Utils";
 import { cleanCurrency } from "../BankAccount/Utils";

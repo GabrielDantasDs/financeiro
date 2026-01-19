@@ -1,4 +1,4 @@
-import { IsDecimal, IsNumberString, IsString } from "class-validator";
+import { IsDecimal, IsNumber, IsNumberString, IsOptional, IsString } from "class-validator";
 import { Product } from "../entities/product.entity";
 import { Decimal, DecimalJsLike } from "@prisma/client/runtime/library";
 
@@ -11,4 +11,9 @@ export class CreateProductDto extends Product{
 
     @IsNumberString()
     client_id: number;
+
+
+    @IsNumber()
+    @IsOptional()
+    recurrency?: number;
 }

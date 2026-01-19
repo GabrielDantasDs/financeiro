@@ -19,5 +19,6 @@ export const getInitialState = (currentClient, values = {}) => {
 		name: values.name ?? "",
 		value: values.value ? formatBRL(values.value) : "",
 		client_id: currentClient ? parseInt(currentClient) : null,
+		recurrency: 0
 	};
 };

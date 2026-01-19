@@ -41,7 +41,7 @@ export default function List() {
 
     await list(filters)
       .then((res) => {
-        let formatted = res.data.map((p) => ({ id: p.id, name: p.name, value: p.value }))
+        let formatted = res.data.map((p) => ({ id: p.id, name: p.name, value: p.value, recurrency: p.recurrency }))
         setItems(formatted)
       })
       .catch((err) => {
@@ -114,6 +114,7 @@ export default function List() {
             <DataTable value={items} stripedRows showGridlines paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: "50rem" }} filters={globalFilterValue} globalFilterFields={["name"]} header={header} emptyMessage="Não há registros.">
               <Column field="name" header="Nome"></Column>
               <Column field="value" header="Valor" body={row => formatBRL(row.value)}></Column>
+              <Column field="recurrency" header="Recorrência" body={row => row.recurrency == 0 ? "Sem recorrência" : row.recurrency + " Dias"}></Column>
               <Column header="Opções" body={actionBody}></Column>
             </DataTable>
           </div>

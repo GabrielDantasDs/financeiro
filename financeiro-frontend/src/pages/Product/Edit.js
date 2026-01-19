@@ -42,7 +42,7 @@ export default function Edit() {
 		const formattedValues = {
 			...values,
 			value: cleanCurrency(values.value),
-		};
+		}
 
 		await update(params.id, formattedValues)
 			.then((res) => {

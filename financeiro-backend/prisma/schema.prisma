@@ -171,6 +171,7 @@ model supplier {
 model product {
   id                    Int                     @id @default(autoincrement())
   client_id             Int
+  recurrency            Int                     @default(0)
   name                  String
   value                 Decimal                 @db.Decimal(6, 2)
   client                client                  @relation(fields: [client_id], references: [id], onDelete: Cascade)
