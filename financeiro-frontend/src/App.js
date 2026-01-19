@@ -28,6 +28,7 @@ import OfxImport from "./pages/OfxImport/Index";
 import ChatBot from "./pages/ChatBot/Index";
 import Customer from "./pages/Customer/Index";
 import Supplier from "./pages/Supplier/Index";
+import Product from "./pages/Product/Index";
 
 library.add(fas);
 
@@ -142,6 +143,14 @@ function App() {
 								element={
 									<ProtectedRoute>
 										<Supplier />
+									</ProtectedRoute>
+								}
+							/>
+							<Route
+								path="product/*"
+								element={
+									<ProtectedRoute>
+										<Product />
 									</ProtectedRoute>
 								}
 							/>

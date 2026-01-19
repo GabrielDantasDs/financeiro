@@ -1,4 +1,4 @@
-import { IsNumberString, IsOptional, IsString } from "class-validator";
+import { IsEmail, IsNumberString, IsOptional, IsString } from "class-validator";
 import { Supplier } from "../entities/supplier.entity";
 
 export class CreateSupplierDto extends Supplier{
@@ -34,4 +34,11 @@ export class CreateSupplierDto extends Supplier{
 
     @IsNumberString()
     client_id: number;
+
+    @IsEmail()
+    email: string;
+
+    @IsString()
+    @IsOptional()
+    zip_code?: string;
 }

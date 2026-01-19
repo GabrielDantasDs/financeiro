@@ -1,17 +1,15 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { CustomerService } from './customer.service';
-import { CreateCustomerDto } from './dto/create-customer.dto';
-import { UpdateCustomerDto } from './dto/update-customer.dto';
-import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
-import { User } from 'src/user/entities/user.entity';
+
+import { RequestCustomerDto } from './dto/request-customer.dto';
 
 @Controller('customer')
 export class CustomerController {
   constructor(private readonly customerService: CustomerService) {}
 
   @Post()
-  create(@Body() createCustomerDto: CreateCustomerDto) {
-    return this.customerService.create(createCustomerDto);
+  create(@Body() requestCustomerDto: RequestCustomerDto) {
+    return this.customerService.create(requestCustomerDto);
   }
 
   @Get('list/:id')
@@ -30,8 +28,8 @@ export class CustomerController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCustomerDto: UpdateCustomerDto) {
-    return this.customerService.update(+id, updateCustomerDto);
+  update(@Param('id') id: string, @Body() requestCustomerDto: RequestCustomerDto) {
+    return this.customerService.update(+id, requestCustomerDto);
   }
 
   @Delete(':id')

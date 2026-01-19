@@ -17,7 +17,7 @@ export class FinancialTransactionService {
     private readonly category: CategoryService,
     private config: ConfigService,
   ) {
-    this.agent = new AgentService(config, 'Classificar as transações segundo o nome/descrição');
+    this.agent = new AgentService(config);
   }
   async create(createFinancialTransactionDto: CreateFinancialTransactionDto) {
     let data = createFinancialTransactionDto;
@@ -38,7 +38,7 @@ export class FinancialTransactionService {
     }
 
     if (!data.category_id) {
-      await this.agent.init('Classificar as transações segundo o nome/descrição');
+      await this.agent.init();
 
       const categories = await this.category.simpleList(data.client_id.toString());
 

@@ -15,4 +15,5 @@ export class Supplier implements Prisma.supplierUncheckedCreateInput {
     recurring_supplier_order?: Prisma.recurring_supplier_orderUncheckedCreateNestedManyWithoutSupplierInput;
     state?: string;
     zip_code?: string;
+    email: string;
 }

@@ -1,7 +1,6 @@
-import { IsEmail, IsNumberString, IsOptional, isString, IsString } from "class-validator";
-import { Customer } from "../entities/customer.entity";
+import { IsEmail, IsNumberString, IsOptional, IsString } from "class-validator";
 
-export class CreateCustomerDto extends Customer{
+export class ResponseCustomerDto {
     @IsString()
     name: string;
 
@@ -41,4 +40,8 @@ export class CreateCustomerDto extends Customer{
 
     @IsNumberString()
     client_id: number;
+
+    @IsNumberString()
+    @IsOptional()
+    product_id?: number;
 }

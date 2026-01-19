@@ -25,5 +25,6 @@ export const getInitialState = (currentClient, values = {}) => {
 		city: values.city ?? "",
         zip_code: values.zip_code ?? "",
 		client_id: currentClient ? parseInt(currentClient) : null,
+		product_id: values.product_id ?? ""
 	};
 };

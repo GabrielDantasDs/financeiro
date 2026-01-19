@@ -56,6 +56,13 @@
 		"cliente": true
 	},
 	{
+		"name": "Produtos",
+		"url": "product",
+		"icon": "boxes-stacked",
+		"active": "users",
+		"cliente": true
+	},
+	{
 		"name": "Relatório",
 		"url": "report",
 		"icon": "pie-chart",

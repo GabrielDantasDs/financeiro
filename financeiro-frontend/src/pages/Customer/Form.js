@@ -281,8 +281,8 @@ export default function Form({ values, loading, submit, onSubmit, products }) {
 											<Select
 												labelId="select-state"
 												id="select-state"
-												value={values.product}
-												name="product"
+												value={values.product_id}
+												name="product_id"
 												label="Produto de adesão"
 												onChange={handleChange}
 											>
